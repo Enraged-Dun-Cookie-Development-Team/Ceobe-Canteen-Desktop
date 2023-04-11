@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-      ?
+    <v-text-field
+        label="Regular"
+    ></v-text-field>
   </div>
 </template>
 
