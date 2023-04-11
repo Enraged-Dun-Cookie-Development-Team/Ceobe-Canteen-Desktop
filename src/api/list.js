@@ -1,6 +1,6 @@
 import service from "@/utils/request";
 
-export const getCardList = () => {
+export function getCardList() {
     return service({
         url: `/canteen/cardList`,
         method: 'GET',

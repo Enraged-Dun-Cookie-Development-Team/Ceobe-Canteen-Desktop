@@ -1,16 +1,15 @@
 <template>
-  <div>{{ data }}</div>
+  <index></index>
 </template>
 
 <script setup>
+import Index from "./view/home"
 import {onMounted, ref} from "vue";
 
 const data = ref(null);
-debugger
 onMounted(()=>{
-
-  window.ceobeRequest.getCardList1().then(res => {
-    data.value = res;
+  window.ceobeRequest.getCardList().then(res => {
+    data.value = res.data;
   })
 })
 </script>

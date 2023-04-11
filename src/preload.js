@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer, clipboard} = require('electron');
+const {contextBridge, ipcRenderer } = require('electron');
 const {getCardList} = require("@/api/list");
 
 contextBridge.exposeInMainWorld('versions', {
@@ -8,7 +8,7 @@ contextBridge.exposeInMainWorld('versions', {
 })
 
 contextBridge.exposeInMainWorld('ceobeRequest', {
-    getCardList1: () => getCardList,
+    getCardList: () => getCardList(),
 })
 
 contextBridge.exposeInMainWorld('operate', {
