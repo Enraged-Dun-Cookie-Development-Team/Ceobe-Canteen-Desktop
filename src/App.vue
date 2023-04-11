@@ -1,17 +1,18 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>{{ data }}</div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import {onMounted, ref} from "vue";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+const data = ref(null);
+debugger
+onMounted(()=>{
+
+  window.ceobeRequest.getCardList1().then(res => {
+    data.value = res;
+  })
+})
 </script>
 
 <style>
