@@ -32,9 +32,9 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
+              <v-btn size="small" icon="fas fa-copy"></v-btn>
               <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-              <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-              <v-btn size="small" icon="mdi: mdi-heart"></v-btn>
+              <v-btn size="small" icon="fas fa-link"></v-btn>
             </v-card-actions>
           </v-card>
         </v-card>
@@ -48,6 +48,7 @@ import {onMounted, reactive} from "vue";
 
 const home = reactive({
   data: [],
+  timeLineData:[],
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       home.data = res.data;
