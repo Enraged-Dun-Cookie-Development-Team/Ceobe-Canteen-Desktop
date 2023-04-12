@@ -1,14 +1,14 @@
 <template>
-  <div class="home">
-    这是首页
+  <div class="index">
+    这是菜单
   </div>
 </template>
 
-<script setup name="home">
+<script setup name="index">
 
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.home {
+.index {
 }
 </style>
