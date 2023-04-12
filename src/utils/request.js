@@ -66,7 +66,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     config => {
-        if (config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)
+        if (config.baseURL == config.baseURL != undefined ? config.baseURL : baseUrl)
             return config
     },
     (err) => {

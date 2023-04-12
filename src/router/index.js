@@ -5,12 +5,12 @@ const routes = [
     {
         path: '',
         component: Navbar,
-        redirect: '/home',
+        redirect: '/timeline',
         children: [
             {
-                path: '/home',
-                component: () => import("@/view/home"),
-                name: 'Home'
+                path: '/timeline',
+                component: () => import("@/view/timeline"),
+                name: 'TimeLine'
             }
         ]
     },
@@ -21,6 +21,4 @@ const router = createRouter({
     routes
 })
 
-export default {
-    router
-}
+export default router
