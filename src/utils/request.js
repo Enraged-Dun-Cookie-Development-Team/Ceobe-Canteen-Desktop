@@ -66,10 +66,11 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     config => {
-        if (config.baseURL == config.baseURL != undefined ? config.baseURL : baseUrl)
+        if (config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)
             return config
     },
     (err) => {
+        console.log(err);
         err.message = '服务器异常，请联系管理员！'
         // 错误抛到业务代码
         return Promise.reject(err)

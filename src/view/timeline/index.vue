@@ -13,8 +13,8 @@
         <template v-slot:icon>
           <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
         </template>
-        <v-card>
           <v-card
+              v-for="item in home.timeLineData"
               class="mx-auto"
               max-width="400"
           >
@@ -26,8 +26,7 @@
             >
             </v-img>
             <v-card-text>
-              <div>Whitehaven Beach</div>
-              <div>Whitsunday Island, Whitsunday Islands</div>
+
             </v-card-text>
 
             <v-card-actions>
@@ -37,7 +36,6 @@
               <v-btn size="small" icon="fas fa-link"></v-btn>
             </v-card-actions>
           </v-card>
-        </v-card>
       </v-timeline-item>
     </v-timeline>
   </div>
@@ -45,13 +43,15 @@
 
 <script setup name="timeLine">
 import {onMounted, reactive} from "vue";
+import {sourceInfo} from "@/constant"
 
 const home = reactive({
   data: [],
-  timeLineData:[],
+  timeLineData: [],
   getData() {
     window.ceobeRequest.getCardList().then(res => {
-      home.data = res.data;
+      let data = res.data.data;
+      home.timeLineData = Object.values(data).flat().sort((x, y) => x.timeForSort - y.timeForSort)
     })
   }
 })
