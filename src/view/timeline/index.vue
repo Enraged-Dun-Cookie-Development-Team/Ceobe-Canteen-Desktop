@@ -10,31 +10,31 @@
           :left="true"
       >
         <template v-slot:icon>
-          <v-avatar :image="proxy.getImg(item.parent.img)"></v-avatar>
+          <v-avatar :image="proxy.getImg('..'+item.parent.img)"></v-avatar>
         </template>
-          <v-card
-              class="mx-auto"
-              max-width="400"
+        <v-card
+            class="mx-auto"
+            max-width="400"
+        >
+          <v-img
+              v-if="false"
+              class="align-end text-white"
+              height="200"
+              :src="item.coverImage"
+              cover
           >
-            <v-img
-                v-if="item.coverImage"
-                class="align-end text-white"
-                height="200"
-                :src="item.coverImage"
-                cover
-            >
-            </v-img>
-            <v-card-text>
-              {{item.content}}
-            </v-card-text>
+          </v-img>
+          <v-card-text>
+            {{ item.content }}
+          </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn size="small" icon="fas fa-copy"></v-btn>
-              <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-              <v-btn size="small" icon="fas fa-link"></v-btn>
-            </v-card-actions>
-          </v-card>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn size="small" icon="fas fa-copy"></v-btn>
+            <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
+            <v-btn size="small" icon="fas fa-link"></v-btn>
+          </v-card-actions>
+        </v-card>
       </v-timeline-item>
     </v-timeline>
   </div>
@@ -52,8 +52,8 @@ const home = reactive({
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
       home.timeLineData = Object.values(data).flat().sort((x, y) => x.timeForSort - y.timeForSort)
-      home.timeLineData.forEach(item=>{
-        item.parent = sourceInfo.find(x=>x.name == item.dataSource)
+      home.timeLineData.forEach(item => {
+        item.parent = sourceInfo.find(x => x.name == item.dataSource)
       })
       console.log(home.timeLineData)
     })

@@ -63,7 +63,7 @@ const sourceInfo = [
     {
         url: 'https://space.bilibili.com/161775300/dynamic',
         name: '官方B站动态',
-        img: '@/assets/image/icon/bili.ico',
+        img: '/assets/image/icon/bili.ico',
     },
     {
         url: 'https://weibo.com/arknights',
