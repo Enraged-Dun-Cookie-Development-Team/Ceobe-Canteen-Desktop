@@ -2,9 +2,11 @@
   <v-card
       class="mx-auto"
       max-width="400"
+      min-width="400"
   >
     <v-img
-        v-if="false"
+        v-if="info.coverImage"
+        referrerpolicy="no-referrer"
         class="align-end text-white "
         height="200"
         :src="info.coverImage"
@@ -12,7 +14,7 @@
     >
     </v-img>
     <v-card-text>
-      <div v-html="info.content"></div>
+      <div v-html="info.content.replace(/(\r\n|\n)/g, '<br>')"></div>
     </v-card-text>
 
     <v-card-actions>
