@@ -4,6 +4,7 @@ import router from './router'
 import vuetify from './plugins/vuetify'
 import {loadFonts} from './plugins/webfontloader'
 import {getImg} from './utils'
+import "@/assets/css/index.scss"
 
 loadFonts()
 

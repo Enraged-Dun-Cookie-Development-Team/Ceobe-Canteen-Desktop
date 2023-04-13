@@ -12,37 +12,19 @@
         <template v-slot:icon>
           <v-avatar :image="proxy.getImg('..'+item.parent.img)"></v-avatar>
         </template>
-        <v-card
-            class="mx-auto"
-            max-width="400"
-        >
-          <v-img
-              v-if="false"
-              class="align-end text-white"
-              height="200"
-              :src="item.coverImage"
-              cover
-          >
-          </v-img>
-          <v-card-text>
-            {{ item.content }}
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn size="small" icon="fas fa-copy"></v-btn>
-            <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-            <v-btn size="small" icon="fas fa-link"></v-btn>
-          </v-card-actions>
-        </v-card>
+        <component :is="component.getComponentName(item)" :info="item" ></component>
       </v-timeline-item>
     </v-timeline>
   </div>
 </template>
 
 <script setup name="timeLine">
-import {getCurrentInstance, onMounted, reactive} from "vue";
+import {getCurrentInstance,defineAsyncComponent, onMounted, reactive} from "vue";
 import {sourceInfo} from "@/constant"
+
+import Music from "@/components/MusicWindow"
+import Info from "@/components/InfoWindow"
+import Terra from "@/components/TerraWindow"
 
 const {proxy} = getCurrentInstance();
 const home = reactive({
@@ -51,12 +33,17 @@ const home = reactive({
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
-      home.timeLineData = Object.values(data).flat().sort((x, y) => x.timeForSort - y.timeForSort)
+      data = data['塞壬唱片网易云音乐']
+      home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort)
       home.timeLineData.forEach(item => {
         item.parent = sourceInfo.find(x => x.name == item.dataSource)
       })
-      console.log(home.timeLineData)
     })
+  }
+});
+const component = reactive({
+  getComponentName(item){
+    return Music
   }
 })
 onMounted(() => {

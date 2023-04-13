@@ -59,7 +59,8 @@
       "vue/no-deprecated-slot-attribute": "off",
       "no-cond-assign": "off",
       "vue/valid-v-for": "off",
-      "vue/no-unused-vars": "off"
+      "vue/no-unused-vars": "off",
+      "vue/no-setup-props-destructure": "off"
     }
   },
   "browserslist": [

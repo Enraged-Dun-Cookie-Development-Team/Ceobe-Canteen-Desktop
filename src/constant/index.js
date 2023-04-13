@@ -96,7 +96,7 @@ const sourceInfo = [
     {
         url: 'https://monster-siren.hypergryph.com/',
         name: '塞壬唱片网易云音乐',
-        img: '/assets/image/icon/wyyyy.jpg',
+        img: '/assets/image/icon/wyyyy.ico',
         radius: true,
     },
     {
