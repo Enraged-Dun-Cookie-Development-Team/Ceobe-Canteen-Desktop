@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <Menu></Menu>
+<!--    <Menu></Menu>-->
     <app-main></app-main>
   </div>
 </template>

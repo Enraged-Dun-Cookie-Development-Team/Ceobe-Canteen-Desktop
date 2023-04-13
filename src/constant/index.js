@@ -1,69 +1,69 @@
 const toolInfo = [
-        {
-            url: 'http://prts.wiki/',
-            name: 'PRTS.Wiki',
-            img: '/assets/image/link/akwiki.png',
-            radius: true,
-        },
-        {
-            url: 'https://mapcn.ark-nights.com',
-            name: 'PRTS.Map',
-            img: '/assets/image/link/akmap.ico',
-            radius: true,
-        },
-        {
-            url: 'https://penguin-stats.cn/',
-            name: '企鹅物流',
-            img: '/assets/image/link/penguin_stats_logo.webp',
-            radius: true,
-        },
-        {
-            url: 'https://arkn.lolicon.app/#/',
-            name: '明日方舟工具箱',
-            img: '/assets/image/link/arktools.png',
-            radius: true,
-        },
-        {
-            url: 'https://kokodayo.fun/',
-            name: 'Kokodayo',
-            img: '/assets/image/link/kkdy.png',
-            radius: true,
-        },
-        {
-            url: 'https://aog.wiki/',
-            name: '刷素材一图流',
-            img: '/assets/image/link/akgraph.ico',
-            radius: true,
-        },
-        {
-            url: 'https://viktorlab.cn/akdata/',
-            name: 'Arknight DPS',
-            img: '/assets/image/link/dps.ico',
-            radius: true,
-        },
-        {
-            url: 'https://terrach.net/',
-            name: '泰拉通讯枢纽',
-            img: '/assets/image/link/tltxsn.png',
-            radius: false,
-        },
-        {
-            url: '../time.html',
-            name: '小刻食堂计时器',
-            img: '/assets/image/icon.png',
-            radius: false,
-        },
-    ];
-const sourceInfo=[
+    {
+        url: 'http://prts.wiki/',
+        name: 'PRTS.Wiki',
+        img: '/assets/image/link/akwiki.png',
+        radius: true,
+    },
+    {
+        url: 'https://mapcn.ark-nights.com',
+        name: 'PRTS.Map',
+        img: '/assets/image/link/akmap.ico',
+        radius: true,
+    },
+    {
+        url: 'https://penguin-stats.cn/',
+        name: '企鹅物流',
+        img: '/assets/image/link/penguin_stats_logo.webp',
+        radius: true,
+    },
+    {
+        url: 'https://arkn.lolicon.app/#/',
+        name: '明日方舟工具箱',
+        img: '/assets/image/link/arktools.png',
+        radius: true,
+    },
+    {
+        url: 'https://kokodayo.fun/',
+        name: 'Kokodayo',
+        img: '/assets/image/link/kkdy.png',
+        radius: true,
+    },
+    {
+        url: 'https://aog.wiki/',
+        name: '刷素材一图流',
+        img: '/assets/image/link/akgraph.ico',
+        radius: true,
+    },
+    {
+        url: 'https://viktorlab.cn/akdata/',
+        name: 'Arknight DPS',
+        img: '/assets/image/link/dps.ico',
+        radius: true,
+    },
+    {
+        url: 'https://terrach.net/',
+        name: '泰拉通讯枢纽',
+        img: '/assets/image/link/tltxsn.png',
+        radius: false,
+    },
+    {
+        url: '../time.html',
+        name: '小刻食堂计时器',
+        img: '/assets/image/icon.png',
+        radius: false,
+    },
+];
+const sourceInfo = [
     {
         url: 'https://ak.hypergryph.com/#information',
-        name: '官方网站',
+        name: '官网',
         img: '/assets/image/icon/mrfz.ico',
     },
     {
         url: 'https://space.bilibili.com/161775300/dynamic',
-        name: '官方哔哩哔哩',
-        img: '/assets/image/icon/bili.ico',
+        name: '官方B站动态',
+        img: '@/assets/image/icon/bili.ico',
     },
     {
         url: 'https://weibo.com/arknights',
@@ -89,8 +89,14 @@ const sourceInfo=[
     },
     {
         url: 'https://monster-siren.hypergryph.com/',
-        name: '塞壬官网',
+        name: '塞壬唱片官网',
         img: '/assets/image/icon/sr.ico',
+        radius: true,
+    },
+    {
+        url: 'https://monster-siren.hypergryph.com/',
+        name: '塞壬唱片网易云音乐',
+        img: '/assets/image/icon/wyyyy.jpg',
         radius: true,
     },
     {
@@ -115,6 +121,11 @@ const sourceInfo=[
         url: 'https://ak.hypergryph.com/anime',
         name: '明日方舟动画官网',
         img: '/assets/image/icon/anime.png',
+        radius: true,
+    }, {
+        url: 'https://ak.hypergryph.com/anime',
+        name: '游戏内公告',
+        img: '/assets/image/icon/txz.jpg',
         radius: true,
     },
 ]
@@ -175,4 +186,4 @@ const dayInfo = [
     },
 ];
 
-export { toolInfo,sourceInfo, dayInfo};
+export {toolInfo, sourceInfo, dayInfo};
