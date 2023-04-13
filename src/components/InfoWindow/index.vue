@@ -9,7 +9,7 @@
         referrerpolicy="no-referrer"
         class="align-end text-white "
         height="200"
-        :src="info.coverImage"
+        :src="common.imgUrl"
         cover
     >
     </v-img>
@@ -27,10 +27,27 @@
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {defineProps, onMounted, reactive} from "vue";
+
 
 const props = defineProps(['info'])
 
+const common = reactive({
+  imgUrl: null,
+  getImg() {
+    if (props.info.dataSource.includes("微博")) {
+      window.ceobeRequest.getWeiboImageBase64(props.info.coverImage).then(res => {
+        common.imgUrl = `data:image/jpeg;base64,${res}`;
+      })
+    } else {
+      common.imgUrl = props.info.coverImage
+    }
+  }
+})
+
+onMounted(() => {
+  common.getImg(props.info.coverImage);
+})
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

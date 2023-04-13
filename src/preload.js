@@ -1,4 +1,4 @@
-const {contextBridge, ipcRenderer } = require('electron');
+const {contextBridge, ipcRenderer} = require('electron');
 const {getCardList} = require("@/api/list");
 
 contextBridge.exposeInMainWorld('versions', {
@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld('versions', {
 
 contextBridge.exposeInMainWorld('ceobeRequest', {
     getCardList: () => getCardList(),
+    getWeiboImageBase64: (url) => ipcRenderer.invoke('getWeiboImageBase64', url)
 })
 
 contextBridge.exposeInMainWorld('operate', {
