@@ -12,7 +12,7 @@
     >
     </v-img>
     <v-card-text>
-      {{ info.content }}
+      <div v-html="info.content"></div>
     </v-card-text>
 
     <v-card-actions>
@@ -27,9 +27,8 @@
 <script setup>
 import {defineProps} from "vue";
 
-const props = defineProps(['item'])
+const props = defineProps(['info'])
 
-const info = props.item
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
