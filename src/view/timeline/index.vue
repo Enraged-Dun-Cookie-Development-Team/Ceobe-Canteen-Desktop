@@ -8,6 +8,9 @@
           v-for="item in home.timeLineData"
           :key="item.id"
           :left="true"
+          fill-dot="fill-dot"
+          dot-color="#fff"
+          size="50"
       >
         <template v-slot:icon>
           <v-avatar :image="proxy.getImg('..'+item.parent.img)"></v-avatar>
@@ -23,7 +26,7 @@ import {getCurrentInstance,defineAsyncComponent, onMounted, reactive} from "vue"
 import {sourceInfo} from "@/constant"
 
 import Music from "@/components/MusicWindow"
-import Info from "@/components/InfoWindow"
+import Info from "@/components/CommonWindow"
 import Terra from "@/components/TerraWindow"
 
 const {proxy} = getCurrentInstance();
