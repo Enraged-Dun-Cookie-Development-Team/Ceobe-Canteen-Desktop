@@ -1,23 +1,19 @@
 <template>
   <div class="weekly-quest flex-column">
-    <v-tooltip text="Tooltip">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props">Tooltip</v-btn>
-      </template>
-    </v-tooltip>
-    <v-card width="100%" v-if="false">
+    <v-card width="100%">
       <v-card-text>
         <div class="d-flex flex-row">
           <div>
-
             <div
-                v-for="(item, index) in quest.resourceInfo.countdown"
+                v-for="(item, index) in quest.countdown"
                 :key="index"
             >
               <div>
                 距离
-                <v-tooltip v-if="item.remark" :text="item.remark">
-                  <span>{{ item.text }}</span>
+                <v-tooltip location="bottom" :text="item.remark" v-if="item.remark">
+                  <template v-slot:activator="{ props }">
+                    <span v-bind="props" class="online-blue cursor-pointer">{{ item.text }}</span>
+                  </template>
                 </v-tooltip>
                 <span v-else class="online-orange">{{ item.text }}</span>
                 <span title="国服 UTC-8">{{ ' ' + quest.calcActivityDiff(item.time) }}</span>
@@ -25,12 +21,20 @@
             </div>
           </div>
         </div>
-        <div class="d-flex flex-row justify-space-around">
-      <span v-for="item in quest.dayInfo" :key="item.name">
-        <v-tooltip :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(item.day)}`">
-                  <v-img :src="getImage(item.src)" width="40" :class="item.notToday ? 'opacity-2' : ''"></v-img>
-        </v-tooltip>
-      </span>
+        <div class="d-flex flex-row justify-space-around mt-2">
+          <span v-for="item in quest.resources" :key="item.name">
+            <v-tooltip location="bottom" :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(item.day)}`">
+              <template v-slot:activator="{ props }">
+                <v-img
+                    class="cursor-pointer"
+                    :aspect-ratio="1"
+                    v-bind="props"
+                    :src="getImage(item.src)"
+                    width="40"
+                    :class="item.notToday ? 'opacity-2' : ''"/>
+              </template>
+            </v-tooltip>
+          </span>
         </div>
       </v-card-text>
     </v-card>
@@ -47,11 +51,22 @@ const quest = reactive({
   dayInfo: dayInfo,
   openResources: false,
   resourceInfo: {},
+  resources: [],
+  countdown: [],
   getData() {
     window.ceobeRequest.getResourceInfo().then(res => {
       quest.resourceInfo = res.data.data
-      // quest.resourcesNotToday()
+      quest.resourcesNotToday()
+      quest.calcCountdown()
     })
+  },
+  calcCountdown() {
+    // 倒计时
+    quest.countdown = quest.resourceInfo.countdown.filter(
+        (x) =>
+            new Date(x.start_time) <= changeToCCT(new Date()) &&
+            new Date(x.over_time) >= changeToCCT(new Date())
+    );
   },
   // 今天有没有该资源可以刷
   resourcesNotToday() {
@@ -61,8 +76,11 @@ const quest = reactive({
       let starTime = new Date(quest.resourceInfo.resources.start_time);
       let overTime = new Date(quest.resourceInfo.resources.over_time);
       if (date >= starTime && date <= overTime) {
-        quest.dayInfo.forEach((item) => {
-          item.notToday = false;
+        quest.resources = quest.dayInfo.map((item) => {
+          return {
+            ...item,
+            notToday: false
+          }
         });
         quest.openResources = true;
         return;
@@ -73,8 +91,11 @@ const quest = reactive({
     // 判断4点更新
     week = date.getHours() >= 4 ? week : week - 1;
     week = week == -1 ? 6 : week;
-    quest.dayInfo.forEach((item) => {
-      item.notToday = !item.day.includes(week);
+    quest.resources = quest.dayInfo.map((item) => {
+      return {
+        ...item,
+        notToday: !item.day.includes(week),
+      }
     });
     quest.openResources = false;
   },

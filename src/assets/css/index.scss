@@ -2,14 +2,42 @@
   user-select: none
 }
 
-.blur-10{
+.blur-10 {
   filter: blur(10px); /* 设置模糊效果 */
 }
 
-.brightness-5{
+.brightness-5 {
   filter: brightness(0.5)
 }
 
-.opacity-2{
+.opacity-2 {
   opacity: 0.2
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.online-blue {
+  color: #23ade5;
+}
+
+.online-orange {
+  color: #ffba4b;
+}
+
+.online-red {
+  color: #f56c6c;
+}
+
+.online-yellow {
+  color: #e6a23c;
+}
+
+.online-green {
+  color: #67c23a;
+}
+
+.online-gray {
+  color: #909399;
 }
