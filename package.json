@@ -23,7 +23,7 @@
     "sass-loader": "^13.2.2",
     "vue": "^3.2.13",
     "vue-router": "^4.1.6",
-    "vuetify": "^3.0.0-beta.0",
+    "vuetify": "^3.1.4",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "electron": "^13.0.0",
+    "electron": "^23.2.3",
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",

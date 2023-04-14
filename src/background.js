@@ -17,8 +17,11 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 1100,
     height: 600,
+    // 这里碰到了大问题 不加载preload 解决方案 添加 nodeIntegration:true,
+    // https://stackoverflow.com/questions/60814430/electron-builder-with-browserwindow-and-preload-js-unable-to-load-preload-scrip
     webPreferences: {
-      preload:path.join(__dirname, 'preload.js'),
+      nodeIntegration:true,
+      preload:path.resolve(__dirname, 'preload.js'),
       webSecurity: false,
     }
   })
