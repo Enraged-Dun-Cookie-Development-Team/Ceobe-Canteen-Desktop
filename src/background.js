@@ -1,4 +1,3 @@
-'use strict'
 
 import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
@@ -19,9 +18,7 @@ async function createWindow() {
     width: 1100,
     height: 600,
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-      preload: path.resolve(__dirname, 'preload.js'),
+      preload:path.join(__dirname, 'preload.js'),
       webSecurity: false,
     }
   })
@@ -56,6 +53,9 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
+    console.log(process.versions.electron)
+    console.log(process.versions.node);
+
     try {
       await installExtension(VUEJS3_DEVTOOLS)
     } catch (e) {

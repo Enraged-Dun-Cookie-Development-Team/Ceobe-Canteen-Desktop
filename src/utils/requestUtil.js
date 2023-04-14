@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://temp.ceobecanteen.top'
+const baseUrl = 'https://server.ceobecanteen.top/api/v1'
 
 const showStatus = (status) => {
     let message = ''

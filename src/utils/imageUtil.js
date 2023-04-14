@@ -1,6 +1,6 @@
-export function getImg(url) {
+export function getImage(url, isLocal = true) {
     if (url) {
-        return new URL(url, import.meta.url).href;
+        return new URL(isLocal ? '..' + url : url, import.meta.url).href;
     } else {
         return null
     }
@@ -10,10 +10,10 @@ export function getImg(url) {
 export function getImageFromBase64(base64String) {
     return new Promise((resolve, reject) => {
         const img = new Image();
-        img.onload = function() {
+        img.onload = function () {
             resolve(this);
         };
-        img.onerror = function() {
+        img.onerror = function () {
             reject('Error loading image');
         };
         img.src = base64String;

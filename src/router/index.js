@@ -1,16 +1,16 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Navbar from '@/view/navbar'
+import Navbar from '@/components/Navbar'
 
 const routes = [
     {
         path: '',
         component: Navbar,
-        redirect: '/timeline',
+        redirect: '/home',
         children: [
             {
-                path: '/timeline',
-                component: () => import("@/view/timeline"),
-                name: 'TimeLine'
+                path: '/home',
+                component: () => import("@/view/home/index"),
+                name: 'Home'
             }
         ]
     },

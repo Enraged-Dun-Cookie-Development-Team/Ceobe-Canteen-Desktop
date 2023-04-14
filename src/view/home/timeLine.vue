@@ -13,7 +13,7 @@
           size="50"
       >
         <template v-slot:icon>
-          <v-avatar :image="proxy.getImg('..'+item.parent.img)"></v-avatar>
+          <v-avatar :image="getImage(item.parent.img)"></v-avatar>
         </template>
         <component :is="component.getComponentName(item)" :info="item" ></component>
       </v-timeline-item>
@@ -24,6 +24,7 @@
 <script setup name="timeLine">
 import {getCurrentInstance,defineAsyncComponent, onMounted, reactive} from "vue";
 import {sourceInfo} from "@/constant"
+import {getImage} from "@/utils/imageUtil"
 
 import Music from "@/components/MusicWindow"
 import Info from "@/components/CommonWindow"

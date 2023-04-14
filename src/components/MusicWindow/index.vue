@@ -42,7 +42,7 @@
         </v-avatar>
       </div>
       <v-card-actions>
-        <v-span>{{ info.timeForDisplay }}</v-span>
+        <span class="font-weight-bold pl-2">{{ info.timeForDisplay }}</span>
         <v-spacer></v-spacer>
         <v-btn size="small" icon="fas fa-copy"></v-btn>
         <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
