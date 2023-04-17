@@ -60,7 +60,9 @@
       "no-cond-assign": "off",
       "vue/valid-v-for": "off",
       "vue/no-unused-vars": "off",
-      "vue/no-setup-props-destructure": "off"
+      "vue/no-setup-props-destructure": "off",
+      "no-undef": "off",
+      "vue/valid-define-emits": "off"
     }
   },
   "browserslist": [

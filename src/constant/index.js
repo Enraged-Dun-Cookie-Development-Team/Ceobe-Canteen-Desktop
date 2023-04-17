@@ -50,7 +50,7 @@ const toolInfo = [
     {
         url: '../time.html',
         name: '小刻食堂计时器',
-        img: '/assets/image/icon.png',
+        img: '/assets/image/logo/icon.png',
         radius: false,
     },
 ];
