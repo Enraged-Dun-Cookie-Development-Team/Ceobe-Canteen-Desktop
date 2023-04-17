@@ -22,8 +22,8 @@ import WeeklyQuest from "@/components/InfoAndTool/weeklyQuest";
 
 <style rel="stylesheet/scss" lang="scss">
 .info-and-tool {
-  width: 500px;
-  max-width: 500px;
+  width: 600px;
+  max-width: 600px;
   user-select: none;
 }
 </style>
