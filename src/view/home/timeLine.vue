@@ -27,9 +27,9 @@ import {getCurrentInstance, defineAsyncComponent, onMounted, reactive} from "vue
 import {sourceInfo} from "@/constant"
 import {getImage} from "@/utils/imageUtil"
 
-import Music from "@/components/MusicWindow"
-import Info from "@/components/CommonWindow"
-import Terra from "@/components/TerraWindow"
+import Music from "@/components/Card/music"
+import Info from "@/components/Card/common"
+import Terra from "@/components/Card/terra"
 
 const {proxy} = getCurrentInstance();
 const home = reactive({
@@ -69,9 +69,13 @@ onMounted(() => {
     grid-template-columns: 8px min-content 8px;
 
     .v-timeline-item {
-      .v-timeline-item__body{
+      .v-timeline-item__body {
         -webkit-padding-start: 8px !important;
         padding-inline-start: 8px !important;
+
+        .v-card-title {
+          text-shadow: 0 0 5px black;
+        }
       }
     }
   }

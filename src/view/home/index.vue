@@ -1,14 +1,23 @@
 <template>
   <div class="home d-flex">
-    <time-line class="pt-2"></time-line>
-    <info-and-tool class="pt-2"></info-and-tool>
+    <time-line class="pt-2" @openUrl="handle.openUrl"></time-line>
+    <router-view v-slot="{Component,route}">
+      <transition name="fade-transform">
+        <component v-if="!route.meta.link" :is="Component" :key="route.path"/>
+      </transition>
+    </router-view>
   </div>
 </template>
 
 <script setup name="home">
-
 import TimeLine from "@/view/home/timeLine";
-import InfoAndTool from "@/view/home/infoAndTool";
+import {reactive, ref} from "vue";
+
+const handle = reactive({
+  openUrl(data){
+
+  }
+})
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

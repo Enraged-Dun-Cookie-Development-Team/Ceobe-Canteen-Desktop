@@ -38,15 +38,6 @@ const videoInfo = reactive({
               new Date(x.start_time) <= changeToCCT(new Date()) &&
               new Date(x.over_time) >= changeToCCT(new Date())
       );
-      let promiseList = [];
-      // videoInfo.list.forEach(item => {
-      //   promiseList.push(window.ceobeRequest.getHasRefererImageBase64(item.cover_img.split('@')[0], null))
-      // })
-      // Promise.all(promiseList).then(res => {
-      //   res.forEach((item, index) => {
-      //     videoInfo.list[index].base64Url = "data:image/jpeg;base64," + item;
-      //   })
-      // })
     })
   }
 })
