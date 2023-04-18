@@ -12,11 +12,12 @@
           fill-dot="fill-dot"
           dot-color="#fff"
           size="50"
+          @click=""
       >
         <template v-slot:icon>
           <v-avatar :image="getImage(item.parent.img)"></v-avatar>
         </template>
-        <component :is="component.getComponentName(item)" :info="item"></component>
+        <component :is="component.getComponentName(item)" :info="item" @openUrl="home.openUrl"></component>
       </v-timeline-item>
     </v-timeline>
   </div>
@@ -30,11 +31,21 @@ import {getImage} from "@/utils/imageUtil"
 import Music from "@/components/Card/music"
 import Info from "@/components/Card/common"
 import Terra from "@/components/Card/terra"
+import router from "@/router";
 
 const {proxy} = getCurrentInstance();
 const home = reactive({
   data: [],
   timeLineData: [],
+  openUrl(url, data) {
+    router.push({
+      path: '/home/browser',
+      meta: {
+        url,
+        data
+      }
+    })
+  },
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
@@ -45,6 +56,7 @@ const home = reactive({
     })
   }
 });
+
 const component = reactive({
   getComponentName(item) {
     if (item.dataSource == "塞壬唱片网易云音乐") {

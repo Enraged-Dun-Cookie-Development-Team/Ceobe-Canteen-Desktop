@@ -62,7 +62,8 @@
       "vue/no-unused-vars": "off",
       "vue/no-setup-props-destructure": "off",
       "no-undef": "off",
-      "vue/valid-define-emits": "off"
+      "vue/valid-define-emits": "off",
+      "vue/valid-v-on": "off"
     }
   },
   "browserslist": [

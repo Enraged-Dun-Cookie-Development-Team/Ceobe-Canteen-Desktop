@@ -2,17 +2,22 @@
   <div class="app-main">
     <v-app>
       <v-main>
-        <router-view v-slot="{Component,route}">
-          <transition name="fade-transform">
-            <component v-if="!route.meta.link" :is="Component" :key="route.path"/>
+        <keep-alive>
+          <transition>
+            <router-view/>
           </transition>
-        </router-view>
+        </keep-alive>
       </v-main>
     </v-app>
   </div>
 </template>
 
 <script setup name="AppMain">
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+import Home from './home/index'
+
+const route = useRoute();
 
 </script>
 

@@ -1,8 +1,8 @@
 <template>
   <div class="common-window">
     <v-card
-        class="mx-auto"
-        max-width="400"
+        class="mx-auto cursor-pointer"
+        @click="common.openUrl(info)"
         min-width="400"
     >
       <v-img
@@ -15,7 +15,7 @@
       >
         <template #default v-if="info.imageList">
           <v-card-title class="text-white text-right">
-            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图` : "" }}
+            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图 →` : "" }}
           </v-card-title>
         </template>
       </v-img>
@@ -41,6 +41,7 @@ import {getImageFromBase64} from "@/utils/imageUtil";
 
 
 const props = defineProps(['info'])
+const emits = defineEmits();
 
 const common = reactive({
   imgUrl: [],
@@ -53,11 +54,10 @@ const common = reactive({
       common.imgUrl = props.info.coverImage
     }
   },
-  async getHeight(event) {
-    common.imgHeight = [];
-    let imageData = await getImageFromBase64(event);
-    let height = imageData.height > 400 ? 400 : imageData.height
-    common.imgHeight.push(height)
+  openImage() {
+  },
+  openUrl(info) {
+    emits('openUrl', info.jumpUrl, info)
   }
 })
 

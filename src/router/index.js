@@ -1,11 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Navbar from '@/components/Navbar'
 
 const routes = [
     {
         path: '',
-        component: Navbar,
-        redirect:'/tool',
+        component: () => import("@/components/Navbar"),
+        redirect:'/home/tool',
         children: [
             {
                 path: '/home',
@@ -13,9 +12,14 @@ const routes = [
                 name: 'Home',
                 children: [
                     {
-                        path: '/tool',
+                        path: 'tool',
                         component: () => import("@/view/home/infoAndTool"),
                         name: 'Tool'
+                    },
+                    {
+                        path: 'browser',
+                        component: () => import("@/components/browser"),
+                        name: 'Browser'
                     }
                 ]
             }
