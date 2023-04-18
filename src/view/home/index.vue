@@ -1,6 +1,7 @@
 <template>
-  <div class="home">
-    <info-and-tool></info-and-tool>
+  <div class="home d-flex">
+    <time-line class="pt-2"></time-line>
+    <info-and-tool class="pt-2"></info-and-tool>
   </div>
 </template>
 
@@ -12,5 +13,7 @@ import InfoAndTool from "@/view/home/infoAndTool";
 
 <style rel="stylesheet/scss" lang="scss">
 .home {
+  min-width:1200px;
+  overflow: hidden;
 }
 </style>

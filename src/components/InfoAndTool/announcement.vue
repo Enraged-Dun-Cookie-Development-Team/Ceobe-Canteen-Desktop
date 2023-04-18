@@ -1,5 +1,5 @@
 <template>
-  <div class="announcement">
+  <div class="announcement mt-2">
     <v-card>
       <v-carousel :show-arrows="false"
                   height="160"
@@ -51,6 +51,7 @@ onMounted(() => {
     align-items: center;
     font-size: 14px;
     margin-top: 7px;
+    justify-content: center;
 
     p {
       margin: 0;

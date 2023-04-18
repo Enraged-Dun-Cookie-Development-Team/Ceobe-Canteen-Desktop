@@ -13,24 +13,13 @@
           max-height="320"
           cover
       >
-        <template #default>
-          <v-card-title class="text-white text-right">{{info.imageList.length>1?`还有${info.imageList.length - 1}张图`:""}}</v-card-title>
+        <template #default v-if="info.imageList">
+          <v-card-title class="text-white text-right">
+            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图` : "" }}
+          </v-card-title>
         </template>
       </v-img>
-      <!--    <v-row v-if="common.imgUrl.length>0">-->
-      <!--      <v-col-->
-      <!--          v-for="n in common.imgUrl"-->
-      <!--          :key="n"-->
-      <!--          class="d-flex child-flex"-->
-      <!--          :cols="common.imgUrl.length == 1?12:common.imgUrl.length == 2?6:4"-->
-      <!--      >-->
-      <!--        <v-img v-for="(item,index) in common.imgUrl"-->
-      <!--               class="align-end text-white"-->
-      <!--               :max-height="common.imgHeight[index]"-->
-      <!--               :src="item"-->
-      <!--               cover></v-img>-->
-      <!--      </v-col>-->
-      <!--    </v-row>-->
+
       <v-card-text>
         <div v-html="info.content.replace(/(\r\n|\n)/g, '<br>')"></div>
       </v-card-text>
@@ -60,17 +49,6 @@ const common = reactive({
       window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then(res => {
         common.imgUrl = 'data:image/jpeg;base64,' + res;
       })
-
-      // 留着以后用
-      // let promiseList = [];
-      // props.info.imageList.forEach(async item => {
-      //   promiseList.push(window.ceobeRequest.getWeiboImageBase64(item))
-      // })
-      // Promise.all(promiseList).then(res => {
-      //   if (res && res.length > 0) {
-      //     common.imgUrl = res.map(x => `data:image/jpeg;base64,${x}`)
-      //   }
-      // });
     } else {
       common.imgUrl = props.info.coverImage
     }

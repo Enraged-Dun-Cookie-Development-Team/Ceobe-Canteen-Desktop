@@ -1,6 +1,6 @@
 <template>
   <div class="weekly-quest flex-column">
-    <v-card width="100%">
+    <v-card>
       <v-card-text>
         <div class="d-flex flex-row">
           <div>

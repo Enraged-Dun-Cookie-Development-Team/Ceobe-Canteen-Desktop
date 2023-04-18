@@ -1,24 +1,25 @@
 <template>
   <div class="video mt-2 d-flex flex-wrap justify-space-between">
     <v-card
-        max-width="296"
+        width="320"
         v-for="item in videoInfo.list"
         class="mb-2"
     >
-<!--      {{ item.video_link }}-->
+      <!--      {{ item.video_link }}-->
       <v-img
           class="align-end text-white"
-          height="100"
-          :src="item.base64Url"
+          width="100%"
+          :src="item.cover_img.split('@')[0]"
           cover
       >
         <v-card-title class="text-right">{{ item.author }}</v-card-title>
       </v-img>
 
-      <v-card-subtitle class="pt-4">
+      <v-card-subtitle class="py-2">
         {{ item.title }}
       </v-card-subtitle>
     </v-card>
+    <i/><i/><i/><i/><i/>
   </div>
 </template>
 
@@ -38,14 +39,14 @@ const videoInfo = reactive({
               new Date(x.over_time) >= changeToCCT(new Date())
       );
       let promiseList = [];
-      videoInfo.list.forEach(item => {
-        promiseList.push(window.ceobeRequest.getHasRefererImageBase64(item.cover_img.split('@')[0], null))
-      })
-      Promise.all(promiseList).then(res => {
-        res.forEach((item, index) => {
-          videoInfo.list[index].base64Url = "data:image/jpeg;base64," + item;
-        })
-      })
+      // videoInfo.list.forEach(item => {
+      //   promiseList.push(window.ceobeRequest.getHasRefererImageBase64(item.cover_img.split('@')[0], null))
+      // })
+      // Promise.all(promiseList).then(res => {
+      //   res.forEach((item, index) => {
+      //     videoInfo.list[index].base64Url = "data:image/jpeg;base64," + item;
+      //   })
+      // })
     })
   }
 })
@@ -59,7 +60,6 @@ onMounted(() => {
 .video {
 
   .v-card {
-
     .v-card-title {
       text-shadow: 0 0 5px black;
     }
@@ -73,5 +73,8 @@ onMounted(() => {
     }
   }
 
+  i {
+    width: 320px;
+  }
 }
 </style>

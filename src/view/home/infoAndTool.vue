@@ -3,19 +3,17 @@
     <!--常用信息-->
     <weekly-quest></weekly-quest>
     <!--公告-->
-    <annoukncement></annoukncement>
+    <announcement></announcement>
     <!--广告-->
     <!--发源地-->
-    <tool-or-source title="饼的发源地" :list="source.list" :not-margin-top="3"></tool-or-source>
+    <tool-or-source title="饼的发源地" :list="source.list" ></tool-or-source>
     <!--快捷工具-->
-    <tool-or-source title="快捷工具" :list="tool.list" :not-margin-top="2"></tool-or-source>
+    <tool-or-source title="快捷工具" :list="tool.list" ></tool-or-source>
     <!--推荐视频-->
     <video-list></video-list>
-    <v-row>
-      <v-col class="d-flex justify-center mt-2">
-        Powered By 蓝芷怡 & 洛梧藤 & 云闪
-      </v-col>
-    </v-row>
+    <div class="d-flex justify-center ma-2">
+      Powered By 蓝芷怡 & 洛梧藤 & 云闪
+    </div>
   </div>
 </template>
 
@@ -40,8 +38,10 @@ const tool = reactive({
 
 <style rel="stylesheet/scss" lang="scss">
 .info-and-tool {
-  width: 600px;
-  max-width: 600px;
   user-select: none;
+  min-width: 600px;
+  height: 100vh;
+  overflow: auto;
+  padding: 10px 16px 0;
 }
 </style>

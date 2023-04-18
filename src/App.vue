@@ -1,5 +1,6 @@
 <template>
-  <router-view class="pa-1"></router-view>
+  <meta name="referrer" content="no-referrer" />
+  <router-view></router-view>
 </template>
 
 <script setup>
