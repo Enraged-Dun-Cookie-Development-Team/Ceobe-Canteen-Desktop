@@ -1,10 +1,10 @@
 const {app, ipcMain} = require('electron')
 app.whenReady().then(() => {
     const {net} = require('electron');
-    const getWeiboImageBase64 = (url) => {
+    const getHasRefererImageBase64 = (url,referer = "https://weibo.com/") => {
         return new Promise((resolve, reject) => {
             const request = net.request(url);
-            request.setHeader('Referer', 'https://weibo.com/');
+            request.setHeader('Referer', referer);
             request.on('response', (response) => {
                 let chunks = [];
                 response.on('data', (chunk) => {
@@ -22,8 +22,8 @@ app.whenReady().then(() => {
             request.end();
         });
     };
-    ipcMain.handle('getWeiboImageBase64', (event, url) => {
-        return getWeiboImageBase64(url);
+    ipcMain.handle('getHasRefererImageBase64', (event, url,referer) => {
+        return getHasRefererImageBase64(url,referer);
     })
 })
 

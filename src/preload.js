@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('ceobeRequest', {
     getCardList: () => getCardList(),
     getAnnouncementInfo: () => getAnnouncementInfo(),
     getResourceInfo: () => getResourceInfo(),
-    getWeiboImageBase64: (url) => ipcRenderer.invoke('getWeiboImageBase64', url)
+    getHasRefererImageBase64: (url) => ipcRenderer.invoke('getHasRefererImageBase64', url)
 })
 
 contextBridge.exposeInMainWorld('operate', {

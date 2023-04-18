@@ -6,11 +6,16 @@
 <!--    <annoukncement ></annoukncement>-->
     <!--广告-->
     <!--发源地-->
-    <tool-or-source title="饼的发源地" :list="source.list"></tool-or-source>
+<!--    <tool-or-source title="饼的发源地" :list="source.list" :not-margin-top="3"></tool-or-source>-->
     <!--快捷工具-->
-    <tool-or-source title="快捷工具" :list="tool.list"></tool-or-source>
+<!--    <tool-or-source title="快捷工具" :list="tool.list" :not-margin-top="2"></tool-or-source>-->
     <!--推荐视频-->
-    <!--Powered By 蓝芷怡 & 洛梧藤 & 云闪-->
+    <video-list></video-list>
+    <v-row >
+      <v-col class="d-flex justify-center mt-2">
+        Powered By 蓝芷怡 & 洛梧藤 & 云闪
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -21,6 +26,7 @@ import Announcement from "@/components/InfoAndTool/announcement";
 import WeeklyQuest from "@/components/InfoAndTool/weeklyQuest";
 import ToolOrSource from "@/components/InfoAndTool/toolOrSource";
 import {sourceInfo,toolInfo} from "@/constant";
+import VideoList from "@/components/InfoAndTool/videoList";
 
 const source = reactive({
   list:sourceInfo

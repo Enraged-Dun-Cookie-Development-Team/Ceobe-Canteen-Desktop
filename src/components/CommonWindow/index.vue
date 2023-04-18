@@ -57,7 +57,7 @@ const common = reactive({
   imgUrl: [],
   getImg() {
     if (props.info.dataSource.includes("微博")) {
-      window.ceobeRequest.getWeiboImageBase64(props.info.coverImage).then(res => {
+      window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then(res => {
         common.imgUrl = 'data:image/jpeg;base64,' + res;
       })
 
