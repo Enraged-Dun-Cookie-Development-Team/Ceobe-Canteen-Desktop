@@ -1,11 +1,9 @@
 <template>
   <div class="music-window">
-    {{ id }}
     <v-card
         theme="dark"
         max-width="400"
         min-width="400"
-        @click="openUrl"
     >
       <template #image>
         <v-img
@@ -77,14 +75,6 @@ const emits = defineEmits();
 const id = props.info.jumpUrl.split("=")[1]
 const showPlayer = ref(false)
 
-function openUrl() {
-  let data = {
-    url: props.info.jumpUrl,
-    source: props.info.dataSource,
-    icon: props.info.parent.img
-  }
-  emits('openUrl', data)
-}
 
 onMounted(() => {
 })

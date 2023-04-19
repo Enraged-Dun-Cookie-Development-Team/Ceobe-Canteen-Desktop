@@ -46,7 +46,7 @@ const home = reactive({
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
-      data = data["塞壬唱片网易云音乐"]
+      // data = data["塞壬唱片网易云音乐"]
       home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
       home.timeLineData.forEach(item => {
         item.parent = sourceInfo.find(x => x.name == item.dataSource)
