@@ -9,8 +9,6 @@ loadFonts()
 
 const app = createApp(App);
 
-// app.config.globalProperties.getImg = getImage;
-
 app.use(router);
 app.use(vuetify);
 app.mount('#app');

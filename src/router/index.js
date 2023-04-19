@@ -19,7 +19,7 @@ const routes = [
                     {
                         path: 'browser',
                         component: () => import("@/components/browser"),
-                        name: 'Browser'
+                        name: 'Browser',
                     }
                 ]
             }

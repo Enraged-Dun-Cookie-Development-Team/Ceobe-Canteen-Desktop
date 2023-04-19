@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, remote, shell } = require('electron');
+const {contextBridge, ipcRenderer, remote, shell} = require('electron');
 const {getCardList, getAnnouncementInfo, getResourceInfo} = require("@/api/list");
 
 contextBridge.exposeInMainWorld('versions', {
@@ -9,7 +9,8 @@ contextBridge.exposeInMainWorld('ceobeRequest', {
     getCardList: () => getCardList(),
     getAnnouncementInfo: () => getAnnouncementInfo(),
     getResourceInfo: () => getResourceInfo(),
-    getHasRefererImageBase64: (url) => ipcRenderer.invoke('getHasRefererImageBase64', url)
+    getHasRefererImageBase64: (url) => ipcRenderer.invoke('getHasRefererImageBase64', url),
+    getLocalFileText: (path) => ipcRenderer.invoke("getLocalFileText", path)
 })
 
 contextBridge.exposeInMainWorld('operate', {

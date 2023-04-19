@@ -37,7 +37,7 @@
 
 <script setup>
 import {defineProps, onMounted, reactive} from "vue";
-import {getImageFromBase64} from "@/utils/imageUtil";
+import {getImage, getImageFromBase64} from "@/utils/imageUtil";
 
 
 const props = defineProps(['info'])
@@ -56,8 +56,14 @@ const common = reactive({
   },
   openImage() {
   },
-  openUrl(info) {
-    emits('openUrl', info.jumpUrl, info)
+  openUrl(item) {
+    // 统一格式 只需要标题和url和icon
+    let data = {
+      url:item.jumpUrl,
+      source:item.dataSource,
+      icon:item.parent.img
+    }
+    emits('openUrl', data)
   }
 })
 

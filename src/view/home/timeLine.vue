@@ -12,7 +12,6 @@
           fill-dot="fill-dot"
           dot-color="#fff"
           size="50"
-          @click=""
       >
         <template v-slot:icon>
           <v-avatar :image="getImage(item.parent.img)"></v-avatar>
@@ -31,19 +30,17 @@ import {getImage} from "@/utils/imageUtil"
 import Music from "@/components/Card/music"
 import Info from "@/components/Card/common"
 import Terra from "@/components/Card/terra"
-import router from "@/router";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const {proxy} = getCurrentInstance();
 const home = reactive({
   data: [],
   timeLineData: [],
-  openUrl(url, data) {
+  openUrl(data) {
     router.push({
       path: '/home/browser',
-      meta: {
-        url,
-        data
-      }
+      query: data
     })
   },
   getData() {
