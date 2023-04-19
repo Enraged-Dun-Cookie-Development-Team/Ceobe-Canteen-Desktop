@@ -35,8 +35,16 @@ const webviewWindow = reactive({
   insertCss() {
     // b站
     webviewWindow.webview.insertCSS(`
-
-
+        #bili-header-container,
+        #internationalHeader,
+        .van-popover,
+        .international-header,
+        .login-tip,
+        .bili-dyn-card-link-common,
+        .bili-dyn-item__footer,
+        .bili-dyn-item__panel{
+          display:none!important
+        }
         `);
   },
   insertJs() {
@@ -65,7 +73,7 @@ onMounted(() => {
 
   webview {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 64px);
   }
 }
 </style>
