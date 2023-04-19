@@ -1,4 +1,4 @@
-const {app, ipcMain} = require('electron')
+const {app, ipcMain,shell} = require('electron')
 const fs = require("fs")
 const path = require('path');
 
@@ -43,6 +43,10 @@ app.whenReady().then(() => {
     // 获取文件
     ipcMain.handle('getLocalFileText', function (event, path) {
         return getLocalFileText(path)
+    });
+
+    ipcMain.handle('openUrl', (event, url) => {
+        shell.openExternal(url);
     });
 })
 

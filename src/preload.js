@@ -15,4 +15,5 @@ contextBridge.exposeInMainWorld('ceobeRequest', {
 
 contextBridge.exposeInMainWorld('operate', {
     openWindow: (data) => ipcRenderer.invoke('newWindow', data),
+    openUrl: (url) => ipcRenderer.invoke('openUrl', url),
 })

@@ -4,7 +4,7 @@
       <template #prepend>
         <v-img :src="getImage(query.icon)" width="26" class="border-radius-50"></v-img>
       </template>
-      <v-btn size="small" @click="back" icon="fas fa-window-restore" title="使用浏览器打开"></v-btn>
+      <v-btn size="small" @click="open" icon="fas fa-window-restore" title="使用浏览器打开"></v-btn>
       <v-btn size="small" @click="back" icon="fas fa-circle-xmark" title="关闭"></v-btn>
     </v-toolbar>
     <webview :src="query.url"></webview>
@@ -15,7 +15,7 @@
 
 <script setup name="index">
 import {useRoute} from "vue-router";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import router from "@/router";
 import {getImage} from "@/utils/imageUtil"
 
@@ -46,17 +46,41 @@ const webviewWindow = reactive({
           display:none!important
         }
         `);
+
+    // 微博
+    webviewWindow.webview.insertCSS(`
+    [class^="Frame_top_"],
+    [class^="Frame_side_"],
+    [class^="Bar_main_"],
+    [class^="title_wrap_"],
+    .woo-panel-main>footer,
+    [class^="Detail_box_"],
+    [class^="Main_side_"]{
+          display:none!important
+        }
+        `);
   },
   insertJs() {
     webviewWindow.webview.executeJavaScript(``).then(res => {
-     console.log(res)
+      console.log(res)
     })
   }
 })
 
 function back() {
-  router.back();
+  router.push({
+    path:'/'
+  })
 }
+
+function open() {
+  window.operate.openUrl(query.value.url)
+}
+
+watch(()=>route.query,val=>{
+  query.value = route.query
+  webviewWindow.init();
+})
 
 onMounted(() => {
   query.value = route.query
