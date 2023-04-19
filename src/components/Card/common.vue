@@ -2,7 +2,7 @@
   <div class="common-window">
     <v-card
         class="mx-auto cursor-pointer"
-        @click="common.openUrl(info)"
+        @click="common.openUrl"
         min-width="400"
     >
       <v-img
@@ -56,12 +56,12 @@ const common = reactive({
   },
   openImage() {
   },
-  openUrl(item) {
+  openUrl() {
     // 统一格式 只需要标题和url和icon
     let data = {
-      url:item.jumpUrl,
-      source:item.dataSource,
-      icon:item.parent.img
+      url:props.info.jumpUrl,
+      source:props.info.dataSource,
+      icon:props.info.parent.img
     }
     emits('openUrl', data)
   }

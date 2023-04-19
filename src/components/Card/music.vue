@@ -1,9 +1,11 @@
 <template>
   <div class="music-window">
+    {{ id }}
     <v-card
         theme="dark"
         max-width="400"
         min-width="400"
+        @click="openUrl"
     >
       <template #image>
         <v-img
@@ -27,8 +29,9 @@
             <v-spacer></v-spacer>
             <v-btn
                 class="ms-2"
-                icon="mdi: mdi-play"
+                :icon="!showPlayer?'mdi: mdi-play':'mdi: mdi-stop'"
                 variant="text"
+                @click.stop="showPlayer = !showPlayer;clickIndex++"
             ></v-btn>
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -48,16 +51,44 @@
         <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
         <v-btn size="small" icon="fas fa-link"></v-btn>
       </v-card-actions>
+      <v-expand-transition>
+        <div v-show="showPlayer">
+          <v-divider></v-divider>
+          <div class="d-flex justify-center ma-1">
+            此插件来源于网易云音乐
+          </div>
+          <webview v-if="showPlayer"
+                   :style="{height:(150+info.componentData.size*30) +'px'}"
+                   :id="`webview-${id}`"
+                   :src="`http://music.163.com/outchain/player?type=1&id=${id}&auto=0`"></webview>
+          <div v-else :style="{height:(150+info.componentData.size*30) +'px'}"></div>
+        </div>
+      </v-expand-transition>
     </v-card>
   </div>
 
 </template>
 
 <script setup>
-import {defineProps, onMounted} from "vue";
+import {defineProps, onMounted, ref, watch} from "vue";
 
 const props = defineProps(['info'])
-console.log(props.info)
+const emits = defineEmits();
+const id = props.info.jumpUrl.split("=")[1]
+const showPlayer = ref(false)
+
+function openUrl() {
+  let data = {
+    url: props.info.jumpUrl,
+    source: props.info.dataSource,
+    icon: props.info.parent.img
+  }
+  emits('openUrl', data)
+}
+
+onMounted(() => {
+})
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

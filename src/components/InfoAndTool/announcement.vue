@@ -1,12 +1,15 @@
 <template>
   <div class="announcement mt-2">
     <v-card>
-      <v-carousel :show-arrows="false"
-                  height="160"
-                  :continuous="false"
-                  v-model="announcementInfo.index"
-                  hide-delimiter-background
-                  delimiter-icon="mdi: mdi-square"
+      <v-carousel
+          cycle
+          :show-arrows="false"
+          height="160"
+          :continuous="false"
+          v-model="announcementInfo.index"
+          hide-delimiter-background
+          delimiter-icon="mdi: mdi-square"
+
       >
         <v-carousel-item
             v-for="(item,i) in announcementInfo.data"
