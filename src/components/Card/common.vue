@@ -31,6 +31,7 @@
         <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
         <v-btn size="small" icon="fas fa-link"></v-btn>
       </v-card-actions>
+
     </v-card>
   </div>
 </template>
