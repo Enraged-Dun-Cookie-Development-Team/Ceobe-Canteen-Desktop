@@ -14,6 +14,14 @@ contextBridge.exposeInMainWorld('ceobeRequest', {
 })
 
 contextBridge.exposeInMainWorld('operate', {
-    openWindow: (data) => ipcRenderer.invoke('newWindow', data),
+    openNotificationWindow: (data) => {
+        ipcRenderer.send('notification-close')
+        ipcRenderer.invoke('openNotificationWindow', data)
+    },
     openUrl: (url) => ipcRenderer.invoke('openUrl', url),
 })
+
+contextBridge.exposeInMainWorld('notification', {
+    getInfo: (callback) => ipcRenderer.on('info', callback),
+    closeWindow: () => ipcRenderer.send('notification-close')
+});

@@ -38,8 +38,6 @@
 
 <script setup>
 import {defineProps, onMounted, reactive} from "vue";
-import {getImage, getImageFromBase64} from "@/utils/imageUtil";
-
 
 const props = defineProps(['info'])
 const emits = defineEmits();

@@ -1,57 +1,18 @@
 import {app, protocol, BrowserWindow} from 'electron'
-import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer'
-import path from "path";
+import {createNotificationWindow, createWindow} from "@/api/window";
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 // 这句话是让我可以操作iframe的内容
 app.commandLine.appendSwitch("disable-site-isolation-trials");
-require('./api/electronFunction.js')
+require('./api/function.js')
+require('./api/window.js')
+
 
 // 必须在应用程序准备就绪之前注册协议
 protocol.registerSchemesAsPrivileged([
     {scheme: 'app', privileges: {secure: true, standard: true}}
 ])
-
-async function createWindow() {
-
-    // 主页面窗口状态
-    const win = new BrowserWindow({
-        width: 1200,
-        height: 600,
-        // 这里碰到了大问题 不加载preload 解决方案 添加 nodeIntegration:true,
-        // https://stackoverflow.com/questions/60814430/electron-builder-with-browserwindow-and-preload-js-unable-to-load-preload-scrip
-        webPreferences: {
-            nodeIntegration: true,
-            preload: path.resolve(__dirname, 'preload.js'),
-            webSecurity: false,
-            webviewTag:true
-        }
-    })
-
-    // 允许iframe访问第三方url
-    win.webContents.session.webRequest.onHeadersReceived({urls: ["*://*/*"]},
-        (d, c) => {
-            if (d.responseHeaders['X-Frame-Options']) {
-                delete d.responseHeaders['X-Frame-Options'];
-            } else if (d.responseHeaders['x-frame-options']) {
-                delete d.responseHeaders['x-frame-options'];
-            }
-
-            c({cancel: false, responseHeaders: d.responseHeaders});
-        });
-
-
-    if (process.env.WEBPACK_DEV_SERVER_URL) {
-        // Load the url of the dev server if in development mode
-        await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-        if (!process.env.IS_TEST) win.webContents.openDevTools()
-    } else {
-        createProtocol('app')
-        // Load the index.html when not in development
-        win.loadURL('app://./index.html')
-    }
-}
 
 // 当所有窗口都关闭时，退出应用程序。
 app.on('window-all-closed', () => {
@@ -78,7 +39,8 @@ app.on('ready', async () => {
             console.error('Vue Devtools failed to install:', e.toString())
         }
     }
-    createWindow()
+    await createWindow()
+    // await createNotificationWindow()
 })
 
 // 在开发模式下，根据父进程的请求进行干净退出。

@@ -25,6 +25,10 @@ const routes = [
             }
         ]
     },
+    {
+        path:'/notification',
+        component: () => import("@/view/notification"),
+    }
 ]
 
 const router = createRouter({

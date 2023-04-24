@@ -38,15 +38,21 @@ const home = reactive({
   data: [],
   timeLineData: [],
   openUrl(data) {
-    router.push({
-      path: '/home/browser',
-      query: data
-    })
+    // router.push({
+    //   path: '/home/browser',
+    //   query: data
+    // })
+
+    window.operate.openNotificationWindow({
+      dataSource:home.timeLineData[0].dataSource,
+      coverImage:home.timeLineData[0].coverImage,
+      content:home.timeLineData[0].content,
+      timeForDisplay:home.timeLineData[0].timeForDisplay});
   },
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
-      data = data["泰拉记事社官网"]
+      // data = data["泰拉记事社官网"]
       home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
       home.timeLineData.forEach(item => {
         item.parent = sourceInfo.find(x => x.name == item.dataSource)
