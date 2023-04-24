@@ -1,8 +1,7 @@
 <template>
   <div class="terra-window">
     <v-card
-        class="mx-auto cursor-pointer"
-        @click="terra.openUrl"
+        class="mx-auto"
         min-width="400"
     >
       <v-img
@@ -37,7 +36,9 @@
             {{info.componentData.introduction}}
           </v-card-subtitle>
           <v-card-text>
-            <v-btn v-for="item in info.componentData.episodes">{{item.title}}</v-btn>
+            <v-btn @click="terra.openUrl(item.cid)"
+                   v-for="item in info.componentData.episodes">
+              {{item.title}}</v-btn>
           </v-card-text>
         </div>
       </v-expand-transition>
@@ -55,6 +56,7 @@ const emits = defineEmits();
 const terra = reactive({
   imgUrl: [],
   show:false,
+
   getImg() {
     if (props.info.dataSource.includes("微博")) {
       window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then(res => {
@@ -66,12 +68,13 @@ const terra = reactive({
   },
   openImage() {
   },
-  openUrl() {
+  openUrl(cid) {
     // 统一格式 只需要标题和url和icon
     let data = {
-      url:props.info.jumpUrl,
+      url:`https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
       source:props.info.dataSource,
-      icon:props.info.parent.img
+      icon:props.info.parent.img,
+      useragent:"Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
     }
     emits('openUrl', data)
   }

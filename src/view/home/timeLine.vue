@@ -39,7 +39,7 @@ const home = reactive({
   timeLineData: [],
   openUrl(data) {
     router.push({
-      path: '/home/browser',
+      path: '/home/Browser',
       query: data
     })
 
@@ -52,7 +52,7 @@ const home = reactive({
   getData() {
     window.ceobeRequest.getCardList().then(res => {
       let data = res.data.data;
-      // data = data["泰拉记事社官网"]
+      data = data["泰拉记事社官网"]
       home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
       home.timeLineData.forEach(item => {
         item.parent = sourceInfo.find(x => x.name == item.dataSource)

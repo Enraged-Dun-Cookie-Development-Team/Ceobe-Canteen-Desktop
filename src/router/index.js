@@ -18,7 +18,7 @@ const routes = [
                     },
                     {
                         path: 'browser',
-                        component: () => import("@/components/browser"),
+                        component: () => import("@/components/Browser"),
                         name: 'Browser',
                     }
                 ]
