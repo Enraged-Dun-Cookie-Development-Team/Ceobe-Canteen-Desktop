@@ -34,13 +34,17 @@
 </template>
 
 <script setup name="index">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 let pageData = ref({})
 window.notification.getInfo((event, data) => {
   pageData.value = data;
 });
-
+onMounted(()=>{
+  setTimeout(()=>{
+    closeThis();
+  },10000)
+})
 function closeThis(){
   window.notification.closeWindow();
 }

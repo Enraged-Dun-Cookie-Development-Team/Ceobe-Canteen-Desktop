@@ -38,10 +38,10 @@ const home = reactive({
   data: [],
   timeLineData: [],
   openUrl(data) {
-    // router.push({
-    //   path: '/home/browser',
-    //   query: data
-    // })
+    router.push({
+      path: '/home/browser',
+      query: data
+    })
 
     window.operate.openNotificationWindow({
       dataSource:home.timeLineData[0].dataSource,
