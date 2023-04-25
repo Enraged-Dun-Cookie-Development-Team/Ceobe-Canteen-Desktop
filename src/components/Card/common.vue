@@ -13,11 +13,11 @@
           max-height="320"
           cover
       >
-        <template #default v-if="info.imageList">
-          <v-card-title class="text-white text-right">
-            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图 →` : "" }}
-          </v-card-title>
-        </template>
+<!--        <template #default v-if="info.imageList">-->
+<!--          <v-card-title class="text-white text-right">-->
+<!--            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图 →` : "" }}-->
+<!--          </v-card-title>-->
+<!--        </template>-->
       </v-img>
 
       <v-card-text>

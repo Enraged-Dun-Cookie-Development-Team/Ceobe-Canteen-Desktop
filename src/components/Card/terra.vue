@@ -29,14 +29,15 @@
       <v-expand-transition>
         <div v-show="terra.show">
           <v-divider></v-divider>
-          <v-card-text>
+          <v-card-title class="text-shadow-none">
             {{info.componentData.title}}
-          </v-card-text>
-          <v-card-subtitle>
+          </v-card-title>
+          <v-card-subtitle class="white-space-normal">
             {{info.componentData.introduction}}
           </v-card-subtitle>
           <v-card-text>
             <v-btn @click="terra.openUrl(item.cid)"
+                   class="mr-1 mb-1"
                    v-for="item in info.componentData.episodes">
               {{item.title}}</v-btn>
           </v-card-text>
@@ -74,6 +75,7 @@ const terra = reactive({
       url:`https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
       source:props.info.dataSource,
       icon:props.info.parent.img,
+      width: '428px',
       useragent:"Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
     }
     emits('openUrl', data)

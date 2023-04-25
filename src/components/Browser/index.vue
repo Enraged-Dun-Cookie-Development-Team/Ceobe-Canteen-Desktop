@@ -7,7 +7,7 @@
       <v-btn size="small" @click="open" icon="fas fa-window-restore" title="使用浏览器打开"></v-btn>
       <v-btn size="small" @click="back" icon="fas fa-circle-xmark" title="关闭"></v-btn>
     </v-toolbar>
-    <webview :src="query.url" style="width: 428px" :useragent="query.useragent?query.useragent:null"></webview>
+    <webview :src="query.url" style="margin: auto" :style="{width: query.width?query.width:null}" :useragent="query.useragent?query.useragent:null"></webview>
   </div>
 </template>
 

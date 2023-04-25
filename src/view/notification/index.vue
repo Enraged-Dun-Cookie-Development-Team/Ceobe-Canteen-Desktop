@@ -3,7 +3,7 @@
     <v-card>
       <v-img
           height="190"
-          :src="pageData.coverImage"
+          :src="pageData.imgUrl"
           cover
           class="text-white"
           @click="closeThis"
@@ -18,9 +18,9 @@
           </template>
         </v-toolbar>
       </v-img>
-      <v-card-text class="pb-1 pt-1">
+      <v-card-title class="pb-1 pt-1">
         小刻在{{pageData.dataSource}}蹲到饼了！
-      </v-card-text>
+      </v-card-title>
       <v-card-subtitle>{{pageData.timeForDisplay}}</v-card-subtitle>
       <v-card-text class="pt-1 pb-0 text">{{pageData.content}}</v-card-text>
       <v-card-actions class="pt-0">
@@ -39,6 +39,13 @@ import {onMounted, ref} from "vue";
 let pageData = ref({})
 window.notification.getInfo((event, data) => {
   pageData.value = data;
+  if (pageData.value.dataSource.includes("微博")) {
+    window.ceobeRequest.getHasRefererImageBase64(pageData.value.coverImage).then(res => {
+      pageData.value.imgUrl = 'data:image/jpeg;base64,' + res;
+    })
+  } else {
+    pageData.value.imgUrl = pageData.value.coverImage
+  }
 });
 onMounted(()=>{
   setTimeout(()=>{

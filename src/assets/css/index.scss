@@ -2,6 +2,14 @@
   user-select: none
 }
 
+.white-space-normal {
+  white-space: normal!important;
+}
+
+.text-shadow-none {
+  text-shadow: none!important;
+}
+
 .blur-10 {
   filter: blur(10px); /* 设置模糊效果 */
 }
@@ -10,7 +18,7 @@
   filter: brightness(0.5)
 }
 
-.border-radius-50{
+.border-radius-50 {
   border-radius: 50%
 }
 

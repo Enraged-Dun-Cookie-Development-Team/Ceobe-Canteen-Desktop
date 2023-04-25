@@ -43,11 +43,11 @@ const home = reactive({
       query: data
     })
 
-    window.operate.openNotificationWindow({
-      dataSource:home.timeLineData[0].dataSource,
-      coverImage:home.timeLineData[0].coverImage,
-      content:home.timeLineData[0].content,
-      timeForDisplay:home.timeLineData[0].timeForDisplay});
+    // window.operate.openNotificationWindow({
+    //   dataSource:home.timeLineData[0].dataSource,
+    //   coverImage:home.timeLineData[0].coverImage,
+    //   content:home.timeLineData[0].content,
+    //   timeForDisplay:home.timeLineData[0].timeForDisplay});
   },
   getData() {
     window.ceobeRequest.getCardList().then(res => {
