@@ -6,7 +6,7 @@
       </template>
       <v-btn size="small" @click="back" icon="fas fa-circle-xmark" title="关闭"></v-btn>
     </v-toolbar>
-    <webview :src="query.url" style="margin: auto" :style="{width: query.width?query.width:null}" :useragent="query.useragent?query.useragent:null"></webview>
+    <webview :src="query.url" style="margin: auto" :style="{width: query.width?query.width:'100%'}" :useragent="query.useragent?query.useragent:null"></webview>
   </div>
 </template>
 
