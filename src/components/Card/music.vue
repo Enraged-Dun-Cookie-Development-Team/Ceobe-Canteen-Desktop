@@ -2,8 +2,7 @@
   <div class="music-window">
     <v-card
         theme="dark"
-        max-width="400"
-        min-width="400"
+        width="400"
     >
       <template #image>
         <v-img

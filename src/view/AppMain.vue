@@ -1,5 +1,5 @@
 <template>
-  <div class="app-main">
+  <div class="app-main d-flex">
     <keep-alive>
       <transition>
         <router-view/>

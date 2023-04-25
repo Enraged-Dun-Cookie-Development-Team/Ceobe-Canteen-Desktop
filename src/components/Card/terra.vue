@@ -2,7 +2,7 @@
   <div class="terra-window">
     <v-card
         class="mx-auto"
-        min-width="400"
+        width="400"
         @click="terra.show = !terra.show"
     >
       <v-img

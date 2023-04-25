@@ -3,7 +3,7 @@
     <v-card
         class="mx-auto cursor-pointer"
         @click="common.openUrl"
-        min-width="400"
+        width="400"
     >
       <v-img
           v-if="info.coverImage"

@@ -1,13 +1,17 @@
+html {
+  overflow: hidden;
+}
+
 .user-select-none {
   user-select: none
 }
 
 .white-space-normal {
-  white-space: normal!important;
+  white-space: normal !important;
 }
 
 .text-shadow-none {
-  text-shadow: none!important;
+  text-shadow: none !important;
 }
 
 .blur-10 {
