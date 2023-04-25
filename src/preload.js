@@ -18,10 +18,11 @@ contextBridge.exposeInMainWorld('operate', {
         ipcRenderer.send('notification-close')
         ipcRenderer.invoke('openNotificationWindow', data)
     },
-    openUrl: (url) => ipcRenderer.invoke('openUrl', url),
+    openUrlInBrowser: (url) => ipcRenderer.invoke('openUrlInBrowser', url),
+    copy: (data) => ipcRenderer.invoke('copy', data),
 })
 
 contextBridge.exposeInMainWorld('notification', {
     getInfo: (callback) => ipcRenderer.on('info', callback),
-    closeWindow: () => ipcRenderer.send('notification-close')
+    closeWindow: () => ipcRenderer.send('notification-close'),
 });

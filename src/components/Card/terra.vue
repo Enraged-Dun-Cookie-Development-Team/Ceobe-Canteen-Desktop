@@ -3,6 +3,7 @@
     <v-card
         class="mx-auto"
         min-width="400"
+        @click="terra.show = !terra.show"
     >
       <v-img
           v-if="info.coverImage"
@@ -13,33 +14,25 @@
       >
       </v-img>
 
-      <v-card-text>
-        <div v-html="info.content.replace(/(\r\n|\n)/g, '<br>')"></div>
-      </v-card-text>
-
+      <v-card-title class="text-shadow-none white-space-normal">
+        {{info.componentData.title}}
+      </v-card-title>
+      <v-card-subtitle>最新话：{{info.componentData.episodes[0].title}}</v-card-subtitle>
       <v-card-actions>
-        <span class="font-weight-bold pl-2">{{ info.timeForDisplay }}</span>
-        <v-spacer></v-spacer>
-        <v-btn size="small" icon="fas fa-copy"></v-btn>
-        <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-        <v-btn size="small" icon="fas fa-link"></v-btn>
-        <v-btn size="small" :icon="terra.show ? 'mdi:mdi-chevron-up' : 'mdi: mdi-chevron-down'"
-               @click="terra.show = !terra.show"></v-btn>
+        <slot :info="info"></slot>
       </v-card-actions>
       <v-expand-transition>
         <div v-show="terra.show">
           <v-divider></v-divider>
-          <v-card-title class="text-shadow-none">
-            {{info.componentData.title}}
-          </v-card-title>
-          <v-card-subtitle class="white-space-normal">
-            {{info.componentData.introduction}}
+          <v-card-subtitle class="white-space-normal mt-1">
+            {{ info.componentData.introduction }}
           </v-card-subtitle>
           <v-card-text>
-            <v-btn @click="terra.openUrl(item.cid)"
+            <v-btn @click.stop="terra.openUrl(item.cid)"
                    class="mr-1 mb-1"
                    v-for="item in info.componentData.episodes">
-              {{item.title}}</v-btn>
+              {{ item.title }}
+            </v-btn>
           </v-card-text>
         </div>
       </v-expand-transition>
@@ -56,7 +49,7 @@ const emits = defineEmits();
 
 const terra = reactive({
   imgUrl: [],
-  show:false,
+  show: false,
 
   getImg() {
     if (props.info.dataSource.includes("微博")) {
@@ -72,11 +65,11 @@ const terra = reactive({
   openUrl(cid) {
     // 统一格式 只需要标题和url和icon
     let data = {
-      url:`https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
-      source:props.info.dataSource,
-      icon:props.info.parent.img,
+      url: `https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
+      source: props.info.dataSource,
+      icon: props.info.parent.img,
       width: '428px',
-      useragent:"Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
+      useragent: "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1"
     }
     emits('openUrl', data)
   }

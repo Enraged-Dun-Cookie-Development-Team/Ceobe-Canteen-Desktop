@@ -13,11 +13,6 @@
           max-height="320"
           cover
       >
-<!--        <template #default v-if="info.imageList">-->
-<!--          <v-card-title class="text-white text-right">-->
-<!--            {{ info.imageList.length > 1 ? `还有${info.imageList.length - 1}张图 →` : "" }}-->
-<!--          </v-card-title>-->
-<!--        </template>-->
       </v-img>
 
       <v-card-text>
@@ -25,11 +20,7 @@
       </v-card-text>
 
       <v-card-actions>
-        <span class="font-weight-bold pl-2">{{ info.timeForDisplay }}</span>
-        <v-spacer></v-spacer>
-        <v-btn size="small" icon="fas fa-copy"></v-btn>
-        <v-btn size="small" icon="fas fa-share-nodes"></v-btn>
-        <v-btn size="small" icon="fas fa-link"></v-btn>
+        <slot :info="info"></slot>
       </v-card-actions>
 
     </v-card>

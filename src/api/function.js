@@ -1,4 +1,4 @@
-const {app, ipcMain,shell} = require('electron')
+const {app, ipcMain, shell, clipboard} = require('electron')
 const fs = require("fs")
 
 app.whenReady().then(() => {
@@ -48,10 +48,16 @@ app.whenReady().then(() => {
     });
 
     // 使用电脑默认浏览器打开链接
-    ipcMain.handle('openUrl', (event, url) => {
+    ipcMain.handle('openUrlInBrowser', (event, url) => {
         shell.openExternal(url);
     });
 
-
+    ipcMain.handle('copy', (event, data) => {
+        if (data.type == 'img') {
+            // clipboard.writeImage(data.data);
+        } else if (data.type == 'text') {
+            clipboard.writeText(data.data)
+        }
+    })
 })
 
