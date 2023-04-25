@@ -1,4 +1,4 @@
-const {app, ipcMain, shell, clipboard} = require('electron')
+const {app, ipcMain, shell, clipboard,nativeImage} = require('electron')
 const fs = require("fs")
 
 app.whenReady().then(() => {
@@ -54,7 +54,8 @@ app.whenReady().then(() => {
 
     ipcMain.handle('copy', (event, data) => {
         if (data.type == 'img') {
-            // clipboard.writeImage(data.data);
+           let image = nativeImage.createFromDataURL(data.data)
+            clipboard.writeImage(image)
         } else if (data.type == 'text') {
             clipboard.writeText(data.data)
         }
