@@ -1,13 +1,24 @@
 import path from "path";
 import {createProtocol} from "vue-cli-plugin-electron-builder/lib";
-import {app, ipcMain} from "electron";
+import {app, ipcMain,Menu, Tray} from "electron";
 
 const {BrowserWindow, screen} = require('electron');
 
+let tray = null
 app.whenReady().then(() => {
     ipcMain.handle('openNotificationWindow', (event, data) => {
         createNotificationWindow(data);
-    })
+    });
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'Item1', type: 'radio' },
+        { label: 'Item2', type: 'radio' },
+        { label: 'Item3', type: 'radio', checked: true },
+        { label: 'Item4', type: 'radio' }
+    ])
+    tray = new Tray('src/assets/image/logo/icon.png')
+    tray.setToolTip('This is my application.')
+    tray.setContextMenu(contextMenu)
+    console.log(tray)
 })
 
 export async function createWindow() {

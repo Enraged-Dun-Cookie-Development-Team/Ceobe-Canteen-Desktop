@@ -1,4 +1,4 @@
-import {app, protocol, BrowserWindow} from 'electron'
+import {app, protocol,  BrowserWindow} from 'electron'
 import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer'
 import {createNotificationWindow, createWindow} from "@/api/window";
 
