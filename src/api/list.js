@@ -23,7 +23,7 @@ export function getResourceInfo(){
 
 export function getVideoList(){
     return service({
-        url: `canteen/operate/video/list`,
+        url: `/canteen/operate/video/list`,
         method: 'GET',
     })
 }
