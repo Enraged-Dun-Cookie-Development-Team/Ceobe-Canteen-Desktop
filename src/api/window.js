@@ -8,6 +8,7 @@ let tray = null
 app.whenReady().then(() => {
     ipcMain.handle('openNotificationWindow', (event, data) => {
         createNotificationWindow(data);
+        createTimelineWindow();
     });
     const contextMenu = Menu.buildFromTemplate([
         { label: 'Item1', type: 'radio' },
@@ -21,10 +22,11 @@ app.whenReady().then(() => {
     console.log(tray)
 })
 
+let win = null;
 export async function createWindow() {
 
     // 主页面窗口状态
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 1200,
         height: 600,
         // 这里碰到了大问题 不加载preload 解决方案 添加 nodeIntegration:true,
@@ -62,11 +64,10 @@ export async function createWindow() {
 }
 
 
-
 let notificationWindow = null;
 
 export async function createNotificationWindow(data = {}) {
-    let workAreaSize = require('electron').screen.getPrimaryDisplay().workAreaSize;
+    let {workAreaSize} = require('electron').screen.getPrimaryDisplay();
     notificationWindow = new BrowserWindow({
         width: 400,
         height: 355,
@@ -100,9 +101,61 @@ export async function createNotificationWindow(data = {}) {
     })
 }
 
+let timelineWindow = null;
+let timelineTimer = null;
+/*  创建时间轴后台窗口
+    在后台调用queryTimeline接口
+    轮询时间轴数据
+*/
+export function createTimelineWindow() {
+    let {queryTimeline} = require('@/api/list');
+    timelineWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+        }
+    });
+
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+        // Load the url of the dev server if in development mode
+        timelineWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'timeline')
+        if (!process.env.IS_TEST) {
+            timelineWindow.webContents.openDevTools()
+        }
+    } else {
+        createProtocol('app')
+        // Load the index.html when not in development
+        timelineWindow.loadFile("dist/index.html", {
+            hash: "/timeline"
+        })
+    }
+
+    timelineTimer = setInterval(() => {
+        let data = queryTimeline();
+        timelineWindow.webContents.send('timeline', data);
+        console.log('timeline', data);
+    }, 15 * 1000);
+
+}
+
+function sendWindowMessage(targetWindow, channel, ...args) {
+    if (targetWindow) {
+        targetWindow.webContents.send(channel, ...args);
+    }
+}
+
 ipcMain.on('notification-close', () => {
     if(notificationWindow){
         notificationWindow.close();
         notificationWindow = null;
     }
 })
+
+app.on(
+    "ready",
+    () => {
+        ipcMain.on("timeline", cookies => {
+            sendWindowMessage(win, "timeline", cookies);
+        });
+    }
+)
