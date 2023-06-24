@@ -43,10 +43,10 @@ export function getDatasourceComb(uuids){
     console.log("get datasource comb", uuids)
     return service({
         url: `/canteen/user/getDatasourceComb`,
-        data: {
-            datasource_push: uuids
-        },
         method: 'POST',
+        data: JSON.stringify({
+            datasource_push: uuids,
+        })
     })
 }
 
