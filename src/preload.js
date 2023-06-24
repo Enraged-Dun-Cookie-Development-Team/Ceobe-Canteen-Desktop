@@ -1,5 +1,13 @@
 const {contextBridge, ipcRenderer, remote, shell} = require('electron');
-const {getCardList, getAnnouncementInfo, getResourceInfo} = require("@/api/list");
+const {
+    getCardList, 
+    getAnnouncementInfo, 
+    getResourceInfo,
+    getResourceList,
+    getDatasourceComb,
+    getDatasourceCombList,
+    getCookieList,
+} = require("@/api/list");
 
 contextBridge.exposeInMainWorld('versions', {
     node: () => process.versions.node, chrome: () => process.versions.chrome, electron: () => process.versions.electron,
@@ -7,6 +15,10 @@ contextBridge.exposeInMainWorld('versions', {
 
 contextBridge.exposeInMainWorld('ceobeRequest', {
     getCardList: () => getCardList(),
+    getResourceList: () => getResourceList(),
+    getDatasourceComb: (uuids) => getDatasourceComb(uuids),
+    getDatasourceCombList: (comb_id) => getDatasourceCombList(comb_id),
+    getCookieList: (comb_id, cookie_id, update_cookie_id) => getCookieList(comb_id, cookie_id, update_cookie_id),
     getAnnouncementInfo: () => getAnnouncementInfo(),
     getResourceInfo: () => getResourceInfo(),
     getHasRefererImageBase64: (url) => ipcRenderer.invoke('getHasRefererImageBase64', url),

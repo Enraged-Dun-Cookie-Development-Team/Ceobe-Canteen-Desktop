@@ -1,7 +1,10 @@
 import service from "@/utils/requestUtil";
 
 export function getCardList() {
-    return queryTimeline()
+    return service({
+        url: `https://temp.ceobecanteen.top/canteen/cardList`,
+        method: 'GET',
+    })
 }
 
 export function getAnnouncementInfo(){
@@ -27,6 +30,7 @@ export function getVideoList(){
 
 export function getResourceList(){
     // 返回带uuid的资源列表
+    console.log("get resource list")
     return service({
         url: `/canteen/config/datasource/list`,
         method: 'GET',
@@ -36,6 +40,7 @@ export function getResourceList(){
 export function getDatasourceComb(uuids){
     // uuid: list[uuid]
     //返回带有一个datasource_comb_id的json
+    console.log("get datasource comb", uuids)
     return service({
         url: `/canteen/user/getDatasourceComb`,
         data: {
@@ -48,6 +53,7 @@ export function getDatasourceComb(uuids){
 export function getDatasourceCombList(comb_id){
     // comb_id: str
     // 返回带有cookie_id和update_cookie_id的json
+    console.log("get datasource comb list", comb_id)
     return service({
         url: `/datasource-comb/${comb_id}`,
         method: "GET",
@@ -59,8 +65,9 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id){
     // cookie_id: str
     // update_cookie_id: str
     // 返回带有cookies的json
+    console.log("get cookie list", comb_id, cookie_id, update_cookie_id)
     return service({
-        url: `/canteen/user/getCookieList`,
+        url: `/cdn/cookie/mainList/cookieList`,
         params: {
             comb_id: comb_id,
             cookie_id: cookie_id,

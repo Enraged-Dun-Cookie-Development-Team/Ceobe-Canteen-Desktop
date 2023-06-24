@@ -69,15 +69,29 @@ const {proxy} = getCurrentInstance();
 const home = reactive({
   data: [],
   timeLineData: [],
-  getData() {
-    window.ceobeRequest.getCardList().then(res => {
-      let data = res.data.data;
-      // data = data["泰拉记事社官网"]
-      home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
+  async getData() {
+    debugger;
+    let {data} = (await window.ceobeRequest.getResourceList()).data
+    let uuids = data.map(x => x.unique_id)
+    let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
+    let comb_id = comb_data.data.datasource_comb_id
+    let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(datasource_comb_id)).data
+    window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id).then(res => {
+      console.log(res)
+      let {cookies} = res.data
+      home.timeLineData = Object.values(cookies).flat().sort((x,y) => y.timeForSort - x.timeForSort);
       home.timeLineData.forEach(item => {
         item.parent = sourceInfo.find(x => x.name == item.dataSource)
       })
     })
+    // window.ceobeRequest.getCardList().then(res => {
+    //   let data = res.data.data;
+    //   // data = data["泰拉记事社官网"]
+    //   home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
+    //   home.timeLineData.forEach(item => {
+    //     item.parent = sourceInfo.find(x => x.name == item.dataSource)
+    //   })
+    // })
   }
 });
 
