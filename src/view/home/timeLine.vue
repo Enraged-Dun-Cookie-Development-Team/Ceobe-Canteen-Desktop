@@ -6,24 +6,25 @@
         truncate-line="start"
     >
       <v-timeline-item
-          v-for="item in home.timeLineData"
-          :key="item.id"
+          v-for="cookie in home.timeLineData"
+          :key="cookie.item.id"
           :left="true"
           fill-dot="fill-dot"
           dot-color="#fff"
           size="50"
       >
         <template v-slot:icon>
-          <v-avatar :image="getImage(item.parent.img)"></v-avatar>
+          <v-avatar rounded :image="cookie.icon">
+          </v-avatar>
         </template>
-        <component :is="component.getComponentName(item)" :id="item.id" :info="item" @openUrl="card.openUrlInThis">
-          <template #default="info" v-if="card.isCopyImage && item.id == card.copyImageId">
+        <component :is="component.getComponentName(cookie)" :id="cookie.item.id" :info="cookie" @openUrl="card.openUrlInThis">
+          <template #default="info" v-if="card.isCopyImage && cookie.id == card.copyImageId">
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
               <div class="h-100 w-100 d-flex justify-space-between align-center print px-2">
                 <div class="d-flex flex-column">
                   <div class="font-weight-bold title">{{ info.info.dataSource }}</div>
-                  <div class="font-weight-light subtitle">{{ info.info.timeForDisplay }}</div>
+                  <div class="font-weight-light subtitle">{{ new Date(info.info.timestamp.platform).toLocaleString() }}</div>
                 </div>
                 <div class="d-flex align-center">
                   <img :src="getImage('/assets/image/logo/icon.png')" width="35">
@@ -37,13 +38,13 @@
             </div>
           </template>
           <template #default="info" v-else>
-            <span class="font-weight-bold pl-2">{{ info.info.timeForDisplay }}</span>
+            <span class="font-weight-bold pl-2">{{ new Date(info.info.timestamp.platform).toLocaleString() }}</span>
             <v-spacer></v-spacer>
-            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(info.info.jumpUrl)"></v-btn>
+            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(info.info.item.url)"></v-btn>
             <v-btn size="small" icon="fas fa-share-nodes" title="生成卡片"
-                   @click.stop="card.copyImage(item.id)"></v-btn>
+                  @click.stop="card.copyImage(cookie.item.id)"></v-btn>
             <v-btn size="small" icon="fas fa-link" title="使用浏览器打开"
-                   @click.stop="card.openUrlInBrowser(info.info.jumpUrl)"></v-btn>
+                  @click.stop="card.openUrlInBrowser(info.info.item.url)"></v-btn>
           </template>
 
         </component>
@@ -70,7 +71,6 @@ const home = reactive({
   data: [],
   timeLineData: [],
   async getData() {
-    debugger;
     let {data} = (await window.ceobeRequest.getResourceList()).data
     let uuids = data.map(x => x.unique_id)
     let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
@@ -102,14 +102,6 @@ const home = reactive({
           ]
     */
     home.timeLineData = Object.values(cookies)
-    // window.ceobeRequest.getCardList().then(res => {
-    //   let data = res.data.data;
-    //   // data = data["泰拉记事社官网"]
-    //   home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
-    //   home.timeLineData.forEach(item => {
-    //     item.parent = sourceInfo.find(x => x.name == item.dataSource)
-    //   })
-    // })
   }
 });
 
