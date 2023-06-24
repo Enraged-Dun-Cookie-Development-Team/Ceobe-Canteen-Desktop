@@ -51,7 +51,7 @@ const service = axios.create({
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
         post: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8'
         }
     },
     // 是否跨站点访问控制请求

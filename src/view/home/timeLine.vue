@@ -56,9 +56,9 @@
 import {getCurrentInstance, nextTick, onMounted, reactive} from "vue";
 import {sourceInfo} from "@/constant"
 import {getImage} from "@/utils/imageUtil"
-import Music from "@/components/Card/music"
+//import Music from "@/components/Card/music"
 import Info from "@/components/Card/common"
-import Terra from "@/components/Card/terra"
+//import Terra from "@/components/Card/terra"
 import {useRouter} from "vue-router";
 import * as htmlToImage from "html-to-image";
 
@@ -75,15 +75,33 @@ const home = reactive({
     let uuids = data.map(x => x.unique_id)
     let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
     let comb_id = comb_data.data.datasource_comb_id
-    let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(datasource_comb_id)).data
-    window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id).then(res => {
-      console.log(res)
-      let {cookies} = res.data
-      home.timeLineData = Object.values(cookies).flat().sort((x,y) => y.timeForSort - x.timeForSort);
-      home.timeLineData.forEach(item => {
-        item.parent = sourceInfo.find(x => x.name == item.dataSource)
-      })
-    })
+    let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(comb_id)).data
+    let {cookies} = (await window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id)).data.data
+    /* 
+      "cookies": [
+            {
+                "datasource": "明日方舟官网",
+                "icon": "http://cdn-dev.ceobecanteen.top/datasource-avatar/f5f6b090-8def-444b-8f5e-fae1b38cfb8c",
+                "timestamp": {
+                    "platform": 1687449600000,
+                    "platform_precision": "day",
+                    "fetcher": 1687530936977
+                },
+                "default_cookie": {
+                    "text": "【明日方舟×中国航天神舟传媒】“宿于繁星”限时活动即将开启",
+                    "images": null
+                },
+                "item": {
+                    "id": "news/2023065436",
+                    "url": "https://ak.hypergryph.com/news/2023065436.html",
+                    "cate": "活动",
+                    "is_top": true
+                }
+            },
+            ...
+          ]
+    */
+    home.timeLineData = Object.values(cookies)
     // window.ceobeRequest.getCardList().then(res => {
     //   let data = res.data.data;
     //   // data = data["泰拉记事社官网"]
@@ -133,13 +151,13 @@ const card = reactive({
 
 const component = reactive({
   getComponentName(item) {
-    if (item.dataSource == "塞壬唱片网易云音乐") {
-      return Music
-    } else if (item.dataSource == "泰拉记事社官网") {
-      return Terra
-    } else {
+    // if (item.dataSource == "塞壬唱片网易云音乐") {
+    //   return Music
+    // } else if (item.dataSource == "泰拉记事社官网") {
+    //   return Terra
+    // } else {
       return Info
-    }
+    // }
   }
 })
 onMounted(() => {
