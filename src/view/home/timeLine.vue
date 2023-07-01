@@ -62,6 +62,7 @@ import Info from "@/components/Card/common"
 //import Terra from "@/components/Card/terra"
 import {useRouter} from "vue-router";
 import * as htmlToImage from "html-to-image";
+import {ipcRender} from "electron";
 
 const router = useRouter();
 const {proxy} = getCurrentInstance();
@@ -70,13 +71,18 @@ const {proxy} = getCurrentInstance();
 const home = reactive({
   data: [],
   timeLineData: [],
+  nextPageId: null,
   async getData() {
-    let {data} = (await window.ceobeRequest.getResourceList()).data
-    let uuids = data.map(x => x.unique_id)
-    let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
-    let comb_id = comb_data.data.datasource_comb_id
-    let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(comb_id)).data
-    let {cookies} = (await window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id)).data.data
+    // let {data} = (await window.ceobeRequest.getResourceList()).data
+    // let uuids = data.map(x => x.unique_id)
+    // let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
+    // let comb_id = comb_data.data.datasource_comb_id
+    // let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(comb_id)).data
+    // let {cookies} = (await window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id)).data.data
+    ipcRender.on('newest-timeline', (event, arg) => {
+      home.timeLineData = Object.values(arg.cookies);
+      home.nextPageId = arg.next_page_id;
+    });
     /* 
       "cookies": [
             {

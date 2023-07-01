@@ -28,6 +28,10 @@ const routes = [
     {
         path:'/notification',
         component: () => import("@/view/notification"),
+    },
+    {
+        path:'/background',
+        component: () => import("@/view/background"),
     }
 ]
 

@@ -76,14 +76,3 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id){
         method: "GET",
     })
 }
-
-export function queryTimeline(){
-    let uuids = getResourceList().data.map((item) => {
-        return item.unique_id;
-    })
-    let {datasource_comb_id} = getDatasourceComb(uuids).data;
-    let {cookie_id, update_cookie_id} = getDatasourceCombList(datasource_comb_id);
-    let {cookies} = getCookieList(comb_id, cookie_id, update_cookie_id).data;
-
-    return cookies;
-}

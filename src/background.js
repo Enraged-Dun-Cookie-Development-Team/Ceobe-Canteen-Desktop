@@ -1,6 +1,6 @@
-import {app, protocol,  BrowserWindow} from 'electron'
-import installExtension, {VUEJS3_DEVTOOLS} from 'electron-devtools-installer'
-import {createNotificationWindow, createWindow} from "@/api/window";
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
+import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+import { createNotificationWindow, createWindow, createBackgroundWindow, backgroundWindow } from "@/api/window";
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 // 这句话是让我可以操作iframe的内容
@@ -11,7 +11,7 @@ require('./api/window.js')
 
 // 必须在应用程序准备就绪之前注册协议
 protocol.registerSchemesAsPrivileged([
-    {scheme: 'app', privileges: {secure: true, standard: true}}
+    { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
 // 当所有窗口都关闭时，退出应用程序。
@@ -40,8 +40,21 @@ app.on('ready', async () => {
         }
     }
     await createWindow()
+    await createBackgroundWindow()
     // await createNotificationWindow()
+
+    ipcMain.on('newest-timeline', (_, arg) => {
+        sendWindowMessage(backgroundWindow, 'newest-timeline', arg);
+    });
 })
+
+function sendWindowMessage(targetWindow, message, payload) {
+    if (typeof targetWindow === 'undefined') {
+        console.log('Target window does not exist');
+        return;
+    }
+    targetWindow.webContents.send(message, payload);
+}
 
 // 在开发模式下，根据父进程的请求进行干净退出。
 if (isDevelopment) {
