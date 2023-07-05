@@ -72,13 +72,6 @@ const home = reactive({
   timeLineData: [],
   nextPageId: null,
   async getData() {
-    // let {data} = (await window.ceobeRequest.getResourceList()).data
-    // let uuids = data.map(x => x.unique_id)
-    // let comb_data = (await window.ceobeRequest.getDatasourceComb(uuids)).data
-    // let comb_id = comb_data.data.datasource_comb_id
-    // let {cookie_id, update_cookie_id} = (await window.ceobeRequest.getDatasourceCombList(comb_id)).data
-    // let {cookies} = (await window.ceobeRequest.getCookieList(comb_id, cookie_id, update_cookie_id)).data.data
-
     window.newestTimeline.getTimeline((_, arg) => {
       home.timeLineData = Object.values(arg.cookies);
       home.nextPageId = arg.next_page_id;
@@ -107,7 +100,6 @@ const home = reactive({
             ...
           ]
     */
-    // home.timeLineData = Object.values(cookies)
   }
 });
 
@@ -149,13 +141,7 @@ const card = reactive({
 
 const component = reactive({
   getComponentName(item) {
-    // if (item.dataSource == "塞壬唱片网易云音乐") {
-    //   return Music
-    // } else if (item.dataSource == "泰拉记事社官网") {
-    //   return Terra
-    // } else {
-      return Info
-    // }
+    return Info
   }
 })
 onMounted(() => {

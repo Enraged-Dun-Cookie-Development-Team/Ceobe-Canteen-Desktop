@@ -51,9 +51,9 @@
             此插件来源于网易云音乐
           </div>
           <webview v-if="showPlayer"
-                   :style="{height:(150+info.componentData.size*30) +'px'}"
-                   :id="`webview-${id}`"
-                   :src="`http://music.163.com/outchain/player?type=1&id=${id}&auto=0`"></webview>
+                  :style="{height:(150+info.componentData.size*30) +'px'}"
+                  :id="`webview-${id}`"
+                  :src="`http://music.163.com/outchain/player?type=1&id=${id}&auto=0`"></webview>
           <div v-else :style="{height:(150+info.componentData.size*30) +'px'}"></div>
         </div>
       </v-expand-transition>
@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import {defineProps, onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 
 const props = defineProps(['info'])
 const emits = defineEmits();

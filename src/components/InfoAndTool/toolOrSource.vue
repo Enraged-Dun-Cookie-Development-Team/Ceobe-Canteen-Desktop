@@ -15,7 +15,6 @@
 </template>
 
 <script setup name="tool">
-import {reactive, defineProps} from "vue";
 import {getImage} from "@/utils/imageUtil"
 
 const props = defineProps(['title', 'list'])

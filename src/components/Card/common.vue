@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import {defineProps, onMounted, reactive, toRaw} from "vue";
+import {onMounted, reactive, toRaw} from "vue";
 
 const props = defineProps(['info'])
 const emits = defineEmits();
