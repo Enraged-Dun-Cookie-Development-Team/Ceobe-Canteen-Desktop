@@ -23,7 +23,9 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
     // 在 macOS 上，当单击 dock 图标并且没有其他窗口打开时，通常会重新创建应用程序中的窗口。
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
 })
 
 // 当 Electron 完成初始化并准备好创建浏览器窗口时，将调用此方法。在此事件发生后，才能使用某些 API。
@@ -43,9 +45,6 @@ app.on('ready', async () => {
     await createBackgroundWindow()
     // await createNotificationWindow()
 
-    ipcMain.on('newest-timeline', (_, arg) => {
-        sendWindowMessage(backgroundWindow, 'newest-timeline', arg);
-    });
 })
 
 function sendWindowMessage(targetWindow, message, payload) {

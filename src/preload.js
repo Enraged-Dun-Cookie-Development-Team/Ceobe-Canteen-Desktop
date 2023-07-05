@@ -38,3 +38,8 @@ contextBridge.exposeInMainWorld('notification', {
     getInfo: (callback) => ipcRenderer.on('info', callback),
     closeWindow: () => ipcRenderer.send('notification-close'),
 });
+
+contextBridge.exposeInMainWorld("newestTimeline", {
+    getTimeline: (callback) => ipcRenderer.on('newest-timeline', callback),
+    sendTimeline: (data) => ipcRenderer.send('newest-timeline', data),
+})

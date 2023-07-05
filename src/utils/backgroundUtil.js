@@ -1,5 +1,4 @@
 
-import { ipcRenderer } from 'electron';
 import {getResourceList, getDatasourceComb, getDatasourceCombList, getCookieList} from '@/api/list';
 
 let old_cookie_id, old_update_cookie_id;
@@ -23,8 +22,10 @@ async function tryFetchCookie() {
     if (cookie_id !== old_cookie_id && update_cookie_id !== old_update_cookie_id) {
         let cookies_data = await getCookieList(datasource_comb_id, cookie_id, update_cookie_id);
         let cookies_info = cookies_data.data.data;
+        old_cookie_id = cookie_id
+        old_update_cookie_id = update_cookie_id
 
-        // ipcRenderer.send('newest-timeline', data);
+        window.newestTimeline.sendTimeline(cookies_info);
         console.log('newest-timeline', cookies_info);
     }
 

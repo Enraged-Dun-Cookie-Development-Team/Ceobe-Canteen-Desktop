@@ -55,7 +55,9 @@ export async function createWindow() {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-        if (!process.env.IS_TEST) win.webContents.openDevTools()
+        if (!process.env.IS_TEST) {
+          win.webContents.openDevTools()
+        }
     } else {
         createProtocol('app')
         // Load the index.html when not in development
@@ -87,7 +89,9 @@ export async function createNotificationWindow(data = {}) {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'notification')
-        if (!process.env.IS_TEST) notificationWindow.webContents.openDevTools()
+        if (!process.env.IS_TEST) {
+            notificationWindow.webContents.openDevTools()
+        }
     } else {
         createProtocol('app')
         // Load the index.html when not in development
@@ -112,6 +116,7 @@ export async function createBackgroundWindow() {
         webPreferences: {
             nodeIntegration: true,
             webSecurity: false,
+            preload: path.resolve(__dirname, 'preload.js'),
         }
     });
 
@@ -128,11 +133,14 @@ export async function createBackgroundWindow() {
             hash: "/background"
         })
     }
+    ipcMain.on("newest-timeline", (_, cookies) => {
+        sendWindowMessage(win, "newest-timeline", cookies);
+    });
 }
 
-function sendWindowMessage(targetWindow, channel, ...args) {
+function sendWindowMessage(targetWindow, channel, args) {
     if (targetWindow) {
-        targetWindow.webContents.send(channel, ...args);
+        targetWindow.webContents.send(channel, args);
     }
 }
 
@@ -142,12 +150,3 @@ ipcMain.on('notification-close', () => {
         notificationWindow = null;
     }
 })
-
-app.on(
-    "ready",
-    () => {
-        ipcMain.on("timeline", cookies => {
-            sendWindowMessage(win, "timeline", cookies);
-        });
-    }
-)
