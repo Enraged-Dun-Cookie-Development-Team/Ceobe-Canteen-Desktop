@@ -18,12 +18,12 @@
           </v-avatar>
         </template>
         <component :is="component.getComponentName(cookie)" :id="cookie.item.id" :info="cookie" @openUrl="card.openUrlInThis">
-          <template #default="info" v-if="card.isCopyImage && cookie.id == card.copyImageId">
+          <template #default="info" v-if="card.isCopyImage && cookie.item.id == card.copyImageId">
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
               <div class="h-100 w-100 d-flex justify-space-between align-center print px-2">
                 <div class="d-flex flex-column">
-                  <div class="font-weight-bold title">{{ info.info.dataSource }}</div>
+                  <div class="font-weight-bold title">{{ info.info.datasource }}</div>
                   <div class="font-weight-light subtitle">{{ new Date(info.info.timestamp.platform).toLocaleString() }}</div>
                 </div>
                 <div class="d-flex align-center">
@@ -38,13 +38,13 @@
             </div>
           </template>
           <template #default="info" v-else>
-            <span class="font-weight-bold pl-2">{{ new Date(info.info.timestamp.platform).toLocaleString() }}</span>
+            <span class="font-weight-bold pl-2">{{ new Date(cookie.timestamp.platform).toLocaleString() }}</span>
             <v-spacer></v-spacer>
-            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(info.info.item.url)"></v-btn>
+            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(cookie.item.url)"></v-btn>
             <v-btn size="small" icon="fas fa-share-nodes" title="生成卡片"
                   @click.stop="card.copyImage(cookie.item.id)"></v-btn>
             <v-btn size="small" icon="fas fa-link" title="使用浏览器打开"
-                  @click.stop="card.openUrlInBrowser(info.info.item.url)"></v-btn>
+                  @click.stop="card.openUrlInBrowser(cookie.item.url)"></v-btn>
           </template>
 
         </component>
@@ -54,7 +54,7 @@
 </template>
 
 <script setup name="timeLine">
-import {getCurrentInstance, nextTick, onMounted, reactive} from "vue";
+import {getCurrentInstance, nextTick, onMounted, reactive, ref} from "vue";
 import {sourceInfo} from "@/constant"
 import {getImage} from "@/utils/imageUtil"
 //import Music from "@/components/Card/music"
@@ -122,16 +122,16 @@ const card = reactive({
   copyImage(id) {
     card.copyImageId = id;
     card.isCopyImage = true;
-
-    nextTick(() => {
+    setTimeout(() => {nextTick(() => {
       htmlToImage.toJpeg(document.getElementById(id), {quality: 0.95})
           .then(function (dataUrl) {
             card.isCopyImage = false;
             window.operate.copy({type: 'img', data: dataUrl})
           });
-    })
+    })}, 500)
   },
   copy(url) {
+    show.value = true;
     window.operate.copy({type: 'text', data: url})
   },
   openUrlInBrowser(url) {

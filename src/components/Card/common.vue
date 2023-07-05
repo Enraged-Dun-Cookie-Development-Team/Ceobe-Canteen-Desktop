@@ -28,23 +28,28 @@
 </template>
 
 <script setup>
-import {onMounted, reactive, toRaw} from "vue";
+import {onMounted, reactive, toRaw, ref} from "vue";
 
-const props = defineProps(['info'])
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {
+    }
+  }
+})
 const emits = defineEmits();
-const cookie = toRaw(props.info)
 
 const common = reactive({
   imgUrl: [],
   getImg() {
-    if (!cookie.default_cookie.images) {
+    if (!props.info.default_cookie.images) {
       common.imgUrl = [];
-    } else if (cookie.datasource.includes("微博")) {
-      window.ceobeRequest.getHasRefererImageBase64(cookie.default_cookie.images[0].compress_url).then(res => {
+    } else if (props.info.datasource.includes("微博")) {
+      window.ceobeRequest.getHasRefererImageBase64(props.info.default_cookie.images[0].compress_url).then(res => {
         common.imgUrl = 'data:image/jpeg;base64,' + res;
       })
     } else {
-      common.imgUrl = cookie.default_cookie.images[0].compress_url;
+      common.imgUrl = props.info.default_cookie.images[0].compress_url;
     }
     return common.imgUrl;
   },
@@ -54,7 +59,7 @@ const common = reactive({
     // 统一格式 只需要标题和url和icon
     let data = {
       url:props.info.item.url,
-      source:props.info.dataSource,
+      source:props.info.datasource,
       icon:props.info.icon
     }
     emits('openUrl', data)
@@ -62,9 +67,9 @@ const common = reactive({
 })
 
 onMounted(() => {
-  if (props.info.default_cookie.image) {
+  if (props.info.default_cookie.images) {
     console.log(props.info)
-    common.getImg(props.info.default_cookie.image);
+    common.getImg(props.info.default_cookie.images);
   }
 })
 </script>
