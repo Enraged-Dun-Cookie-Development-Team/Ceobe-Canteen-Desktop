@@ -133,6 +133,7 @@ const timeline = reactive({
         timeline.timeLineData = arg.cookies;
       } else {
         timeline.refreshTimelineData = arg.cookies;
+        document.querySelector(".time-line").scrollTop = 0;
       }
       timeline.combId = arg.comb_id;
       timeline.updateCookieId = arg.update_cookie_id;

@@ -43,3 +43,8 @@ contextBridge.exposeInMainWorld("newestTimeline", {
     getTimeline: (callback) => ipcRenderer.on('newest-timeline', callback),
     sendTimeline: (data) => ipcRenderer.send('newest-timeline', data),
 })
+
+contextBridge.exposeInMainWorld("datasourceConfig", {
+    datasourceCombUpdated: (callback) => ipcRenderer.on('update-datasource-comb', callback),
+    updateDatasourceComb: () => ipcRenderer.send('update-datasource-comb'),
+})

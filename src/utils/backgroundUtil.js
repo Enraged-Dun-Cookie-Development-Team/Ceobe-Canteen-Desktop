@@ -6,7 +6,7 @@ let datasource_comb_id;
 
 export async function backgroundInit() {
     // 获取内存组合id配置
-    datasource_comb_id = window.localStorage.getItem("datasource-comb")
+    datasource_comb_id = window.localStorage.getItem("datasource-comb");
     if(!datasource_comb_id) {
         // 获取数据源列表
         let resource_data = await getResourceList();
@@ -18,6 +18,11 @@ export async function backgroundInit() {
         datasource_comb_id = datasource_comb_id_resp.data.data.datasource_comb_id;
         window.localStorage.setItem("datasource-comb", datasource_comb_id);
     }
+    window.datasourceConfig.datasourceCombUpdated(() => {
+        datasource_comb_id = window.localStorage.getItem("datasource-comb");
+        old_cookie_id = null;
+        old_update_cookie_id = null;
+    })
     await tryFetchCookie()
 }
 
