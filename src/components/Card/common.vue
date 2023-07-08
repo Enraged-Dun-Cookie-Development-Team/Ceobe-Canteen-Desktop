@@ -68,7 +68,6 @@ const common = reactive({
 
 onMounted(() => {
   if (props.info.default_cookie.images) {
-    console.log(props.info)
     common.getImg(props.info.default_cookie.images);
   }
 })

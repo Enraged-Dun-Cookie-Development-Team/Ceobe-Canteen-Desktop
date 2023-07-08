@@ -48,10 +48,12 @@ const service = axios.create({
     // 联调
     headers: {
         get: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            'Cache-Control': 'no-cache',
         },
         post: {
-            'Content-Type': 'application/json;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8',
+            'Cache-Control': 'no-cache',
         }
     },
     // 是否跨站点访问控制请求

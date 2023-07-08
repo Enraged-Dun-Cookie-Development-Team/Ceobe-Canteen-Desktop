@@ -30,7 +30,6 @@ export function getVideoList(){
 
 export function getResourceList(){
     // 返回带uuid的资源列表
-    console.log("get resource list")
     return service({
         url: `/canteen/config/datasource/list`,
         method: 'GET',
@@ -40,20 +39,18 @@ export function getResourceList(){
 export function getDatasourceComb(uuids){
     // uuid: list[uuid]
     //返回带有一个datasource_comb_id的json
-    console.log("get datasource comb", uuids)
     return service({
         url: `/canteen/user/getDatasourceComb`,
         method: 'POST',
-        data: JSON.stringify({
+        data: {
             datasource_push: uuids,
-        })
+        }
     })
 }
 
-export function getDatasourceCombList(comb_id){
+export function getCookieNewestInfo(comb_id){
     // comb_id: str
     // 返回带有cookie_id和update_cookie_id的json
-    console.log("get datasource comb list", comb_id)
     return service({
         url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
         method: "GET",
@@ -65,7 +62,6 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id){
     // cookie_id: str
     // update_cookie_id: str
     // 返回带有cookies的json
-    console.log("get cookie list", comb_id, cookie_id, update_cookie_id)
     return service({
         url: `http://cdn-muelsyse-dev.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
         params: {
