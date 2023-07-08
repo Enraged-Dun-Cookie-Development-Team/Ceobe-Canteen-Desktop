@@ -42,7 +42,7 @@
 </template>
 
 <script setup name="weeklyQuest">
-import {reactive, defineProps, onMounted} from "vue";
+import {reactive, onMounted} from "vue";
 import {dayInfo} from "@/constant";
 import {getImage} from '@/utils/imageUtil'
 import {changeToCCT, numberToWeek, calcDiff} from "@/utils/timeUtil";

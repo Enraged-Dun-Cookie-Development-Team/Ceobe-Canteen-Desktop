@@ -8,6 +8,7 @@ let tray = null
 app.whenReady().then(() => {
     ipcMain.handle('openNotificationWindow', (event, data) => {
         createNotificationWindow(data);
+        createTimelineWindow();
     });
     const contextMenu = Menu.buildFromTemplate([
         { label: 'Item1', type: 'radio' },
@@ -21,10 +22,11 @@ app.whenReady().then(() => {
     console.log(tray)
 })
 
+let win = null;
 export async function createWindow() {
 
     // 主页面窗口状态
-    const win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 1200,
         height: 600,
         // 这里碰到了大问题 不加载preload 解决方案 添加 nodeIntegration:true,
@@ -53,7 +55,9 @@ export async function createWindow() {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-        if (!process.env.IS_TEST) win.webContents.openDevTools()
+        if (!process.env.IS_TEST) {
+          win.webContents.openDevTools()
+        }
     } else {
         createProtocol('app')
         // Load the index.html when not in development
@@ -62,11 +66,10 @@ export async function createWindow() {
 }
 
 
-
 let notificationWindow = null;
 
 export async function createNotificationWindow(data = {}) {
-    let workAreaSize = require('electron').screen.getPrimaryDisplay().workAreaSize;
+    let {workAreaSize} = require('electron').screen.getPrimaryDisplay();
     notificationWindow = new BrowserWindow({
         width: 400,
         height: 355,
@@ -86,7 +89,9 @@ export async function createNotificationWindow(data = {}) {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'notification')
-        if (!process.env.IS_TEST) notificationWindow.webContents.openDevTools()
+        if (!process.env.IS_TEST) {
+            notificationWindow.webContents.openDevTools()
+        }
     } else {
         createProtocol('app')
         // Load the index.html when not in development
@@ -98,6 +103,45 @@ export async function createNotificationWindow(data = {}) {
     notificationWindow.webContents.on('did-finish-load', () => {
         notificationWindow.webContents.send('info', data);
     })
+}
+
+export let backgroundWindow = null;
+/*  创建时间轴后台窗口
+    在后台调用queryTimeline接口
+    轮询时间轴数据
+*/
+export async function createBackgroundWindow() {
+    backgroundWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true,
+            webSecurity: false,
+            preload: path.resolve(__dirname, 'preload.js'),
+        }
+    });
+
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+        // Load the url of the dev server if in development mode
+        await backgroundWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'background')
+        if (!process.env.IS_TEST) {
+            backgroundWindow.webContents.openDevTools()
+        }
+    } else {
+        createProtocol('app')
+        // Load the index.html when not in development
+        await backgroundWindow.loadFile("dist/index.html", {
+            hash: "/background"
+        })
+    }
+    ipcMain.on("newest-timeline", (_, cookies) => {
+        sendWindowMessage(win, "newest-timeline", cookies);
+    });
+}
+
+function sendWindowMessage(targetWindow, channel, args) {
+    if (targetWindow) {
+        targetWindow.webContents.send(channel, args);
+    }
 }
 
 ipcMain.on('notification-close', () => {

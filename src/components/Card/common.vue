@@ -6,17 +6,17 @@
         width="400"
     >
       <v-img
-          v-if="info.coverImage"
+          v-if="info.default_cookie.images"
           referrerpolicy="no-referrer"
           class="align-end text-white header-image"
-          :src="common.imgUrl"
+          :src="common.getImg()"
           max-height="320"
           cover
       >
       </v-img>
 
       <v-card-text>
-        <div v-html="info.content.replace(/(\r\n|\n)/g, '<br>')"></div>
+        <div v-html="info.default_cookie.text.replace(/(\r\n|\n)/g, '<br>')"></div>
       </v-card-text>
 
       <v-card-actions>
@@ -28,38 +28,48 @@
 </template>
 
 <script setup>
-import {defineProps, onMounted, reactive} from "vue";
+import {onMounted, reactive, toRaw, ref} from "vue";
 
-const props = defineProps(['info'])
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {
+    }
+  }
+})
 const emits = defineEmits();
 
 const common = reactive({
   imgUrl: [],
   getImg() {
-    if (props.info.dataSource.includes("微博")) {
-      window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then(res => {
+    if (!props.info.default_cookie.images) {
+      common.imgUrl = [];
+    } else if (props.info.datasource.includes("微博")) {
+      window.ceobeRequest.getHasRefererImageBase64(props.info.default_cookie.images[0].compress_url).then(res => {
         common.imgUrl = 'data:image/jpeg;base64,' + res;
       })
     } else {
-      common.imgUrl = props.info.coverImage
+      common.imgUrl = props.info.default_cookie.images[0].compress_url;
     }
+    return common.imgUrl;
   },
   openImage() {
   },
   openUrl() {
     // 统一格式 只需要标题和url和icon
     let data = {
-      url:props.info.jumpUrl,
-      source:props.info.dataSource,
-      icon:props.info.parent.img
+      url:props.info.item.url,
+      source:props.info.datasource,
+      icon:props.info.icon
     }
     emits('openUrl', data)
   }
 })
 
 onMounted(() => {
-  if (props.info.coverImage) {
-    common.getImg(props.info.coverImage);
+  if (props.info.default_cookie.images) {
+    console.log(props.info)
+    common.getImg(props.info.default_cookie.images);
   }
 })
 </script>

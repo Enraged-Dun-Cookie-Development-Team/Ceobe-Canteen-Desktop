@@ -29,8 +29,8 @@
           </v-card-subtitle>
           <v-card-text>
             <v-btn @click.stop="terra.openUrl(item.cid)"
-                   class="mr-1 mb-1"
-                   v-for="item in info.componentData.episodes">
+                  class="mr-1 mb-1"
+                  v-for="item in info.componentData.episodes">
               {{ item.title }}
             </v-btn>
           </v-card-text>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import {defineProps, onMounted, reactive} from "vue";
+import {onMounted, reactive} from "vue";
 
 
 const props = defineProps(['info'])

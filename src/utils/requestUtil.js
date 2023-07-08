@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://server.ceobecanteen.top/api/v1'
+const baseUrl = 'http://server-dev.ceobecanteen.top/api/v1'
 
 const showStatus = (status) => {
     let message = ''
@@ -51,7 +51,7 @@ const service = axios.create({
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
         },
         post: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            'Content-Type': 'application/json;charset=utf-8'
         }
     },
     // 是否跨站点访问控制请求
@@ -66,8 +66,9 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     config => {
-        if (config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)
+        if (config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl) {
             return config
+        }
     },
     (err) => {
         console.log(err);

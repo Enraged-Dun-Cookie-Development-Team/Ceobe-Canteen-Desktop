@@ -6,24 +6,25 @@
         truncate-line="start"
     >
       <v-timeline-item
-          v-for="item in home.timeLineData"
-          :key="item.id"
+          v-for="cookie in home.timeLineData"
+          :key="cookie.item.id"
           :left="true"
           fill-dot="fill-dot"
           dot-color="#fff"
           size="50"
       >
         <template v-slot:icon>
-          <v-avatar :image="getImage(item.parent.img)"></v-avatar>
+          <v-avatar rounded :image="cookie.icon">
+          </v-avatar>
         </template>
-        <component :is="component.getComponentName(item)" :id="item.id" :info="item" @openUrl="card.openUrlInThis">
-          <template #default="info" v-if="card.isCopyImage && item.id == card.copyImageId">
+        <component :is="component.getComponentName(cookie)" :id="cookie.item.id" :info="cookie" @openUrl="card.openUrlInThis">
+          <template #default="info" v-if="card.isCopyImage && cookie.item.id == card.copyImageId">
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
               <div class="h-100 w-100 d-flex justify-space-between align-center print px-2">
                 <div class="d-flex flex-column">
-                  <div class="font-weight-bold title">{{ info.info.dataSource }}</div>
-                  <div class="font-weight-light subtitle">{{ info.info.timeForDisplay }}</div>
+                  <div class="font-weight-bold title">{{ info.info.datasource }}</div>
+                  <div class="font-weight-light subtitle">{{ new Date(info.info.timestamp.platform).toLocaleString() }}</div>
                 </div>
                 <div class="d-flex align-center">
                   <img :src="getImage('/assets/image/logo/icon.png')" width="35">
@@ -37,13 +38,13 @@
             </div>
           </template>
           <template #default="info" v-else>
-            <span class="font-weight-bold pl-2">{{ info.info.timeForDisplay }}</span>
+            <span class="font-weight-bold pl-2">{{ new Date(cookie.timestamp.platform).toLocaleString() }}</span>
             <v-spacer></v-spacer>
-            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(info.info.jumpUrl)"></v-btn>
+            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(cookie.item.url)"></v-btn>
             <v-btn size="small" icon="fas fa-share-nodes" title="生成卡片"
-                   @click.stop="card.copyImage(item.id)"></v-btn>
+                  @click.stop="card.copyImage(cookie.item.id)"></v-btn>
             <v-btn size="small" icon="fas fa-link" title="使用浏览器打开"
-                   @click.stop="card.openUrlInBrowser(info.info.jumpUrl)"></v-btn>
+                  @click.stop="card.openUrlInBrowser(cookie.item.url)"></v-btn>
           </template>
 
         </component>
@@ -53,12 +54,12 @@
 </template>
 
 <script setup name="timeLine">
-import {getCurrentInstance, nextTick, onMounted, reactive} from "vue";
+import {getCurrentInstance, nextTick, onMounted, reactive, ref} from "vue";
 import {sourceInfo} from "@/constant"
 import {getImage} from "@/utils/imageUtil"
-import Music from "@/components/Card/music"
+//import Music from "@/components/Card/music"
 import Info from "@/components/Card/common"
-import Terra from "@/components/Card/terra"
+//import Terra from "@/components/Card/terra"
 import {useRouter} from "vue-router";
 import * as htmlToImage from "html-to-image";
 
@@ -69,15 +70,36 @@ const {proxy} = getCurrentInstance();
 const home = reactive({
   data: [],
   timeLineData: [],
-  getData() {
-    window.ceobeRequest.getCardList().then(res => {
-      let data = res.data.data;
-      // data = data["泰拉记事社官网"]
-      home.timeLineData = Object.values(data).flat().sort((x, y) => y.timeForSort - x.timeForSort);
-      home.timeLineData.forEach(item => {
-        item.parent = sourceInfo.find(x => x.name == item.dataSource)
-      })
+  nextPageId: null,
+  async getData() {
+    window.newestTimeline.getTimeline((_, arg) => {
+      home.timeLineData = Object.values(arg.cookies);
+      home.nextPageId = arg.next_page_id;
     })
+    /* 
+      "cookies": [
+            {
+                "datasource": "明日方舟官网",
+                "icon": "http://cdn-dev.ceobecanteen.top/datasource-avatar/f5f6b090-8def-444b-8f5e-fae1b38cfb8c",
+                "timestamp": {
+                    "platform": 1687449600000,
+                    "platform_precision": "day",
+                    "fetcher": 1687530936977
+                },
+                "default_cookie": {
+                    "text": "【明日方舟×中国航天神舟传媒】“宿于繁星”限时活动即将开启",
+                    "images": null
+                },
+                "item": {
+                    "id": "news/2023065436",
+                    "url": "https://ak.hypergryph.com/news/2023065436.html",
+                    "cate": "活动",
+                    "is_top": true
+                }
+            },
+            ...
+          ]
+    */
   }
 });
 
@@ -100,16 +122,16 @@ const card = reactive({
   copyImage(id) {
     card.copyImageId = id;
     card.isCopyImage = true;
-
-    nextTick(() => {
+    setTimeout(() => {nextTick(() => {
       htmlToImage.toJpeg(document.getElementById(id), {quality: 0.95})
           .then(function (dataUrl) {
             card.isCopyImage = false;
             window.operate.copy({type: 'img', data: dataUrl})
           });
-    })
+    })}, 500)
   },
   copy(url) {
+    show.value = true;
     window.operate.copy({type: 'text', data: url})
   },
   openUrlInBrowser(url) {
@@ -119,13 +141,7 @@ const card = reactive({
 
 const component = reactive({
   getComponentName(item) {
-    if (item.dataSource == "塞壬唱片网易云音乐") {
-      return Music
-    } else if (item.dataSource == "泰拉记事社官网") {
-      return Terra
-    } else {
-      return Info
-    }
+    return Info
   }
 })
 onMounted(() => {
