@@ -3,19 +3,35 @@
     <div class="fix-btn">
       <v-btn
         class="refresh-btn"
+        prepend-icon="fas fa-copy"
+        color="#ffba4b"
+        elevation="0"
+        :ripple="false"
         :class="
           scroll.scrollShow && timeline.refreshTimelineData.length !== 0
             ? 'refresh-btn-show'
             : ''
         "
+        density="default"
+        rounded="xl"
         @click.stop="timeline.refreshTimeline"
-        >刷新</v-btn
-      >
+        >
+        <template v-slot:prepend>
+          <v-icon color="#fff"></v-icon>
+        </template>
+        <span style="color:#fff">有新饼</span>
+      </v-btn>
       <v-btn
         class="top-btn"
+        size="small"
+        icon="fas fa-copy"
+        color="#ffba4b"
+        elevation="0"
+        style="color: #fff"
+        density="default"
         :class="scroll.scrollShow ? 'top-btn-show' : ''"
         @click.stop="scroll.scrollToTop"
-        >顶部</v-btn
+        ></v-btn
       >
     </div>
     <v-timeline
@@ -125,19 +141,25 @@ const timeline = reactive({
   timeLineData: [],
   refreshTimelineData: [],
   nextPageId: null,
+  refreshNextPageId: null,
   combId: null,
+  refreshCombId: null,
   updateCookieId: null,
+  refreshUpdateCookieId: null,
   async getData() {
     window.newestTimeline.getTimeline((_, arg) => {
       if (timeline.timeLineData.length === 0 || !scroll.scrollShow) {
         timeline.timeLineData = arg.cookies;
+        timeline.combId = arg.comb_id;
+        timeline.updateCookieId = arg.update_cookie_id;
+        timeline.nextPageId = arg.next_page_id;
+        document.querySelector(".time-line").scrollTop = 0;
       } else {
         timeline.refreshTimelineData = arg.cookies;
-        document.querySelector(".time-line").scrollTop = 0;
+        timeline.refreshCombId = arg.comb_id;
+        timeline.refreshUpdateCookieId = arg.update_cookie_id;
+        timeline.refreshNextPageId = arg.next_page_id;
       }
-      timeline.combId = arg.comb_id;
-      timeline.updateCookieId = arg.update_cookie_id;
-      timeline.nextPageId = arg.next_page_id;
     });
   },
   refreshTimeline() {
@@ -146,6 +168,12 @@ const timeline = reactive({
     }
     timeline.timeLineData = timeline.refreshTimelineData.slice(0);
     timeline.refreshTimelineData = [];
+    timeline.combId = timeline.refreshCombId;
+    timeline.refreshCombId = null;
+    timeline.updateCookieId = timeline.refreshUpdateCookieId;
+    timeline.refreshUpdateCookieId = null;
+    timeline.nextPageId = timeline.refreshNextPageId;
+    timeline.refreshNextPageId = null;
     document.querySelector(".time-line").scrollTop = 0;
   },
 });
@@ -188,10 +216,13 @@ const scroll = reactive({
   scrollShow: false,
 
   bindHandleScroll(e) {
-    // console.log("asdasdasdasd");
+    
     scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
-    // TODO: 这边做一下节流
+    
     if (e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight) {
+      if (!timeline.nextPageId) {
+        return
+      }
       getCookieList(
         timeline.combId,
         timeline.nextPageId,
@@ -262,10 +293,38 @@ onMounted(() => {
   min-width: 500px;
 
   .fix-btn {
-    position: fixed;
-    left: 300px;
-    bottom: 20px;
-    z-index: 1;
+    .refresh-btn {
+      position: fixed;
+      left: 300px;
+      bottom: -40px;
+      z-index: 1;
+      transition: 0.3s all;
+      opacity: 1;
+      &.refresh-btn-show {
+        bottom: 20px;
+        opacity: 0.4;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    .top-btn {
+      position: fixed;
+      left: 410px;
+      bottom: -40px;
+      z-index: 1;
+      transition: 0.3s all;
+      opacity: 1;
+      &.top-btn-show {
+        bottom: 18px;
+        opacity: 0.4;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
   }
 
   .v-timeline {
