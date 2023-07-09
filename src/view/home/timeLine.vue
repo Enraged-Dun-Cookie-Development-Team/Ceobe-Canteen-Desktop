@@ -3,7 +3,7 @@
     <div class="fix-btn">
       <v-btn
         class="refresh-btn"
-        prepend-icon="fas fa-copy"
+        prepend-icon="fas fa-arrows-rotate"
         color="#ffba4b"
         elevation="0"
         :ripple="false"
@@ -24,7 +24,7 @@
       <v-btn
         class="top-btn"
         size="small"
-        icon="fas fa-copy"
+        icon="fas fa-arrow-up"
         color="#ffba4b"
         elevation="0"
         style="color: #fff"
