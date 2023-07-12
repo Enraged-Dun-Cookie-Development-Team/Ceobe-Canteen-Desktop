@@ -245,26 +245,6 @@ onMounted(() => {
   timeline.getData();
   window.addEventListener('scroll', throttle(scroll.bindHandleScroll, 500), true);
 });
-onMounted(() => {
-    window.newestTimeline.getTimeline((_, args) => {
-        // 接收到的是详细的饼列表
-        console.log(args);
-        const cookies = args.cookies
-        console.log(cookies);
-        let cookies_len = args.length;
-        let count = 0;
-        window.operate.openNotificationWindow(cookies[0]);
-        // cookies.forEach(data => {
-        //     count++;
-        //     window.operate.openNotificationWindow(data);
-        //     if (count !== cookies_len) {
-        //         setTimeout(() => {
-        //             window.notification.closeWindow();
-        //         }, 10000)
-        //     }
-        // });
-    })
-})
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
