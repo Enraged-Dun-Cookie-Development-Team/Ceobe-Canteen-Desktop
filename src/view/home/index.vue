@@ -16,7 +16,7 @@ import TimeLine from "@/view/home/timeLine";
 
 <style rel="stylesheet/scss" lang="scss">
 .home {
-  min-width: 1200px;
+  min-width: 100vw;
   overflow: hidden;
 
   .fade-enter-active,
