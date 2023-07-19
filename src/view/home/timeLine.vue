@@ -176,6 +176,7 @@ const card = reactive({
     window.operate.copy({ type: 'text', data: url });
   },
   openUrlInBrowser(url) {
+    debugger
     window.operate.openUrlInBrowser(url);
   }
 });

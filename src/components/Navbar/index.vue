@@ -1,12 +1,12 @@
 <template>
   <div class="index">
-    <!--    <Menu></Menu>-->
+    <app-top></app-top>
     <app-main></app-main>
   </div>
 </template>
 
 <script setup name="index">
-import Menu from '@/view/menu';
+import AppTop from '@/components/appTop';
 import AppMain from '@/view/AppMain';
 </script>
 

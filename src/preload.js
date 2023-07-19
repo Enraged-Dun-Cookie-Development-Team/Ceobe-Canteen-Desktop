@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, remote, shell } = require('electron');
+const { contextBridge, ipcRenderer, remote, shell  } = require('electron');
 const {
   getCardList,
   getAnnouncementInfo,
@@ -33,7 +33,10 @@ contextBridge.exposeInMainWorld('operate', {
     ipcRenderer.invoke('openNotificationWindow', data);
   },
   openUrlInBrowser: url => ipcRenderer.invoke('openUrlInBrowser', url),
-  copy: data => ipcRenderer.invoke('copy', data)
+  copy: data => ipcRenderer.invoke('copy', data),
+  minus: () => ipcRenderer.invoke('minus'),
+  maximize: () => ipcRenderer.invoke('maximize'),
+  close: () => ipcRenderer.invoke('close')
 });
 
 contextBridge.exposeInMainWorld('notification', {

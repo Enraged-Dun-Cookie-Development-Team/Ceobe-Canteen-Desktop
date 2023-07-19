@@ -23,11 +23,14 @@ app.whenReady().then(() => {
 });
 
 let win = null;
+
 export async function createWindow() {
   // 主页面窗口状态
   win = new BrowserWindow({
     width: 1200,
     height: 600,
+    useContentSize: true,
+    frame: false,
     // 这里碰到了大问题 不加载preload 解决方案 添加 nodeIntegration:true,
     // https://stackoverflow.com/questions/60814430/electron-builder-with-browserwindow-and-preload-js-unable-to-load-preload-scrip
     webPreferences: {
@@ -102,6 +105,7 @@ export async function createNotificationWindow(data = {}) {
 }
 
 export let backgroundWindow = null;
+
 /*  创建时间轴后台窗口
     在后台调用queryTimeline接口
     轮询时间轴数据
@@ -145,4 +149,23 @@ ipcMain.on('notification-close', () => {
     notificationWindow.close();
     notificationWindow = null;
   }
+});
+
+// 最小化等
+ipcMain.handle('minus', event => {
+  win.minimize();
+});
+
+// 窗口最大化
+ipcMain.handle('maximize', event => {
+  if (win.isMaximized()) {
+    win.restore();
+  } else {
+    win.maximize();
+  }
+});
+
+// 窗口关闭
+ipcMain.handle('close', event => {
+  win.close();
 });
