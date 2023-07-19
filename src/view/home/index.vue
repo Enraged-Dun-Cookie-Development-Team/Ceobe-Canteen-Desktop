@@ -3,15 +3,14 @@
     <time-line class="pt-2"></time-line>
     <keep-alive>
       <transition name="fade" mode="out-in">
-        <router-view/>
+        <router-view />
       </transition>
     </keep-alive>
   </div>
 </template>
 
 <script setup name="home">
-import TimeLine from "@/view/home/timeLine";
-
+import TimeLine from '@/view/home/timeLine';
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

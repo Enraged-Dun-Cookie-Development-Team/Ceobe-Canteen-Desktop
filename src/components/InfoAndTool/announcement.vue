@@ -2,31 +2,25 @@
   <div class="announcement mt-2">
     <v-card>
       <v-carousel
-          cycle
-          :show-arrows="false"
-          height="160"
-          :continuous="false"
-          v-model="announcementInfo.index"
-          hide-delimiter-background
-          delimiter-icon="mdi: mdi-square"
-
+        cycle
+        :show-arrows="false"
+        height="160"
+        :continuous="false"
+        v-model="announcementInfo.index"
+        hide-delimiter-background
+        delimiter-icon="mdi: mdi-square"
       >
-        <v-carousel-item
-            v-for="(item,i) in announcementInfo.data"
-            :key="i"
-        >
+        <v-carousel-item v-for="(item, i) in announcementInfo.data" :key="i">
           <div v-html="item.html"></div>
         </v-carousel-item>
       </v-carousel>
     </v-card>
-
   </div>
 </template>
 
 <script setup name="announcement">
-
-import {onMounted, reactive} from "vue";
-import {changeToCCT} from "@/utils/timeUtil";
+import { onMounted, reactive } from 'vue';
+import { changeToCCT } from '@/utils/timeUtil';
 
 const announcementInfo = reactive({
   data: [],
@@ -34,17 +28,15 @@ const announcementInfo = reactive({
   getData() {
     window.ceobeRequest.getAnnouncementInfo().then(res => {
       announcementInfo.data = res.data.data.filter(
-          (x) =>
-              new Date(x.start_time) <= changeToCCT(new Date()) &&
-              new Date(x.over_time) >= changeToCCT(new Date())
+        x => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
       );
-    })
+    });
   }
-})
+});
 
 onMounted(() => {
   announcementInfo.getData();
-})
+});
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

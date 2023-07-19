@@ -7,19 +7,15 @@
         color="#ffba4b"
         elevation="0"
         :ripple="false"
-        :class="
-          scroll.scrollShow && timeline.refreshTimelineData.length !== 0
-            ? 'refresh-btn-show'
-            : ''
-        "
+        :class="scroll.scrollShow && timeline.refreshTimelineData.length !== 0 ? 'refresh-btn-show' : ''"
         density="default"
         rounded="xl"
         @click.stop="timeline.refreshTimeline"
-        >
+      >
         <template v-slot:prepend>
           <v-icon color="#fff"></v-icon>
         </template>
-        <span style="color:#fff">有新饼</span>
+        <span style="color: #fff">有新饼</span>
       </v-btn>
       <v-btn
         class="top-btn"
@@ -31,15 +27,9 @@
         density="default"
         :class="scroll.scrollShow ? 'top-btn-show' : ''"
         @click.stop="scroll.scrollToTop"
-        ></v-btn
-      >
+      ></v-btn>
     </div>
-    <v-timeline
-      ref="timeline_area"
-      align="start"
-      side="end"
-      truncate-line="start"
-    >
+    <v-timeline ref="timeline_area" align="start" side="end" truncate-line="start">
       <v-timeline-item
         v-for="cookie in timeline.timeLineData"
         :key="cookie.item.id"
@@ -49,7 +39,7 @@
         size="50"
       >
         <template v-slot:icon>
-          <v-avatar rounded :image="cookie.icon"> </v-avatar>
+          <v-avatar rounded :image="cookie.icon"></v-avatar>
         </template>
         <component
           :is="component.getComponentName(cookie)"
@@ -57,52 +47,33 @@
           :info="cookie"
           @openUrl="card.openUrlInThis"
         >
-          <template
-            #default="info"
-            v-if="card.isCopyImage && cookie.item.id == card.copyImageId"
-          >
+          <template #default="info" v-if="card.isCopyImage && cookie.item.id == card.copyImageId">
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
-              <div
-                class="h-100 w-100 d-flex justify-space-between align-center print px-2"
-              >
+              <div class="h-100 w-100 d-flex justify-space-between align-center print px-2">
                 <div class="d-flex flex-column">
                   <div class="font-weight-bold title">
                     {{ info.info.datasource }}
                   </div>
                   <div class="font-weight-light subtitle">
-                    {{
-                      new Date(info.info.timestamp.platform).toLocaleString()
-                    }}
+                    {{ new Date(info.info.timestamp.platform).toLocaleString() }}
                   </div>
                 </div>
                 <div class="d-flex align-center">
-                  <img
-                    :src="getImage('/assets/image/logo/icon.png')"
-                    width="35"
-                  />
+                  <img :src="getImage('/assets/image/logo/icon.png')" width="35" />
                   <v-divider class="mx-2" vertical></v-divider>
                   <div>
                     <div class="font-weight-bold title">小刻终于吃到饼啦！</div>
-                    <div class="font-weight-light subtitle">
-                      分享来自小刻食堂
-                    </div>
+                    <div class="font-weight-light subtitle">分享来自小刻食堂</div>
                   </div>
                 </div>
               </div>
             </div>
           </template>
           <template #default="info" v-else>
-            <span class="font-weight-bold pl-2">{{
-              new Date(cookie.timestamp.platform).toLocaleString()
-            }}</span>
+            <span class="font-weight-bold pl-2">{{ new Date(cookie.timestamp.platform).toLocaleString() }}</span>
             <v-spacer></v-spacer>
-            <v-btn
-              size="small"
-              icon="fas fa-copy"
-              title="复制链接"
-              @click.stop="card.copy(cookie.item.url)"
-            ></v-btn>
+            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(cookie.item.url)"></v-btn>
             <v-btn
               size="small"
               icon="fas fa-share-nodes"
@@ -123,15 +94,15 @@
 </template>
 
 <script setup name="timeLine">
-import { getCurrentInstance, nextTick, onMounted, reactive, ref } from "vue";
-import { sourceInfo } from "@/constant";
-import { getImage } from "@/utils/imageUtil";
+import { getCurrentInstance, nextTick, onMounted, reactive, ref } from 'vue';
+import { sourceInfo } from '@/constant';
+import { getImage } from '@/utils/imageUtil';
 //import Music from "@/components/Card/music"
-import Info from "@/components/Card/common";
+import Info from '@/components/Card/common';
 //import Terra from "@/components/Card/terra"
-import { useRouter } from "vue-router";
-import * as htmlToImage from "html-to-image";
-import { getCookieList } from "@/api/list";
+import { useRouter } from 'vue-router';
+import * as htmlToImage from 'html-to-image';
+import { getCookieList } from '@/api/list';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -153,7 +124,7 @@ const timeline = reactive({
         timeline.combId = arg.comb_id;
         timeline.updateCookieId = arg.update_cookie_id;
         timeline.nextPageId = arg.next_page_id;
-        document.querySelector(".time-line").scrollTop = 0;
+        document.querySelector('.time-line').scrollTop = 0;
       } else {
         timeline.refreshTimelineData = arg.cookies;
         timeline.refreshCombId = arg.comb_id;
@@ -174,8 +145,8 @@ const timeline = reactive({
     timeline.refreshUpdateCookieId = null;
     timeline.nextPageId = timeline.refreshNextPageId;
     timeline.refreshNextPageId = null;
-    document.querySelector(".time-line").scrollTop = 0;
-  },
+    document.querySelector('.time-line').scrollTop = 0;
+  }
 });
 
 // 卡片操作
@@ -184,8 +155,8 @@ const card = reactive({
   copyImageId: null,
   openUrlInThis(data) {
     router.push({
-      path: "/home/Browser",
-      query: data,
+      path: '/home/Browser',
+      query: data
     });
   },
   copyImage(id) {
@@ -193,22 +164,20 @@ const card = reactive({
     card.isCopyImage = true;
     setTimeout(() => {
       nextTick(() => {
-        htmlToImage
-          .toJpeg(document.getElementById(id), { quality: 0.95 })
-          .then(function (dataUrl) {
-            card.isCopyImage = false;
-            window.operate.copy({ type: "img", data: dataUrl });
-          });
+        htmlToImage.toJpeg(document.getElementById(id), { quality: 0.95 }).then(function (dataUrl) {
+          card.isCopyImage = false;
+          window.operate.copy({ type: 'img', data: dataUrl });
+        });
       });
     }, 500);
   },
   copy(url) {
     // show.value = true;
-    window.operate.copy({ type: "text", data: url });
+    window.operate.copy({ type: 'text', data: url });
   },
   openUrlInBrowser(url) {
     window.operate.openUrlInBrowser(url);
-  },
+  }
 });
 
 // 滚动操作
@@ -216,19 +185,14 @@ const scroll = reactive({
   scrollShow: false,
 
   bindHandleScroll(e) {
-    
     scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
-    
+
     if (e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight) {
       if (!timeline.nextPageId) {
-        return
+        return;
       }
-      getCookieList(
-        timeline.combId,
-        timeline.nextPageId,
-        timeline.updateCookieId
-      )
-        .then((resp) => {
+      getCookieList(timeline.combId, timeline.nextPageId, timeline.updateCookieId)
+        .then(resp => {
           let cookies_info = resp.data.data;
           timeline.timeLineData.push(...cookies_info.cookies);
           timeline.nextPageId = cookies_info.next_page_id;
@@ -239,15 +203,15 @@ const scroll = reactive({
     }
   },
   scrollToTop() {
-    let top = document.querySelector(".time-line").scrollTop;
+    let top = document.querySelector('.time-line').scrollTop;
     let changeTop = top / 10;
     const timeTop = setInterval(() => {
-      document.querySelector(".time-line").scrollTop = top -= changeTop;
+      document.querySelector('.time-line').scrollTop = top -= changeTop;
       if (top <= 0) {
         clearInterval(timeTop);
       }
     }, 10);
-  },
+  }
 });
 
 // 简单的节流函数
@@ -274,15 +238,11 @@ const throttle = (fn, t) => {
 const component = reactive({
   getComponentName(item) {
     return Info;
-  },
+  }
 });
 onMounted(() => {
   timeline.getData();
-  window.addEventListener(
-    "scroll",
-    throttle(scroll.bindHandleScroll, 500),
-    true
-  );
+  window.addEventListener('scroll', throttle(scroll.bindHandleScroll, 500), true);
 });
 </script>
 

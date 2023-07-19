@@ -1,0 +1,8 @@
+**/.git
+**/.svn
+**/node_modules
+**/dist_electron
+**/.idea
+**/.vite
+**/bin
+**/public

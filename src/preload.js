@@ -1,50 +1,52 @@
-const {contextBridge, ipcRenderer, remote, shell} = require('electron');
+const { contextBridge, ipcRenderer, remote, shell } = require('electron');
 const {
-    getCardList, 
-    getAnnouncementInfo, 
-    getResourceInfo,
-    getResourceList,
-    getDatasourceComb,
-    getDatasourceCombList,
-    getCookieList,
-} = require("@/api/list");
+  getCardList,
+  getAnnouncementInfo,
+  getResourceInfo,
+  getResourceList,
+  getDatasourceComb,
+  getDatasourceCombList,
+  getCookieList
+} = require('@/api/list');
 
 contextBridge.exposeInMainWorld('versions', {
-    node: () => process.versions.node, chrome: () => process.versions.chrome, electron: () => process.versions.electron,
-})
-
-contextBridge.exposeInMainWorld('ceobeRequest', {
-    getCardList: () => getCardList(),
-    getResourceList: () => getResourceList(),
-    getDatasourceComb: (uuids) => getDatasourceComb(uuids),
-    getDatasourceCombList: (comb_id) => getDatasourceCombList(comb_id),
-    getCookieList: (comb_id, cookie_id, update_cookie_id) => getCookieList(comb_id, cookie_id, update_cookie_id),
-    getAnnouncementInfo: () => getAnnouncementInfo(),
-    getResourceInfo: () => getResourceInfo(),
-    getHasRefererImageBase64: (url) => ipcRenderer.invoke('getHasRefererImageBase64', url),
-    getLocalFileText: (path) => ipcRenderer.invoke("getLocalFileText", path)
-})
-
-contextBridge.exposeInMainWorld('operate', {
-    openNotificationWindow: (data) => {
-        ipcRenderer.send('notification-close')
-        ipcRenderer.invoke('openNotificationWindow', data)
-    },
-    openUrlInBrowser: (url) => ipcRenderer.invoke('openUrlInBrowser', url),
-    copy: (data) => ipcRenderer.invoke('copy', data),
-})
-
-contextBridge.exposeInMainWorld('notification', {
-    getInfo: (callback) => ipcRenderer.on('info', callback),
-    closeWindow: () => ipcRenderer.send('notification-close'),
+  node: () => process.versions.node,
+  chrome: () => process.versions.chrome,
+  electron: () => process.versions.electron
 });
 
-contextBridge.exposeInMainWorld("newestTimeline", {
-    getTimeline: (callback) => ipcRenderer.on('newest-timeline', callback),
-    sendTimeline: (data) => ipcRenderer.send('newest-timeline', data),
-})
+contextBridge.exposeInMainWorld('ceobeRequest', {
+  getCardList: () => getCardList(),
+  getResourceList: () => getResourceList(),
+  getDatasourceComb: uuids => getDatasourceComb(uuids),
+  getDatasourceCombList: comb_id => getDatasourceCombList(comb_id),
+  getCookieList: (comb_id, cookie_id, update_cookie_id) => getCookieList(comb_id, cookie_id, update_cookie_id),
+  getAnnouncementInfo: () => getAnnouncementInfo(),
+  getResourceInfo: () => getResourceInfo(),
+  getHasRefererImageBase64: url => ipcRenderer.invoke('getHasRefererImageBase64', url),
+  getLocalFileText: path => ipcRenderer.invoke('getLocalFileText', path)
+});
 
-contextBridge.exposeInMainWorld("datasourceConfig", {
-    datasourceCombUpdated: (callback) => ipcRenderer.on('update-datasource-comb', callback),
-    updateDatasourceComb: () => ipcRenderer.send('update-datasource-comb'),
-})
+contextBridge.exposeInMainWorld('operate', {
+  openNotificationWindow: data => {
+    ipcRenderer.send('notification-close');
+    ipcRenderer.invoke('openNotificationWindow', data);
+  },
+  openUrlInBrowser: url => ipcRenderer.invoke('openUrlInBrowser', url),
+  copy: data => ipcRenderer.invoke('copy', data)
+});
+
+contextBridge.exposeInMainWorld('notification', {
+  getInfo: callback => ipcRenderer.on('info', callback),
+  closeWindow: () => ipcRenderer.send('notification-close')
+});
+
+contextBridge.exposeInMainWorld('newestTimeline', {
+  getTimeline: callback => ipcRenderer.on('newest-timeline', callback),
+  sendTimeline: data => ipcRenderer.send('newest-timeline', data)
+});
+
+contextBridge.exposeInMainWorld('datasourceConfig', {
+  datasourceCombUpdated: callback => ipcRenderer.on('update-datasource-comb', callback),
+  updateDatasourceComb: () => ipcRenderer.send('update-datasource-comb')
+});

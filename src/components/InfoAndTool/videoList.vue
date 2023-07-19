@@ -1,17 +1,8 @@
 <template>
   <div class="video mt-2 d-flex flex-wrap justify-space-between">
-    <v-card
-        width="320"
-        v-for="item in videoInfo.list"
-        class="mb-2"
-    >
+    <v-card width="320" v-for="item in videoInfo.list" class="mb-2">
       <!--      {{ item.video_link }}-->
-      <v-img
-          class="align-end text-white"
-          width="100%"
-          :src="item.cover_img.split('@')[0]"
-          cover
-      >
+      <v-img class="align-end text-white" width="100%" :src="item.cover_img.split('@')[0]" cover>
         <v-card-title class="text-right">{{ item.author }}</v-card-title>
       </v-img>
 
@@ -19,14 +10,18 @@
         {{ item.title }}
       </v-card-subtitle>
     </v-card>
-    <i/><i/><i/><i/><i/>
+    <i />
+    <i />
+    <i />
+    <i />
+    <i />
   </div>
 </template>
 
 <script setup name="video">
-import {onMounted, reactive} from "vue";
-import {getVideoList} from "@/api/list";
-import {changeToCCT} from "@/utils/timeUtil";
+import { onMounted, reactive } from 'vue';
+import { getVideoList } from '@/api/list';
+import { changeToCCT } from '@/utils/timeUtil';
 
 const videoInfo = reactive({
   list: [],
@@ -34,22 +29,19 @@ const videoInfo = reactive({
     getVideoList().then(res => {
       // 快捷连接
       videoInfo.list = res.data.data.filter(
-          (x) =>
-              new Date(x.start_time) <= changeToCCT(new Date()) &&
-              new Date(x.over_time) >= changeToCCT(new Date())
+        x => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
       );
-    })
+    });
   }
-})
+});
 
 onMounted(() => {
   videoInfo.getList();
-})
+});
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
 .video {
-
   .v-card {
     .v-card-title {
       text-shadow: 0 0 5px black;

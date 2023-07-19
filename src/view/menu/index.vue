@@ -1,12 +1,8 @@
 <template>
-  <div class="index">
-    这是菜单
-  </div>
+  <div class="index">这是菜单</div>
 </template>
 
-<script setup name="index">
-
-</script>
+<script setup name="index"></script>
 
 <style rel="stylesheet/scss" lang="scss">
 .index {

@@ -1,28 +1,16 @@
 <template>
   <div class="notification">
     <v-card>
-      <v-img
-          height="190"
-          :src="pageData.imgUrl"
-          cover
-          class="text-white"
-          @click="closeThis"
-      >
-
-        <v-toolbar
-            color="rgba(0, 0, 0, 0)"
-            theme="dark"
-        >
+      <v-img height="190" :src="pageData.imgUrl" cover class="text-white" @click="closeThis">
+        <v-toolbar color="rgba(0, 0, 0, 0)" theme="dark">
           <template v-slot:append>
             <v-btn size="small" icon="fas fa-circle-xmark"></v-btn>
           </template>
         </v-toolbar>
       </v-img>
-      <v-card-title class="pb-1 pt-1">
-        小刻在{{pageData.dataSource}}蹲到饼了！
-      </v-card-title>
-      <v-card-subtitle>{{pageData.timeForDisplay}}</v-card-subtitle>
-      <v-card-text class="pt-1 pb-0 text">{{pageData.content}}</v-card-text>
+      <v-card-title class="pb-1 pt-1">小刻在{{ pageData.dataSource }}蹲到饼了！</v-card-title>
+      <v-card-subtitle>{{ pageData.timeForDisplay }}</v-card-subtitle>
+      <v-card-text class="pt-1 pb-0 text">{{ pageData.content }}</v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn size="x-small" icon="fas fa-copy"></v-btn>
@@ -34,42 +22,42 @@
 </template>
 
 <script setup name="index">
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from 'vue';
 
-let pageData = ref({})
+let pageData = ref({});
 window.notification.getInfo((event, data) => {
   pageData.value = data;
-  if (pageData.value.dataSource.includes("微博")) {
+  if (pageData.value.dataSource.includes('微博')) {
     window.ceobeRequest.getHasRefererImageBase64(pageData.value.coverImage).then(res => {
       pageData.value.imgUrl = 'data:image/jpeg;base64,' + res;
-    })
+    });
   } else {
-    pageData.value.imgUrl = pageData.value.coverImage
+    pageData.value.imgUrl = pageData.value.coverImage;
   }
 });
-onMounted(()=>{
-  setTimeout(()=>{
+onMounted(() => {
+  setTimeout(() => {
     closeThis();
-  },10000)
-})
-function closeThis(){
+  }, 10000);
+});
+function closeThis() {
   window.notification.closeWindow();
 }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
 html {
-  overflow: hidden
+  overflow: hidden;
 }
 
 .notification {
   .v-card {
     width: 100vw;
     height: 100vh;
-    img{
+    img {
       object-position: top;
     }
-    .text{
+    .text {
       overflow: auto;
       height: 75px;
       &::-webkit-scrollbar {
@@ -77,7 +65,5 @@ html {
       }
     }
   }
-
-
 }
 </style>
