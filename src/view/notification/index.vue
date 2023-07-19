@@ -3,7 +3,7 @@
     <v-card>
       <v-img
           height="190"
-          :src="imgUrl"
+          :src="info.imgUrl"
           cover
           class="text-white"
           @click="closeThis"
@@ -19,10 +19,10 @@
         </v-toolbar>
       </v-img>
       <v-card-title class="pb-1 pt-1">
-        小刻在{{dataSource}}蹲到饼了！
+        小刻在{{info.dataSource}}蹲到饼了！
       </v-card-title>
-      <v-card-subtitle>{{cookieTime}}</v-card-subtitle>
-      <v-card-text class="pt-1 pb-0 text">{{cookieText}}</v-card-text>
+      <v-card-subtitle>{{info.cookieTime}}</v-card-subtitle>
+      <v-card-text class="pt-1 pb-0 text">{{info.cookieText}}</v-card-text>
       <v-card-actions class="pt-0">
         <v-spacer></v-spacer>
         <v-btn size="x-small" icon="fas fa-copy"></v-btn>
@@ -35,26 +35,28 @@
 
 <script setup name="index">
 import { getImage } from "@/utils/imageUtil";
-import { computed, ref } from "vue";
+import { reactive } from "vue";
 
-const imgUrl = ref(getImage("/assets/image/logo/icon.png"));
-const dataSource = ref("");
-const cookieTime = ref("");
-const cookieText = ref("");
+const info = reactive({
+  imgUrl: getImage("/assets/image/logo/icon.png"),
+  dataSource: "",
+  cookieTime: "",
+  cookieText: "",
+})
 
 const updatePageData = (newData) => {
-  dataSource.value = newData.datasource;
-  cookieTime.value = new Date(newData.timestamp.platform).toLocaleString();
-  cookieText.value = newData.default_cookie.text;
+  info.dataSource = newData.datasource;
+  info.cookieTime = new Date(newData.timestamp.platform).toLocaleString();
+  info.cookieText = newData.default_cookie.text;
 
   let images = newData.default_cookie.images;
   if (images) {
     if (newData.datasource.includes("微博")) {
       window.ceobeRequest.getHasRefererImageBase64(images[0].origin_url).then(res => {
-        imgUrl.value = 'data:image/jpeg;base64,' + res;
+        info.imgUrl = 'data:image/jpeg;base64,' + res;
       })
     } else {
-      imgUrl.value = images[0].origin_url;
+      info.imgUrl = images[0].origin_url;
     }
   } else {
     console.log("no image");
