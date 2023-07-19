@@ -84,22 +84,21 @@ export async function createWindow() {
 let notificationWindow = null;
 
 export async function createNotificationWindow(data = {}) {
-  let { workAreaSize } = require('electron').screen.getPrimaryDisplay();
-  notificationWindow = new BrowserWindow({
-    width: 400,
-    height: 355,
-    frame: false,
-    resizable: false,
-    x: workAreaSize.width - 410,
-    y: workAreaSize.height - 365,
-    webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true,
-      preload: path.resolve(__dirname, 'preload.js')
-    }
-  });
-
-  notificationWindow.webContents.openDevTools();
+    let {workAreaSize} = require('electron').screen.getPrimaryDisplay();
+    notificationWindow = new BrowserWindow({
+        width: 400,
+        height: 355,
+        frame: false,
+        resizable: false,
+        x: workAreaSize.width - 410,
+        y: workAreaSize.height - 365,
+        webPreferences: {
+            webSecurity: false,
+            nodeIntegration: true,
+            preload: path.resolve(__dirname, 'preload.js'),
+        },
+        alwaysOnTop: true,
+    });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
