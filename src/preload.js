@@ -36,7 +36,8 @@ contextBridge.exposeInMainWorld('operate', {
   copy: data => ipcRenderer.invoke('copy', data),
   minus: () => ipcRenderer.invoke('minus'),
   maximize: () => ipcRenderer.invoke('maximize'),
-  close: () => ipcRenderer.invoke('close')
+  close: () => ipcRenderer.invoke('close'),
+  exit: () => ipcRenderer.invoke('exit')
 });
 
 contextBridge.exposeInMainWorld('notification', {

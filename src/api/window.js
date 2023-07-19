@@ -5,24 +5,40 @@ import { app, ipcMain, Menu, Tray } from 'electron';
 const { BrowserWindow, screen } = require('electron');
 
 let tray = null;
+
+let win = null;
+
 app.whenReady().then(() => {
   ipcMain.handle('openNotificationWindow', (event, data) => {
     createNotificationWindow(data);
     createTimelineWindow();
   });
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Item1', type: 'radio' },
-    { label: 'Item2', type: 'radio' },
-    { label: 'Item3', type: 'radio', checked: true },
-    { label: 'Item4', type: 'radio' }
-  ]);
+  // 托盘
   tray = new Tray('src/assets/image/logo/icon.png');
-  tray.setToolTip('This is my application.');
+  tray.setToolTip('小刻食堂持续蹲饼中');
+  // 菜单
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '退出小刻食堂',
+      click: () => {
+        app.quit(); // 退出应用程序
+      }
+    }
+  ]);
   tray.setContextMenu(contextMenu);
-  console.log(tray);
-});
 
-let win = null;
+  if (process.platform !== 'darwin') {
+    tray.on('click', () => {
+      if (win && !win.isDestroyed()) {
+        // 在窗口存在且未被销毁时打开窗口
+        win.show();
+      } else {
+        // 在窗口不存在或已被销毁时创建新的窗口 （一般不会）
+        createWindow().then();
+      }
+    });
+  }
+});
 
 export async function createWindow() {
   // 主页面窗口状态
@@ -167,5 +183,17 @@ ipcMain.handle('maximize', event => {
 
 // 窗口关闭
 ipcMain.handle('close', event => {
-  win.close();
+  win.hide();
+});
+
+// 退出程序
+ipcMain.handle('exit', event => {
+  win.hide();
+});
+
+// 在窗口关闭时，销毁托盘图标
+app.on('window-all-closed', () => {
+  if (tray) {
+    tray.destroy();
+  }
 });
