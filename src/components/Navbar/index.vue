@@ -9,8 +9,3 @@
 import AppTop from '@/components/appTop';
 import AppMain from '@/view/AppMain';
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-.index {
-}
-</style>

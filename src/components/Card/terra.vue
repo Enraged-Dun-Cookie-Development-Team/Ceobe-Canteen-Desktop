@@ -23,7 +23,12 @@
             {{ info.componentData.introduction }}
           </v-card-subtitle>
           <v-card-text>
-            <v-btn @click.stop="terra.openUrl(item.cid)" class="mr-1 mb-1" v-for="item in info.componentData.episodes">
+            <v-btn
+              v-for="(item, index) in info.componentData.episodes"
+              :key="index"
+              class="mr-1 mb-1"
+              @click.stop="terra.openUrl(item.cid)"
+            >
               {{ item.title }}
             </v-btn>
           </v-card-text>
@@ -36,8 +41,15 @@
 <script setup>
 import { onMounted, reactive } from 'vue';
 
-const props = defineProps(['info']);
-const emits = defineEmits();
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {},
+  },
+});
+const emits = defineEmits({
+  openUrl: null,
+});
 
 const terra = reactive({
   imgUrl: [],
@@ -45,7 +57,7 @@ const terra = reactive({
 
   getImg() {
     if (props.info.dataSource.includes('微博')) {
-      window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then(res => {
+      window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then((res) => {
         terra.imgUrl = 'data:image/jpeg;base64,' + res;
       });
     } else {
@@ -61,10 +73,10 @@ const terra = reactive({
       icon: props.info.parent.img,
       width: '428px',
       useragent:
-        'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1'
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1',
     };
     emits('openUrl', data);
-  }
+  },
 });
 
 onMounted(() => {
@@ -73,8 +85,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style rel="stylesheet/scss" lang="scss">
-.terra-window {
-}
-</style>

@@ -7,8 +7,8 @@
             <div v-for="(item, index) in quest.countdown" :key="index">
               <div>
                 距离
-                <v-tooltip location="bottom" :text="item.remark" v-if="item.remark">
-                  <template v-slot:activator="{ props }">
+                <v-tooltip v-if="item.remark" location="bottom" :text="item.remark">
+                  <template #activator="{ props }">
                     <span v-bind="props" class="online-blue cursor-pointer">{{ item.text }}</span>
                   </template>
                 </v-tooltip>
@@ -21,7 +21,7 @@
         <div class="d-flex flex-row justify-space-around mt-2">
           <span v-for="item in quest.resources" :key="item.name">
             <v-tooltip location="bottom" :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(item.day)}`">
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-img
                   class="cursor-pointer"
                   :aspect-ratio="1"
@@ -52,7 +52,7 @@ const quest = reactive({
   resources: [],
   countdown: [],
   getData() {
-    window.ceobeRequest.getResourceInfo().then(res => {
+    window.ceobeRequest.getResourceInfo().then((res) => {
       quest.resourceInfo = res.data.data;
       quest.resourcesNotToday();
       quest.calcCountdown();
@@ -61,7 +61,7 @@ const quest = reactive({
   calcCountdown() {
     // 倒计时
     quest.countdown = quest.resourceInfo.countdown.filter(
-      x => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
+      (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
     );
   },
   // 今天有没有该资源可以刷
@@ -72,10 +72,10 @@ const quest = reactive({
       let starTime = new Date(quest.resourceInfo.resources.start_time);
       let overTime = new Date(quest.resourceInfo.resources.over_time);
       if (date >= starTime && date <= overTime) {
-        quest.resources = quest.dayInfo.map(item => {
+        quest.resources = quest.dayInfo.map((item) => {
           return {
             ...item,
-            notToday: false
+            notToday: false,
           };
         });
         quest.openResources = true;
@@ -87,10 +87,10 @@ const quest = reactive({
     // 判断4点更新
     week = date.getHours() >= 4 ? week : week - 1;
     week = week == -1 ? 6 : week;
-    quest.resources = quest.dayInfo.map(item => {
+    quest.resources = quest.dayInfo.map((item) => {
       return {
         ...item,
-        notToday: !item.day.includes(week)
+        notToday: !item.day.includes(week),
       };
     });
     quest.openResources = false;
@@ -109,9 +109,9 @@ const quest = reactive({
     if (quest.openResources) {
       return '活动期间，“资源收集”限时全天开放';
     } else {
-      return days.map(x => numberToWeek(x)).join();
+      return days.map((x) => numberToWeek(x)).join();
     }
-  }
+  },
 });
 
 onMounted(() => {

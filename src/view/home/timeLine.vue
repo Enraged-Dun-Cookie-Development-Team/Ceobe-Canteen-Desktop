@@ -12,7 +12,7 @@
         rounded="xl"
         @click.stop="timeline.refreshTimeline"
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <v-icon color="#fff"></v-icon>
         </template>
         <span style="color: #fff">有新饼</span>
@@ -38,16 +38,16 @@
         dot-color="#fff"
         size="50"
       >
-        <template v-slot:icon>
+        <template #icon>
           <v-avatar rounded :image="cookie.icon"></v-avatar>
         </template>
         <component
           :is="component.getComponentName(cookie)"
           :id="cookie.item.id"
           :info="cookie"
-          @openUrl="card.openUrlInThis"
+          @open-url="card.openUrlInThis"
         >
-          <template #default="info" v-if="card.isCopyImage && cookie.item.id == card.copyImageId">
+          <template v-if="card.isCopyImage && cookie.item.id == card.copyImageId" #default="info">
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
               <div class="h-100 w-100 d-flex justify-space-between align-center print px-2">
@@ -70,21 +70,28 @@
               </div>
             </div>
           </template>
-          <template #default="info" v-else>
-            <span class="font-weight-bold pl-2">{{ new Date(cookie.timestamp.platform).toLocaleString() }}</span>
+          <template v-else #default="info">
+            <span class="font-weight-bold pl-2">{{
+              new Date(info.info.timestamp?.platform ?? info.info.timestamp?.fetcher ?? '').toLocaleString()
+            }}</span>
             <v-spacer></v-spacer>
-            <v-btn size="small" icon="fas fa-copy" title="复制链接" @click.stop="card.copy(cookie.item.url)"></v-btn>
+            <v-btn
+              size="small"
+              icon="fas fa-copy"
+              title="复制链接"
+              @click.stop="card.copy(info.info.item.url ?? '')"
+            ></v-btn>
             <v-btn
               size="small"
               icon="fas fa-share-nodes"
               title="生成卡片"
-              @click.stop="card.copyImage(cookie.item.id)"
+              @click.stop="card.copyImage(info.info.item.id)"
             ></v-btn>
             <v-btn
               size="small"
               icon="fas fa-link"
               title="使用浏览器打开"
-              @click.stop="card.openUrlInBrowser(cookie.item.url)"
+              @click.stop="card.openUrlInBrowser(info.info.item.url)"
             ></v-btn>
           </template>
         </component>
@@ -146,7 +153,7 @@ const timeline = reactive({
     timeline.nextPageId = timeline.refreshNextPageId;
     timeline.refreshNextPageId = null;
     document.querySelector('.time-line').scrollTop = 0;
-  }
+  },
 });
 
 // 卡片操作
@@ -156,7 +163,7 @@ const card = reactive({
   openUrlInThis(data) {
     router.push({
       path: '/home/Browser',
-      query: data
+      query: data,
     });
   },
   copyImage(id) {
@@ -176,9 +183,8 @@ const card = reactive({
     window.operate.copy({ type: 'text', data: url });
   },
   openUrlInBrowser(url) {
-    debugger
     window.operate.openUrlInBrowser(url);
-  }
+  },
 });
 
 // 滚动操作
@@ -193,7 +199,7 @@ const scroll = reactive({
         return;
       }
       getCookieList(timeline.combId, timeline.nextPageId, timeline.updateCookieId)
-        .then(resp => {
+        .then((resp) => {
           let cookies_info = resp.data.data;
           timeline.timeLineData.push(...cookies_info.cookies);
           timeline.nextPageId = cookies_info.next_page_id;
@@ -212,7 +218,7 @@ const scroll = reactive({
         clearInterval(timeTop);
       }
     }, 10);
-  }
+  },
 });
 
 // 简单的节流函数
@@ -239,7 +245,7 @@ const throttle = (fn, t) => {
 const component = reactive({
   getComponentName(item) {
     return Info;
-  }
+  },
 });
 onMounted(() => {
   timeline.getData();
@@ -249,18 +255,17 @@ onMounted(() => {
 
 <style rel="stylesheet/scss" lang="scss">
 .time-line {
-  height: 100vh;
   overflow: auto;
   min-width: 500px;
 
   .fix-btn {
     .refresh-btn {
       position: fixed;
-      left: 300px;
       bottom: -40px;
+      left: 300px;
       z-index: 1;
-      transition: 0.3s all;
       opacity: 1;
+      transition: 0.3s all;
       &.refresh-btn-show {
         bottom: 20px;
         opacity: 0.4;
@@ -272,11 +277,11 @@ onMounted(() => {
     }
     .top-btn {
       position: fixed;
-      left: 410px;
       bottom: -40px;
+      left: 410px;
       z-index: 1;
-      transition: 0.3s all;
       opacity: 1;
+      transition: 0.3s all;
       &.top-btn-show {
         bottom: 18px;
         opacity: 0.4;

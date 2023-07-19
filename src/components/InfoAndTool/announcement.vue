@@ -2,11 +2,11 @@
   <div class="announcement mt-2">
     <v-card>
       <v-carousel
+        v-model="announcementInfo.index"
         cycle
         :show-arrows="false"
         height="160"
         :continuous="false"
-        v-model="announcementInfo.index"
         hide-delimiter-background
         delimiter-icon="mdi: mdi-square"
       >
@@ -26,14 +26,14 @@ const announcementInfo = reactive({
   data: [],
   index: 0,
   getData() {
-    window.ceobeRequest.getAnnouncementInfo().then(res => {
+    window.ceobeRequest.getAnnouncementInfo().then((res) => {
       if (res.stutas == 200) {
         announcementInfo.data = res.data.data.filter(
-          x => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
+          (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
         );
       }
     });
-  }
+  },
 });
 
 onMounted(() => {
@@ -45,10 +45,10 @@ onMounted(() => {
 .announcement {
   .online-area {
     display: flex;
-    align-items: center;
-    font-size: 14px;
-    margin-top: 7px;
     justify-content: center;
+    align-items: center;
+    margin-top: 7px;
+    font-size: 14px;
 
     p {
       margin: 0;

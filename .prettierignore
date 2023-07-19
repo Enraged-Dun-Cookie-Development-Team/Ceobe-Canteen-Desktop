@@ -1,8 +1,9 @@
-**/.git
-**/.svn
-**/node_modules
-**/dist_electron
-**/.idea
-**/.vite
-**/bin
-**/public
+.idea
+.git
+
+dist
+node_modules
+
+package-lock.json
+
+src/test
