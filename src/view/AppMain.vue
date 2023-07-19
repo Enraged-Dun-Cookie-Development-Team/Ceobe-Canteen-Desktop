@@ -9,8 +9,3 @@
 </template>
 
 <script setup name="AppMain"></script>
-
-<style rel="stylesheet/scss" lang="scss">
-.app-main {
-}
-</style>

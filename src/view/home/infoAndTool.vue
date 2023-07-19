@@ -25,20 +25,19 @@ import { sourceInfo, toolInfo } from '@/constant';
 import VideoList from '@/components/InfoAndTool/videoList';
 
 const source = reactive({
-  list: sourceInfo
+  list: sourceInfo,
 });
 
 const tool = reactive({
-  list: toolInfo
+  list: toolInfo,
 });
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
 .info-and-tool {
-  user-select: none;
-  min-width: 600px;
-  height: 100vh;
   overflow: auto;
   padding: 10px 16px 0;
+  min-width: 600px;
+  user-select: none;
 }
 </style>

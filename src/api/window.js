@@ -11,7 +11,6 @@ let win = null;
 app.whenReady().then(() => {
   ipcMain.handle('openNotificationWindow', (event, data) => {
     createNotificationWindow(data);
-    createTimelineWindow();
   });
   // 托盘
   tray = new Tray('src/assets/image/logo/icon.png');
@@ -22,8 +21,8 @@ app.whenReady().then(() => {
       label: '退出小刻食堂',
       click: () => {
         app.quit(); // 退出应用程序
-      }
-    }
+      },
+    },
   ]);
   tray.setContextMenu(contextMenu);
 
@@ -53,8 +52,8 @@ export async function createWindow() {
       nodeIntegration: true,
       preload: path.resolve(__dirname, 'preload.js'),
       webSecurity: false,
-      webviewTag: true
-    }
+      webviewTag: true,
+    },
   });
 
   // 允许iframe访问第三方url
@@ -84,21 +83,21 @@ export async function createWindow() {
 let notificationWindow = null;
 
 export async function createNotificationWindow(data = {}) {
-    let {workAreaSize} = require('electron').screen.getPrimaryDisplay();
-    notificationWindow = new BrowserWindow({
-        width: 400,
-        height: 355,
-        frame: false,
-        resizable: false,
-        x: workAreaSize.width - 410,
-        y: workAreaSize.height - 365,
-        webPreferences: {
-            webSecurity: false,
-            nodeIntegration: true,
-            preload: path.resolve(__dirname, 'preload.js'),
-        },
-        alwaysOnTop: true,
-    });
+  let { workAreaSize } = require('electron').screen.getPrimaryDisplay();
+  notificationWindow = new BrowserWindow({
+    width: 400,
+    height: 355,
+    frame: false,
+    resizable: false,
+    x: workAreaSize.width - 410,
+    y: workAreaSize.height - 365,
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+      preload: path.resolve(__dirname, 'preload.js'),
+    },
+    alwaysOnTop: true,
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -110,7 +109,7 @@ export async function createNotificationWindow(data = {}) {
     createProtocol('app');
     // Load the index.html when not in development
     await notificationWindow.loadFile('dist/index.html', {
-      hash: '/notification'
+      hash: '/notification',
     });
   }
 
@@ -131,8 +130,8 @@ export async function createBackgroundWindow() {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
-      preload: path.resolve(__dirname, 'preload.js')
-    }
+      preload: path.resolve(__dirname, 'preload.js'),
+    },
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -145,7 +144,7 @@ export async function createBackgroundWindow() {
     createProtocol('app');
     // Load the index.html when not in development
     await backgroundWindow.loadFile('dist/index.html', {
-      hash: '/background'
+      hash: '/background',
     });
   }
   ipcMain.on('newest-timeline', (_, cookies) => {
@@ -167,12 +166,12 @@ ipcMain.on('notification-close', () => {
 });
 
 // 最小化等
-ipcMain.handle('minus', event => {
+ipcMain.handle('minus', (event) => {
   win.minimize();
 });
 
 // 窗口最大化
-ipcMain.handle('maximize', event => {
+ipcMain.handle('maximize', (event) => {
   if (win.isMaximized()) {
     win.restore();
   } else {
@@ -181,12 +180,12 @@ ipcMain.handle('maximize', event => {
 });
 
 // 窗口关闭
-ipcMain.handle('close', event => {
+ipcMain.handle('close', (event) => {
   win.hide();
 });
 
 // 退出程序
-ipcMain.handle('exit', event => {
+ipcMain.handle('exit', (event) => {
   win.hide();
 });
 

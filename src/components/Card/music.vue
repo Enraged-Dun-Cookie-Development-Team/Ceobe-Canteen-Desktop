@@ -43,8 +43,8 @@
           <div class="d-flex justify-center ma-1">此插件来源于网易云音乐</div>
           <webview
             v-if="showPlayer"
-            :style="{ height: 150 + info.componentData.size * 30 + 'px' }"
             :id="`webview-${id}`"
+            :style="{ height: 150 + info.componentData.size * 30 + 'px' }"
             :src="`http://music.163.com/outchain/player?type=1&id=${id}&auto=0`"
           ></webview>
           <div v-else :style="{ height: 150 + info.componentData.size * 30 + 'px' }"></div>
@@ -57,8 +57,12 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-const props = defineProps(['info']);
-const emits = defineEmits();
+const props = defineProps({
+  info: {
+    type: Object,
+    default: () => {},
+  },
+});
 const id = props.info.jumpUrl.split('=')[1];
 const showPlayer = ref(false);
 

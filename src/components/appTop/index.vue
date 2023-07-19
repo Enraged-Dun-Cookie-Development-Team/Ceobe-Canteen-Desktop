@@ -7,41 +7,41 @@
 
     <div class="h-100 no-drag">
       <v-menu v-model="search.show" :close-on-content-click="false" location="bottom" transition="slide-y-transition">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn variant="text" icon="fas fa-magnifying-glass" v-bind="props"></v-btn>
         </template>
         <v-card class="mx-auto" color="grey-lighten-3" min-width="400">
           <v-text-field
-            :loading="search.searchLoading"
             v-model="search.model"
+            :loading="search.searchLoading"
             density="compact"
             variant="solo"
             label="查找饼仓"
             autofocus
             append-inner-icon="fa fa-magnifying-glass"
             hide-details
-            @click:append-inner="search.searchIng"
             clearable
+            @click:append-inner="search.searchIng"
           ></v-text-field>
         </v-card>
       </v-menu>
 
       <v-menu v-model="menuShow.show" :close-on-content-click="false" location="bottom" transition="slide-y-transition">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn variant="text" icon="fas fa-database" v-bind="props"></v-btn>
         </template>
         <v-list density="compact">
           <v-list-item
-            class="menuShow-item"
-            :class="item.check ? '' : 'not'"
             v-for="(item, i) in sourceList"
             :key="i"
+            class="menuShow-item"
+            :class="item.check ? '' : 'not'"
             :value="item"
             color="primary"
-            @click="menuShow.changeSelectSource(item)"
+            :title="item.name"
             :prepend-avatar="getImage(item.img)"
+            @click="menuShow.changeSelectSource(item)"
           >
-            <v-list-item-title v-text="item.name"></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -55,7 +55,7 @@
         :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
         @click="handleWindow.maximize"
       ></v-btn>
-      <v-btn variant="text" icon="fas fa-circle-xmark" @click="handleWindow.close" color="error"></v-btn>
+      <v-btn variant="text" icon="fas fa-circle-xmark" color="error" @click="handleWindow.close"></v-btn>
     </div>
   </div>
 </template>
@@ -71,7 +71,7 @@ const menuShow = reactive({
   show: false,
   changeSelectSource(data) {
     data.check = !data.check;
-  }
+  },
 });
 const search = reactive({
   show: false,
@@ -84,7 +84,7 @@ const search = reactive({
       search.searchLoading = false;
       search.show = false;
     }, 1000);
-  }
+  },
 });
 
 const handleWindow = reactive({
@@ -100,15 +100,15 @@ const handleWindow = reactive({
   // 关闭
   close() {
     window.operate.close();
-  }
+  },
 });
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
 .app-top {
+  position: relative;
   height: 60px;
   background: #fdba4b;
-  position: relative;
   -webkit-app-region: drag;
 
   .no-drag {
@@ -116,9 +116,9 @@ const handleWindow = reactive({
   }
 
   .title {
-    color: #707070;
-    font-family: 'DOUYUfont', sans-serif;
     font-size: 26px;
+    font-family: 'DOUYUfont', sans-serif;
+    color: #707070;
   }
 }
 

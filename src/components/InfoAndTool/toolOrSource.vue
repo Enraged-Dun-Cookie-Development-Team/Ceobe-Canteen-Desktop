@@ -2,7 +2,7 @@
   <div class="tool">
     <v-card class="mt-2 position-relative">
       <v-card-text class="d-flex flex-wrap justify-start">
-        <v-btn class="mr-2 mb-2" v-for="(item, index) in props.list">
+        <v-btn v-for="(item, index) in props.list" :key="index" class="mr-2 mb-2">
           <template #prepend>
             <v-img width="20" class="btn-img" :src="getImage(item.img)"></v-img>
           </template>
@@ -17,12 +17,20 @@
 <script setup name="tool">
 import { getImage } from '@/utils/imageUtil';
 
-const props = defineProps(['title', 'list']);
-const emits = defineEmits();
+const props = defineProps({
+  title: {
+    type: String,
+    default: () => '',
+  },
+  list: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-function clickBtn(data) {
-  emits('click', data);
-}
+// function clickBtn(data) {
+//   emits('click', data);
+// }
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -31,9 +39,9 @@ function clickBtn(data) {
     border-radius: 50%;
   }
   .card-title {
-    display: none;
-    bottom: -20px;
     right: 10px;
+    bottom: -20px;
+    display: none;
     font-size: 36px;
     color: #000;
     opacity: 0.1;
