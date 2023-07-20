@@ -29,7 +29,10 @@
         @click.stop="scroll.scrollToTop"
       ></v-btn>
     </div>
-    <v-timeline ref="timeline_area" align="start" side="end" truncate-line="start">
+    <div v-if="!timeline.timeLineData" class="loading-image">
+      <img :src="getImage('/assets/image/load/list-load.gif')" />
+    </div>
+    <v-timeline v-else ref="timeline_area" align="start" side="end" truncate-line="start">
       <v-timeline-item
         v-for="cookie in timeline.timeLineData"
         :key="cookie.item.id"
@@ -116,8 +119,8 @@ const { proxy } = getCurrentInstance();
 
 // 卡片数据
 const timeline = reactive({
-  timeLineData: [],
-  refreshTimelineData: [],
+  timeLineData: null,
+  refreshTimelineData: null,
   nextPageId: null,
   refreshNextPageId: null,
   combId: null,
@@ -126,7 +129,7 @@ const timeline = reactive({
   refreshUpdateCookieId: null,
   async getData() {
     window.newestTimeline.getTimeline((_, arg) => {
-      if (timeline.timeLineData.length === 0 || !scroll.scrollShow) {
+      if (!timeline.timeLineData || !scroll.scrollShow) {
         timeline.timeLineData = arg.cookies;
         timeline.combId = arg.comb_id;
         timeline.updateCookieId = arg.update_cookie_id;
@@ -145,7 +148,7 @@ const timeline = reactive({
       return;
     }
     timeline.timeLineData = timeline.refreshTimelineData.slice(0);
-    timeline.refreshTimelineData = [];
+    timeline.refreshTimelineData = null;
     timeline.combId = timeline.refreshCombId;
     timeline.refreshCombId = null;
     timeline.updateCookieId = timeline.refreshUpdateCookieId;
@@ -256,6 +259,7 @@ onMounted(() => {
 <style rel="stylesheet/scss" lang="scss">
 .time-line {
   overflow: auto;
+  width: 500px;
   min-width: 500px;
 
   .fix-btn {
@@ -290,6 +294,14 @@ onMounted(() => {
           opacity: 1;
         }
       }
+    }
+  }
+
+  .loading-image {
+    height: calc(100vh - 70px);
+    line-height: calc(100vh - 70px);
+    img {
+      width: 100%;
     }
   }
 
