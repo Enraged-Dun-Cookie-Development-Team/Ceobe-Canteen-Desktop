@@ -120,6 +120,11 @@ const menuShow = reactive({
         });
       let comb_resp = await getDatasourceComb(datasourceConfig);
       let comb_id = comb_resp.data.data.datasource_comb_id;
+      let datasourceComb = window.localStorage.getItem('datasource-comb');
+      // 如果组合id和之前一样，不进行刷新
+      if (datasourceComb == comb_id) {
+        return;
+      }
       window.localStorage.setItem('datasource-config', JSON.stringify(datasourceConfig));
       window.localStorage.setItem('datasource-comb', comb_id);
       window.datasourceConfig.updateDatasourceComb();
