@@ -7,7 +7,11 @@
         color="#ffba4b"
         elevation="0"
         :ripple="false"
-        :class="scroll.scrollShow && timeline.refreshTimelineData.length !== 0 ? 'refresh-btn-show' : ''"
+        :class="
+          scroll.scrollShow && timeline.refreshTimelineData && timeline.refreshTimelineData?.length !== 0
+            ? 'refresh-btn-show'
+            : ''
+        "
         density="default"
         rounded="xl"
         @click.stop="timeline.refreshTimeline"
@@ -147,7 +151,7 @@ const timeline = reactive({
     });
   },
   refreshTimeline() {
-    if (timeline.refreshTimelineData.length == 0) {
+    if (!timeline.refreshTimelineData || timeline.refreshTimelineData.length == 0) {
       return;
     }
     timeline.timeLineData = timeline.refreshTimelineData.slice(0);
@@ -198,7 +202,11 @@ const scroll = reactive({
   scrollShow: false,
 
   bindHandleScroll(e) {
+    if (document.querySelector('.time-line') !== e.target) {
+      return;
+    }
     scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
+    console.log(scroll.scrollShow);
 
     if (e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight) {
       if (!timeline.nextPageId) {
