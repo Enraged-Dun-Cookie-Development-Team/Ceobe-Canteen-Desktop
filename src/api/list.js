@@ -7,7 +7,7 @@ import service from '@/utils/requestUtil';
 export function getCardList() {
   return service({
     url: `https://temp.ceobecanteen.top/canteen/cardList`,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -17,14 +17,15 @@ export function getCardList() {
  */
 export function getAnnouncementInfo() {
   return service({
-    method: 'GET'
+    url: `/canteen/operate/announcement/list`,
+    method: 'GET',
   });
 }
 
 export function getResourceInfo() {
   return service({
     url: `/canteen/operate/resource/get`,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -35,7 +36,7 @@ export function getResourceInfo() {
 export function getVideoList() {
   return service({
     url: `/canteen/operate/video/list`,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -46,7 +47,7 @@ export function getVideoList() {
 export function getResourceList() {
   return service({
     url: `/canteen/config/datasource/list`,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -60,8 +61,8 @@ export function getDatasourceComb(uuids) {
     url: `/canteen/user/getDatasourceComb`,
     method: 'POST',
     data: {
-      datasource_push: uuids
-    }
+      datasource_push: uuids,
+    },
   });
 }
 
@@ -73,7 +74,7 @@ export function getDatasourceComb(uuids) {
 export function getCookieNewestInfo(comb_id) {
   return service({
     url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -90,8 +91,8 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id) {
     params: {
       datasource_comb_id: comb_id,
       cookie_id: cookie_id,
-      update_cookie_id: update_cookie_id
+      update_cookie_id: update_cookie_id,
     },
-    method: 'GET'
+    method: 'GET',
   });
 }
