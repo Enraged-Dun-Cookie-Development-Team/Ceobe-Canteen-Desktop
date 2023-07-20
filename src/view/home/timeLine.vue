@@ -129,6 +129,9 @@ const timeline = reactive({
   refreshUpdateCookieId: null,
   async getData() {
     window.newestTimeline.getTimeline((_, arg) => {
+      if (arg == null) {
+        return;
+      }
       if (!timeline.timeLineData || !scroll.scrollShow) {
         timeline.timeLineData = arg.cookies;
         timeline.combId = arg.comb_id;
@@ -252,6 +255,10 @@ const component = reactive({
 });
 onMounted(() => {
   timeline.getData();
+  // 如果没有数据，让后台发一份过来
+  if (!timeline.timeLineData) {
+    window.newestTimeline.needTimeline();
+  }
   window.addEventListener('scroll', throttle(scroll.bindHandleScroll, 500), true);
 });
 </script>
