@@ -157,6 +157,9 @@ ipcMain.on('need-timeline', () => {
 ipcMain.on('update-datasource-comb', () => {
   sendWindowMessage(backgroundWindow, 'update-datasource-comb');
 });
+ipcMain.on('search-word', (_, searchWord) => {
+  sendWindowMessage(win, 'search-word', searchWord);
+});
 
 function sendWindowMessage(targetWindow, channel, args) {
   if (targetWindow) {

@@ -107,3 +107,23 @@ export function getAllDatasources() {
     method: 'GET',
   });
 }
+
+/**
+ * 获取饼搜索列表
+ * @returns {*}
+ */
+export function getCookieSearchList(cookie_id, datasource_comb_id, search_word) {
+  let params = {
+    datasource_comb_id: datasource_comb_id,
+    search_word: search_word,
+  };
+
+  if (cookie_id) {
+    params['cookie_id'] = cookie_id;
+  }
+  return service({
+    url: `/canteen/cookie/search/list`,
+    method: 'GET',
+    params: params,
+  });
+}

@@ -12,8 +12,7 @@
         </template>
         <v-card class="mx-auto" color="grey-lighten-3" min-width="400">
           <v-text-field
-            v-model="search.model"
-            :loading="search.searchLoading"
+            v-model="search.searchWord"
             density="compact"
             variant="solo"
             label="查找饼仓"
@@ -21,11 +20,12 @@
             append-inner-icon="fa fa-magnifying-glass"
             hide-details
             clearable
-            @click:append-inner="search.searchIng"
+            @click:append-inner="search.searching"
+            @update:model-value="search.searchChange"
           ></v-text-field>
         </v-card>
       </v-menu>
-
+      <span v-if="search.wordShow !== ''">{{ search.wordShow }}</span>
       <v-menu
         v-model="menuShow.show"
         :close-on-content-click="false"
@@ -128,15 +128,19 @@ const menuShow = reactive({
 });
 const search = reactive({
   show: false,
-  searchLoading: false,
-  model: null,
-  searchIng(event) {
-    search.searchLoading = true;
-    console.log(search.model);
-    setTimeout(() => {
-      search.searchLoading = false;
-      search.show = false;
-    }, 1000);
+  wordShow: '',
+  searchWord: null,
+  searching() {
+    // 将搜索词发送给timeline进行处理
+    window.searchWordEvent.sendSearchWord(search.searchWord);
+    search.wordShow = search.searchWord;
+  },
+  searchChange() {
+    // 如果为空 同步到timeline
+    if (search.searchWord === '' || !search.searchWord) {
+      window.searchWordEvent.sendSearchWord(search.searchWord);
+      search.wordShow = '';
+    }
   },
 });
 

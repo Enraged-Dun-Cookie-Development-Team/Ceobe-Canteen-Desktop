@@ -56,3 +56,8 @@ contextBridge.exposeInMainWorld('datasourceConfig', {
   datasourceCombUpdated: (callback) => ipcRenderer.on('update-datasource-comb', callback),
   updateDatasourceComb: () => ipcRenderer.send('update-datasource-comb'),
 });
+
+contextBridge.exposeInMainWorld('searchWordEvent', {
+  getSearchWord: (callback) => ipcRenderer.on('search-word', callback),
+  sendSearchWord: (data) => ipcRenderer.send('search-word', data),
+});
