@@ -104,6 +104,8 @@
         </component>
       </v-timeline-item>
     </v-timeline>
+    <div v-if="timeline.nextPageId" class="loading-more">这是精美的加载动画</div>
+    <div v-else class="loading-more">没有更多饼了，小刻很满足！！！</div>
   </div>
 </template>
 
@@ -393,6 +395,15 @@ onMounted(() => {
         }
       }
     }
+  }
+  .v-timeline--vertical.v-timeline {
+    height: auto;
+  }
+  .loading-more {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
   }
 }
 </style>
