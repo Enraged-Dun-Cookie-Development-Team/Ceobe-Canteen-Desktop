@@ -96,3 +96,14 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id) {
     method: 'GET',
   });
 }
+
+/**
+ * 获取所有数据源信息
+ * @returns {*}
+ */
+export function getAllDatasources() {
+  return service({
+    url: `/canteen/config/datasource/list`,
+    method: 'GET',
+  });
+}

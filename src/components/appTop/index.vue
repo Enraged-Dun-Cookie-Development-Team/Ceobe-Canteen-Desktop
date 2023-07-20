@@ -26,20 +26,26 @@
         </v-card>
       </v-menu>
 
-      <v-menu v-model="menuShow.show" :close-on-content-click="false" location="bottom" transition="slide-y-transition">
+      <v-menu
+        v-model="menuShow.show"
+        :close-on-content-click="false"
+        location="bottom"
+        transition="slide-y-transition"
+        :on-update:model-value="menuShow.changeDatasourceOpen(menuShow.show)"
+      >
         <template #activator="{ props }">
           <v-btn variant="text" icon="fas fa-database" v-bind="props"></v-btn>
         </template>
         <v-list density="compact">
           <v-list-item
-            v-for="(item, i) in sourceList"
+            v-for="(item, i) in menuShow.datasourceList"
             :key="i"
             class="menuShow-item"
             :class="item.check ? '' : 'not'"
             :value="item"
             color="primary"
-            :title="item.name"
-            :prepend-avatar="getImage(item.img)"
+            :title="item.nickname"
+            :prepend-avatar="item.avatar"
             @click="menuShow.changeSelectSource(item)"
           >
           </v-list-item>
@@ -62,15 +68,62 @@
 
 <script setup name="index">
 import { reactive, ref } from 'vue';
-import { sourceInfo } from '@/constant';
 import { getImage } from '@/utils/imageUtil';
+import { getAllDatasources, getDatasourceComb } from '@/api/list';
 
-const sourceList = ref(sourceInfo);
 const winMax = ref(false);
 const menuShow = reactive({
+  notOpened: true, // 没有打开过
   show: false,
+  datasourceList: [],
   changeSelectSource(data) {
     data.check = !data.check;
+  },
+  async changeDatasourceOpen(value) {
+    if (value) {
+      if (menuShow.notOpened) {
+        menuShow.notOpened = false;
+      }
+      let datasourceConfig = JSON.parse(window.localStorage.getItem('datasource-config'));
+      // 打开列表
+      getAllDatasources().then((data) => {
+        if (data.status == 200) {
+          menuShow.datasourceList = data.data.data;
+          if (datasourceConfig) {
+            let datasourceConfigUuidMap = {};
+            for (let datasource of datasourceConfig) {
+              datasourceConfigUuidMap[datasource] = true;
+            }
+            menuShow.datasourceList.forEach((element) => {
+              if (datasourceConfigUuidMap[element.unique_id]) {
+                element.check = true;
+              }
+            });
+          } else {
+            menuShow.datasourceList.forEach((element) => {
+              element.check = true;
+            });
+          }
+        }
+      });
+    } else {
+      if (menuShow.notOpened) {
+        return;
+      }
+      // 关闭列表
+      let datasourceConfig = menuShow.datasourceList
+        .filter((element) => {
+          return element.check;
+        })
+        .map((element) => {
+          return element.unique_id;
+        });
+      let comb_resp = await getDatasourceComb(datasourceConfig);
+      let comb_id = comb_resp.data.data.datasource_comb_id;
+      window.localStorage.setItem('datasource-config', JSON.stringify(datasourceConfig));
+      window.localStorage.setItem('datasource-comb', comb_id);
+      window.datasourceConfig.updateDatasourceComb();
+    }
   },
 });
 const search = reactive({
