@@ -180,14 +180,17 @@ const timeline = reactive({
     window.searchWordEvent.getSearchWord((_, searchWord) => {
       timeline.searchWord = searchWord;
       if (searchWord !== '' && searchWord !== null) {
-        timeline.searchStatus = true;
         // 先确保数据更新到显示
         timeline.refreshTimeline();
-        // 把列表存到临时列表
-        timeline.tempTimelineData = timeline.timelineData?.slice(0);
-        timeline.tempNextPageId = timeline.nextPageId;
-        timeline.timelineData = null;
-        timeline.nextPageId = null;
+        // 如果之前不是在搜索状态，才转移列表
+        if (!timeline.searchStatus) {
+          // 把列表存到临时列表
+          timeline.tempTimelineData = timeline.timelineData?.slice(0);
+          timeline.tempNextPageId = timeline.nextPageId;
+          timeline.timelineData = null;
+          timeline.nextPageId = null;
+          timeline.searchStatus = true;
+        }
         getCookieSearchList(null, timeline.combId, searchWord).then((data) => {
           if (data.status == 200) {
             let respData = data.data.data;
