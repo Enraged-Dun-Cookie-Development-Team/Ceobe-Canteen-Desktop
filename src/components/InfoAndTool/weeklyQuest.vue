@@ -9,7 +9,7 @@
                 距离
                 <v-tooltip v-if="item.remark" location="bottom" :text="item.remark">
                   <template #activator="{ props }">
-                    <span v-bind="props" class="online-blue cursor-pointer">{{ item.text }}</span>
+                    <span v-bind="props" class="online-orange cursor-pointer">{{ item.text }}</span>
                   </template>
                 </v-tooltip>
                 <span v-else class="online-orange">{{ item.text }}</span>
