@@ -5,6 +5,7 @@ let datasource_comb_id;
 let old_cookie_id_map = {};
 let init_fetched = false; // 是否初次蹲过饼
 let timeline = null;
+let timeoutId = null;
 
 export async function backgroundInit() {
   // 获取内存组合id配置
@@ -20,11 +21,15 @@ export async function backgroundInit() {
     datasource_comb_id = datasource_comb_id_resp.data.data.datasource_comb_id;
     window.localStorage.setItem('datasource-comb', datasource_comb_id);
   }
-  window.datasourceConfig.datasourceCombUpdated(() => {
+  window.datasourceConfig.datasourceCombUpdated(async () => {
     datasource_comb_id = window.localStorage.getItem('datasource-comb');
     old_cookie_id = null;
     old_update_cookie_id = null;
     init_fetched = false;
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    await tryFetchCookie();
   });
   window.newestTimeline.knowNeedTimeline(() => {
     window.newestTimeline.sendTimeline(timeline);
@@ -60,7 +65,7 @@ async function tryFetchCookie() {
     window.newestTimeline.sendTimeline(cookies_info);
   }
 
-  setTimeout(async () => {
+  timeoutId = setTimeout(async () => {
     await tryFetchCookie();
   }, 15 * 1000);
 }
