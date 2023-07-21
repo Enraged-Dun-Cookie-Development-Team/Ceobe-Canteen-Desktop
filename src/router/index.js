@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
@@ -14,30 +14,30 @@ const routes = [
           {
             path: 'tool',
             component: () => import('@/view/home/infoAndTool'),
-            name: 'Tool'
+            name: 'Tool',
           },
           {
             path: 'browser',
             component: () => import('@/components/Browser'),
-            name: 'Browser'
-          }
-        ]
-      }
-    ]
+            name: 'Browser',
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/notification',
-    component: () => import('@/view/notification')
+    component: () => import('@/view/notification'),
   },
   {
     path: '/background',
-    component: () => import('@/view/background')
-  }
+    component: () => import('@/view/background'),
+  },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHashHistory(),
+  routes,
 });
 
 export default router;
