@@ -190,6 +190,7 @@ const timeline = reactive({
           timeline.timelineData = null;
           timeline.nextPageId = null;
           timeline.searchStatus = true;
+          document.querySelector('.time-line').scrollTop = 0;
         }
         getCookieSearchList(null, timeline.combId, searchWord).then((data) => {
           if (data.status == 200) {
@@ -199,11 +200,14 @@ const timeline = reactive({
           }
         });
       } else {
-        // 回归普通列表
-        timeline.searchStatus = false;
-        timeline.timelineData = timeline.tempTimelineData?.slice(0);
-        timeline.nextPageId = timeline.tempNextPageId;
-        document.querySelector('.time-line').scrollTop = 0;
+        // 如果之前是在搜索状态，才需要回归
+        if (timeline.searchStatus) {
+          // 回归普通列表
+          timeline.searchStatus = false;
+          timeline.timelineData = timeline.tempTimelineData?.slice(0);
+          timeline.nextPageId = timeline.tempNextPageId;
+          document.querySelector('.time-line').scrollTop = 0;
+        }
       }
     });
   },
@@ -249,9 +253,9 @@ const scroll = reactive({
       return;
     }
     scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
-    console.log(scroll.scrollShow);
 
-    if (e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight) {
+    // 因为有些情况会导致高度不能正好相等，给个差值小于5来扩大判断范围
+    if (Math.abs(e.target.scrollTop + e.target.clientHeight - e.target.scrollHeight) < 5) {
       if (!timeline.nextPageId) {
         return;
       }
