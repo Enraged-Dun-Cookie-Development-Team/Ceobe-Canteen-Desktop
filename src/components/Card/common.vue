@@ -1,5 +1,5 @@
 <template>
-  <div class="common-window">
+  <div class="commw">
     <v-card class="mx-auto cursor-pointer" width="400" @click="common.openUrl">
       <v-img
         v-if="info.default_cookie.images"
@@ -12,6 +12,10 @@
 
       <v-card-text>
         <div v-html="info.default_cookie.text.replace(/(\r\n|\n)/g, '<br>')"></div>
+        <div v-if="info.item.retweeted" class="retweet-area">
+          <div>转发自：{{ info.item.retweeted.author_name }}</div>
+          <div v-html="info.item.retweeted.text.replace(/(\r\n|\n)/g, '<br>')"></div>
+        </div>
       </v-card-text>
 
       <v-card-actions>
@@ -74,5 +78,9 @@ onMounted(() => {
       object-position: top;
     }
   }
+}
+.retweet-area {
+  padding: 10px;
+  background-color: #e7e7e7;
 }
 </style>
