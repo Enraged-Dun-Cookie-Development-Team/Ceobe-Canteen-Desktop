@@ -16,7 +16,7 @@ app.whenReady().then(() => {
   if (process.env.NODE_ENV === 'development') {
     tray = new Tray('/public/icon.png');
   } else {
-    tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/public/icon.png'));
+    tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/resources/public/icon.png'));
   }
   tray.setToolTip('小刻食堂持续蹲饼中');
   // 菜单
