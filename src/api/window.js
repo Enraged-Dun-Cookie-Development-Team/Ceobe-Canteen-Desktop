@@ -13,7 +13,11 @@ app.whenReady().then(() => {
     createNotificationWindow(data);
   });
   // 托盘
-  tray = new Tray('src/assets/image/logo/icon.png');
+  if (process.env.NODE_ENV === 'development') {
+    tray = new Tray('/public/icon.png');
+  } else {
+    tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/public/icon.png'));
+  }
   tray.setToolTip('小刻食堂持续蹲饼中');
   // 菜单
   const contextMenu = Menu.buildFromTemplate([

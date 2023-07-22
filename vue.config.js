@@ -31,6 +31,12 @@ module.exports = defineConfig({
             },
           ],
         },
+        extraResources: [
+          {
+            from: './public',
+            to: './public',
+          },
+        ],
       },
     },
     vuetify: {
