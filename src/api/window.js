@@ -99,7 +99,7 @@ export async function createNotificationWindow(data = {}) {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'notification');
+    await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/notification');
     if (!process.env.IS_TEST) {
       notificationWindow.webContents.openDevTools();
     }
@@ -134,7 +134,7 @@ export async function createBackgroundWindow() {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await backgroundWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'background');
+    await backgroundWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/background');
     if (!process.env.IS_TEST) {
       backgroundWindow.webContents.openDevTools();
     }
