@@ -27,7 +27,7 @@ const announcementInfo = reactive({
   index: 0,
   getData() {
     window.ceobeRequest.getAnnouncementInfo().then((res) => {
-      if (res.stutas == 200) {
+      if (res.status == 200) {
         announcementInfo.data = res.data.data.filter(
           (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
         );

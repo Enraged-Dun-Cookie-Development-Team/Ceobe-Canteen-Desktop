@@ -7,7 +7,11 @@
         color="#ffba4b"
         elevation="0"
         :ripple="false"
-        :class="scroll.scrollShow && timeline.refreshTimelineData.length !== 0 ? 'refresh-btn-show' : ''"
+        :class="
+          scroll.scrollShow && timeline.refreshTimelineData && timeline.refreshTimelineData?.length !== 0
+            ? 'refresh-btn-show'
+            : ''
+        "
         density="default"
         rounded="xl"
         @click.stop="timeline.refreshTimeline"
@@ -29,9 +33,12 @@
         @click.stop="scroll.scrollToTop"
       ></v-btn>
     </div>
-    <v-timeline ref="timeline_area" align="start" side="end" truncate-line="start">
+    <div v-if="!timeline.timelineData" class="loading-image">
+      <img :src="getImage('/assets/image/load/list-load.gif')" />
+    </div>
+    <v-timeline v-else ref="timeline_area" align="start" side="end" truncate-line="start">
       <v-timeline-item
-        v-for="cookie in timeline.timeLineData"
+        v-for="cookie in timeline.timelineData"
         :key="cookie.item.id"
         :left="true"
         fill-dot="fill-dot"
@@ -97,6 +104,8 @@
         </component>
       </v-timeline-item>
     </v-timeline>
+    <div v-if="timeline.nextPageId" class="loading-more">这是精美的加载动画</div>
+    <div v-else class="loading-more">没有更多饼了，小刻很满足！！！</div>
   </div>
 </template>
 
@@ -109,25 +118,38 @@ import Info from '@/components/Card/common';
 //import Terra from "@/components/Card/terra"
 import { useRouter } from 'vue-router';
 import * as htmlToImage from 'html-to-image';
-import { getCookieList } from '@/api/list';
+import { getCookieList, getCookieSearchList } from '@/api/list';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 // 卡片数据
 const timeline = reactive({
-  timeLineData: [],
-  refreshTimelineData: [],
-  nextPageId: null,
-  refreshNextPageId: null,
-  combId: null,
-  refreshCombId: null,
-  updateCookieId: null,
-  refreshUpdateCookieId: null,
+  timelineData: null, // 饼列表
+  refreshTimelineData: null, // 刷新临时存的饼列表
+  tempTimelineData: null, // 用于搜索状态，临时存的饼列表
+  nextPageId: null, // 下一页id
+  refreshNextPageId: null, // 刷新临时存的下一页id
+  tempNextPageId: null, // 用于搜索状态，临时存的下一页id
+  combId: null, // 数据源组合id
+  refreshCombId: null, // 刷新临时存的数据源组合id
+  updateCookieId: null, // 更新饼id
+  refreshUpdateCookieId: null, // 刷新临时存的更新饼id
+  searchStatus: false, // 搜索状态，列表展示搜索内容就为true
+  searchWord: null,
   async getData() {
     window.newestTimeline.getTimeline((_, arg) => {
-      if (timeline.timeLineData.length === 0 || !scroll.scrollShow) {
-        timeline.timeLineData = arg.cookies;
+      if (arg == null) {
+        return;
+      }
+      if (timeline.searchStatus) {
+        // 搜索状态直接更新临时
+        timeline.tempTimelineData = arg.cookies;
+        timeline.combId = arg.comb_id;
+        timeline.updateCookieId = arg.update_cookie_id;
+        timeline.tempNextPageId = arg.next_page_id;
+      } else if (!timeline.timelineData || !scroll.scrollShow) {
+        timeline.timelineData = arg.cookies;
         timeline.combId = arg.comb_id;
         timeline.updateCookieId = arg.update_cookie_id;
         timeline.nextPageId = arg.next_page_id;
@@ -141,11 +163,11 @@ const timeline = reactive({
     });
   },
   refreshTimeline() {
-    if (timeline.refreshTimelineData.length == 0) {
+    if (!timeline.refreshTimelineData || timeline.refreshTimelineData.length == 0) {
       return;
     }
-    timeline.timeLineData = timeline.refreshTimelineData.slice(0);
-    timeline.refreshTimelineData = [];
+    timeline.timelineData = timeline.refreshTimelineData.slice(0);
+    timeline.refreshTimelineData = null;
     timeline.combId = timeline.refreshCombId;
     timeline.refreshCombId = null;
     timeline.updateCookieId = timeline.refreshUpdateCookieId;
@@ -153,6 +175,37 @@ const timeline = reactive({
     timeline.nextPageId = timeline.refreshNextPageId;
     timeline.refreshNextPageId = null;
     document.querySelector('.time-line').scrollTop = 0;
+  },
+  searchTimeline() {
+    window.searchWordEvent.getSearchWord((_, searchWord) => {
+      timeline.searchWord = searchWord;
+      if (searchWord !== '' && searchWord !== null) {
+        // 先确保数据更新到显示
+        timeline.refreshTimeline();
+        // 如果之前不是在搜索状态，才转移列表
+        if (!timeline.searchStatus) {
+          // 把列表存到临时列表
+          timeline.tempTimelineData = timeline.timelineData?.slice(0);
+          timeline.tempNextPageId = timeline.nextPageId;
+          timeline.timelineData = null;
+          timeline.nextPageId = null;
+          timeline.searchStatus = true;
+        }
+        getCookieSearchList(null, timeline.combId, searchWord).then((data) => {
+          if (data.status == 200) {
+            let respData = data.data.data;
+            timeline.timelineData = respData.cookies;
+            timeline.nextPageId = respData.next_page_id;
+          }
+        });
+      } else {
+        // 回归普通列表
+        timeline.searchStatus = false;
+        timeline.timelineData = timeline.tempTimelineData?.slice(0);
+        timeline.nextPageId = timeline.tempNextPageId;
+        document.querySelector('.time-line').scrollTop = 0;
+      }
+    });
   },
 });
 
@@ -192,21 +245,35 @@ const scroll = reactive({
   scrollShow: false,
 
   bindHandleScroll(e) {
+    if (document.querySelector('.time-line') !== e.target) {
+      return;
+    }
     scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
+    console.log(scroll.scrollShow);
 
     if (e.target.scrollTop + e.target.clientHeight == e.target.scrollHeight) {
       if (!timeline.nextPageId) {
         return;
       }
-      getCookieList(timeline.combId, timeline.nextPageId, timeline.updateCookieId)
-        .then((resp) => {
-          let cookies_info = resp.data.data;
-          timeline.timeLineData.push(...cookies_info.cookies);
-          timeline.nextPageId = cookies_info.next_page_id;
-        })
-        .catch(() => {
-          // TODO：弹窗处理一下
+      if (timeline.searchStatus) {
+        getCookieSearchList(timeline.nextPageId, timeline.combId, timeline.searchWord).then((data) => {
+          if (data.status == 200) {
+            let respData = data.data.data;
+            timeline.timelineData.push(...respData.cookies);
+            timeline.nextPageId = respData.next_page_id;
+          }
         });
+      } else {
+        getCookieList(timeline.combId, timeline.nextPageId, timeline.updateCookieId)
+          .then((resp) => {
+            let cookies_info = resp.data.data;
+            timeline.timelineData.push(...cookies_info.cookies);
+            timeline.nextPageId = cookies_info.next_page_id;
+          })
+          .catch(() => {
+            // TODO：弹窗处理一下
+          });
+      }
     }
   },
   scrollToTop() {
@@ -249,13 +316,19 @@ const component = reactive({
 });
 onMounted(() => {
   timeline.getData();
+  // 如果没有数据，让后台发一份过来
+  if (!timeline.timelineData) {
+    window.newestTimeline.needTimeline();
+  }
   window.addEventListener('scroll', throttle(scroll.bindHandleScroll, 500), true);
+  timeline.searchTimeline();
 });
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
 .time-line {
   overflow: auto;
+  width: 500px;
   min-width: 500px;
 
   .fix-btn {
@@ -293,6 +366,14 @@ onMounted(() => {
     }
   }
 
+  .loading-image {
+    height: calc(100vh - 70px);
+    line-height: calc(100vh - 70px);
+    img {
+      width: 100%;
+    }
+  }
+
   .v-timeline {
     grid-template-columns: 8px min-content 8px;
 
@@ -317,6 +398,15 @@ onMounted(() => {
         }
       }
     }
+  }
+  .v-timeline--vertical.v-timeline {
+    height: auto;
+  }
+  .loading-more {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
   }
 }
 </style>

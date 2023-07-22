@@ -145,10 +145,19 @@ export async function createBackgroundWindow() {
       hash: '/background',
     });
   }
-  ipcMain.on('newest-timeline', (_, cookies) => {
-    sendWindowMessage(win, 'newest-timeline', cookies);
-  });
 }
+ipcMain.on('newest-timeline', (_, cookies) => {
+  sendWindowMessage(win, 'newest-timeline', cookies);
+});
+ipcMain.on('need-timeline', () => {
+  sendWindowMessage(backgroundWindow, 'need-timeline');
+});
+ipcMain.on('update-datasource-comb', () => {
+  sendWindowMessage(backgroundWindow, 'update-datasource-comb');
+});
+ipcMain.on('search-word', (_, searchWord) => {
+  sendWindowMessage(win, 'search-word', searchWord);
+});
 
 function sendWindowMessage(targetWindow, channel, args) {
   if (targetWindow) {

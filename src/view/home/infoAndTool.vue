@@ -11,7 +11,9 @@
     <tool-or-source title="快捷工具" :list="tool.list"></tool-or-source>
     <!--推荐视频-->
     <video-list></video-list>
-    <div class="d-flex justify-center ma-2">Powered By 蓝芷怡 & 洛梧藤 & 云闪</div>
+    <div class="d-flex justify-center ma-2">
+      Powered By &nbsp;<a href="https://www.ceobecanteen.top/#/"> CeobeCanteen</a>
+    </div>
   </div>
 </template>
 
@@ -39,5 +41,8 @@ const tool = reactive({
   padding: 10px 16px 0;
   min-width: 600px;
   user-select: none;
+}
+a {
+  text-decoration: none;
 }
 </style>
