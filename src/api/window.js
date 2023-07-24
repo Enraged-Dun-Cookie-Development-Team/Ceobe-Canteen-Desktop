@@ -13,7 +13,11 @@ app.whenReady().then(() => {
     createNotificationWindow(data);
   });
   // 托盘
-  tray = new Tray('src/assets/image/logo/icon.png');
+  if (process.env.NODE_ENV === 'development') {
+    tray = new Tray('/public/icon.png');
+  } else {
+    tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/resources/public/icon.png'));
+  }
   tray.setToolTip('小刻食堂持续蹲饼中');
   // 菜单
   const contextMenu = Menu.buildFromTemplate([
@@ -99,7 +103,7 @@ export async function createNotificationWindow(data = {}) {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'notification');
+    await notificationWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/notification');
     if (!process.env.IS_TEST) {
       notificationWindow.webContents.openDevTools();
     }
@@ -134,7 +138,7 @@ export async function createBackgroundWindow() {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await backgroundWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + 'background');
+    await backgroundWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '#/background');
     if (!process.env.IS_TEST) {
       backgroundWindow.webContents.openDevTools();
     }
