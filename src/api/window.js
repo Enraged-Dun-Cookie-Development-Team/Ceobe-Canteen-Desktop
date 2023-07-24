@@ -14,7 +14,7 @@ app.whenReady().then(() => {
   });
   // 托盘
   if (process.env.NODE_ENV === 'development') {
-    tray = new Tray('/public/icon.png');
+    tray = new Tray(path.join(__dirname, '../public/icon.png'));
   } else {
     tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/resources/public/icon.png'));
   }

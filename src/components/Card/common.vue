@@ -11,10 +11,10 @@
       ></v-img>
 
       <v-card-text>
-        <div v-html="info.default_cookie.text.replace(/(\r\n|\n)/g, '<br>')"></div>
+        <div class="cookie-text">{{ info.default_cookie.text }}</div>
         <div v-if="info.item.retweeted" class="retweet-area">
           <div>转发自：{{ info.item.retweeted.author_name }}</div>
-          <div v-html="info.item.retweeted.text.replace(/(\r\n|\n)/g, '<br>')"></div>
+          <div class="retweet-text">{{ info.item.retweeted.text }}</div>
         </div>
       </v-card-text>
 
@@ -78,9 +78,35 @@ onMounted(() => {
       object-position: top;
     }
   }
+  .cookie-text {
+    /* 盒子模型 */
+    display: -webkit-box;
+    /* 超出范围隐藏 */
+    overflow: hidden;
+    /* 文字超出用省略号 */
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    /* 显示的文本行数 */
+    -webkit-line-clamp: 10;
+    /* 子元素的垂直排列方式 */
+    -webkit-box-orient: vertical;
+  }
   .retweet-area {
     padding: 10px;
     background-color: #e7e7e7;
+    .retweet-text {
+      /* 盒子模型 */
+      display: -webkit-box;
+      /* 超出范围隐藏 */
+      overflow: hidden;
+      /* 文字超出用省略号 */
+      text-overflow: ellipsis;
+      white-space: pre-wrap;
+      /* 显示的文本行数 */
+      -webkit-line-clamp: 7;
+      /* 子元素的垂直排列方式 */
+      -webkit-box-orient: vertical;
+    }
   }
 }
 </style>
