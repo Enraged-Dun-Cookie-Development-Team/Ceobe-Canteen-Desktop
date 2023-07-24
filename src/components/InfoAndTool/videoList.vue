@@ -1,6 +1,12 @@
 <template>
-  <div class="video mt-2 d-flex flex-wrap justify-space-between">
-    <v-card v-for="(item, index) in videoInfo.list" :key="index" width="320" class="mb-2">
+  <div class="video mt-2 d-flex flex-wrap justify-space-evenly">
+    <v-card
+      v-for="(item, index) in videoInfo.list"
+      :key="index"
+      width="320"
+      class="mb-2"
+      @click="openUrl(item.video_link)"
+    >
       <!--      {{ item.video_link }}-->
       <v-img class="align-end text-white" width="100%" :src="item.cover_img.split('@')[0]" cover>
         <v-card-title class="text-right">{{ item.author }}</v-card-title>
@@ -34,6 +40,9 @@ const videoInfo = reactive({
     });
   },
 });
+function openUrl(url) {
+  window.operate.openUrlInBrowser(url);
+}
 
 onMounted(() => {
   videoInfo.getList();
