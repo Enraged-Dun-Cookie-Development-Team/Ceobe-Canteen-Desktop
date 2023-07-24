@@ -1,7 +1,7 @@
 <template>
   <div class="app-top d-flex justify-space-between align-center w-100 pa-2">
     <div class="h-100 d-flex align-center">
-      <v-img src="../../assets/image/logo/icon.png" width="40"></v-img>
+      <v-img :src="getImage('/public/image/logo/icon.png')" width="40"></v-img>
       <span class="title ml-2 mt-1">小刻食堂</span>
     </div>
 

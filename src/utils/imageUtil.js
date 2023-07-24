@@ -1,6 +1,6 @@
 export function getImage(url, isLocal = true) {
   if (url) {
-    return new URL(isLocal ? '..' + url : url, import.meta.url).href;
+    return new URL(isLocal ? '@/../../..' + url : url, import.meta.url).href;
   } else {
     return null;
   }

@@ -26,7 +26,7 @@ import { getImage } from '@/utils/imageUtil';
 import { reactive } from 'vue';
 
 const info = reactive({
-  imgUrl: getImage('/assets/image/logo/icon.png'),
+  imgUrl: getImage('/public/image/logo/icon.png'),
   dataSource: '',
   cookieTime: '',
   cookieText: '',

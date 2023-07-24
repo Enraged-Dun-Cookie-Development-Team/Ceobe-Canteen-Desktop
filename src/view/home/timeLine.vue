@@ -34,7 +34,7 @@
       ></v-btn>
     </div>
     <div v-if="!timeline.timelineData" class="loading-image">
-      <img :src="getImage('/assets/image/load/list-load.gif')" />
+      <img :src="getImage('/public/image/load/list-load.gif')" />
     </div>
     <v-timeline v-else ref="timeline_area" align="start" side="end" truncate-line="start">
       <v-timeline-item
@@ -67,7 +67,7 @@
                   </div>
                 </div>
                 <div class="d-flex align-center">
-                  <img :src="getImage('/assets/image/logo/icon.png')" width="35" />
+                  <img :src="getImage('/public/image/logo/icon.png')" width="35" />
                   <v-divider class="mx-2" vertical></v-divider>
                   <div>
                     <div class="font-weight-bold title">小刻终于吃到饼啦！</div>
