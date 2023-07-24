@@ -2,7 +2,7 @@
   <div class="tool">
     <v-card class="mt-2 position-relative">
       <v-card-text class="d-flex flex-wrap justify-start">
-        <v-btn v-for="(item, index) in props.list" :key="index" class="mr-2 mb-2">
+        <v-btn v-for="(item, index) in props.list" :key="index" class="mr-2 mb-2" @click.stop="openUrl(item.url)">
           <template #prepend>
             <v-img width="20" class="btn-img" :src="getImage(item.img)"></v-img>
           </template>
@@ -28,9 +28,9 @@ const props = defineProps({
   },
 });
 
-// function clickBtn(data) {
-//   emits('click', data);
-// }
+function openUrl(url) {
+  window.operate.openUrlInBrowser(url);
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
