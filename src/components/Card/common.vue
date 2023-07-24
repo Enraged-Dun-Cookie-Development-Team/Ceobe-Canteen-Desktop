@@ -1,5 +1,5 @@
 <template>
-  <div class="commw">
+  <div class="common-window">
     <v-card class="mx-auto cursor-pointer" width="400" @click="common.openUrl">
       <v-img
         v-if="info.default_cookie.images"
@@ -44,11 +44,11 @@ const common = reactive({
     if (!props.info.default_cookie.images) {
       common.imgUrl = [];
     } else if (props.info.datasource.includes('微博')) {
-      window.ceobeRequest.getHasRefererImageBase64(props.info.default_cookie.images[0].compress_url).then((res) => {
+      window.ceobeRequest.getHasRefererImageBase64(props.info.default_cookie.images[0].origin_url).then((res) => {
         common.imgUrl = 'data:image/jpeg;base64,' + res;
       });
     } else {
-      common.imgUrl = props.info.default_cookie.images[0].compress_url;
+      common.imgUrl = props.info.default_cookie.images[0].origin_url;
     }
     return common.imgUrl;
   },
@@ -78,9 +78,9 @@ onMounted(() => {
       object-position: top;
     }
   }
-}
-.retweet-area {
-  padding: 10px;
-  background-color: #e7e7e7;
+  .retweet-area {
+    padding: 10px;
+    background-color: #e7e7e7;
+  }
 }
 </style>
