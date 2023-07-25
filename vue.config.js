@@ -36,6 +36,10 @@ module.exports = defineConfig({
             from: './public',
             to: './public',
           },
+          {
+            from: './src/assets',
+            to: './assets',
+          },
         ],
       },
     },
