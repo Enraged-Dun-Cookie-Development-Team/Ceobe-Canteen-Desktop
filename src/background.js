@@ -1,6 +1,6 @@
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
-import { createNotificationWindow, createWindow, createBackgroundWindow, backgroundWindow } from '@/api/window';
+import { createNotificationWindow, createWindow, createBackgroundWindow, backgroundWindow, win } from '@/api/window';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 // 这句话是让我可以操作iframe的内容
@@ -25,23 +25,37 @@ app.on('activate', () => {
   }
 });
 
-// 当 Electron 完成初始化并准备好创建浏览器窗口时，将调用此方法。在此事件发生后，才能使用某些 API。
-app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    console.log(process.versions.electron);
-    console.log(process.versions.node);
+const gotTheLock = app.requestSingleInstanceLock();
 
-    try {
-      await installExtension(VUEJS3_DEVTOOLS);
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString());
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    //有人试图运行第二个实例，我们应该关注我们的窗口
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+      win.show();
     }
-  }
-  await createWindow();
-  await createBackgroundWindow();
-  // await createNotificationWindow()
-});
+  });
+  // 当 Electron 完成初始化并准备好创建浏览器窗口时，将调用此方法。在此事件发生后，才能使用某些 API。
+  app.on('ready', async () => {
+    if (isDevelopment && !process.env.IS_TEST) {
+      // Install Vue Devtools
+      console.log(process.versions.electron);
+      console.log(process.versions.node);
+
+      try {
+        await installExtension(VUEJS3_DEVTOOLS);
+      } catch (e) {
+        console.error('Vue Devtools failed to install:', e.toString());
+      }
+    }
+    await createWindow();
+    await createBackgroundWindow();
+    // await createNotificationWindow()
+  });
+}
 
 function sendWindowMessage(targetWindow, message, payload) {
   if (typeof targetWindow === 'undefined') {
@@ -54,7 +68,7 @@ function sendWindowMessage(targetWindow, message, payload) {
 // 在开发模式下，根据父进程的请求进行干净退出。
 if (isDevelopment) {
   if (process.platform === 'win32') {
-    process.on('message', data => {
+    process.on('message', (data) => {
       if (data === 'graceful-exit') {
         app.quit();
       }

@@ -6,7 +6,7 @@ const { BrowserWindow, screen } = require('electron');
 
 let tray = null;
 
-let win = null;
+export let win = null;
 
 app.whenReady().then(() => {
   ipcMain.handle('openNotificationWindow', (event, data) => {

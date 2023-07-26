@@ -4,6 +4,7 @@
       <v-carousel
         v-model="announcementInfo.index"
         cycle
+        interval="3000"
         :show-arrows="false"
         height="160"
         :continuous="false"
