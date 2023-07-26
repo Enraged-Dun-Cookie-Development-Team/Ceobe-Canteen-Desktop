@@ -1,6 +1,10 @@
 export function getImage(url, isLocal = true) {
   if (url) {
-    return isLocal ? '..' + url : new URL(url, import.meta.url).href;
+    return isLocal
+      ? process.env.NODE_ENV === 'production'
+        ? '..' + url
+        : new URL('@/../..' + url, import.meta.url).href
+      : new URL(url, import.meta.url).href;
   } else {
     return null;
   }
