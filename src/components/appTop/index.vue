@@ -54,6 +54,7 @@
     </div>
 
     <div class="h-100 no-drag">
+      <v-btn variant="text" icon="fas fa-comments-dollar"></v-btn>
       <v-btn variant="text" icon="fas fa-gear"></v-btn>
       <v-btn variant="text" icon="fas fa-minus" @click="handleWindow.minus"></v-btn>
       <v-btn
