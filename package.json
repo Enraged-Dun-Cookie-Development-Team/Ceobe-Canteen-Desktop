@@ -27,8 +27,10 @@
     "electron-connect": "^0.6.3",
     "html-to-image": "^1.11.11",
     "i": "^0.3.7",
+    "joi": "^17.9.2",
     "node-sass": "^8.0.0",
     "prettier": "^3.0.0",
+    "rebuild": "^0.1.2",
     "roboto-fontface": "*",
     "sass-loader": "^13.2.2",
     "vue": "^3.2.13",
@@ -64,9 +66,6 @@
     "not dead",
     "not ie 11"
   ],
-  "gitHooks": {
-    "pre-commit": "lint-staged --concurrent false --quiet --verbose"
-  },
   "lint-staged": {
     "src/**/*.{js,vue}": [
       "vue-cli-service lint"

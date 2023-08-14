@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <div v-if="loadApp.value" class="read-me">
+    <div v-if="!loadApp" class="read-me">
       <h1 class="online-yellow">小刻食堂免责声明</h1>
       <div class="read-me-content">
         <div>
@@ -54,7 +54,7 @@
         <v-btn elevation="0" density="default" @click="dialog = true">不同意，退出程序</v-btn>
 
         <v-btn color="#e6a23c" elevation="0" style="color: #fff" class="ml-3" density="default" @click="agreeApp"
-          >同意以上条款并开始蹲饼
+          >我已阅读以上全部条款并同意以上条款。开始蹲饼！
         </v-btn>
       </div>
     </div>
@@ -64,16 +64,12 @@
     </div>
   </div>
   <v-dialog v-model="dialog" persistent width="auto">
-    <template #activator="{ props }">
-      <v-btn color="primary" v-bind="props"> Open Dialog</v-btn>
-    </template>
     <v-card>
       <v-card-title class="text-h5">裆真?</v-card-title>
       <v-card-text>你选得对，但小刻食堂是一款优秀的蹲饼器，用于实时获取兔兔发的动态。</v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="online-red" variant="text" @click="exitApp"> 我不用小刻食堂</v-btn>
-        <v-btn color="online-yellow" variant="text" @click="dialog = false"> 刚刚是手滑，我要同意条款</v-btn>
+      <v-card-actions class="justify-end">
+        <v-btn color="#f56c6c" variant="text" @click="exitApp"> 我不用小刻食堂</v-btn>
+        <v-btn color="#e6a23c" variant="text" @click="dialog = false"> 刚刚是手滑，我要同意条款</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -98,7 +94,9 @@ onMounted(() => {
   let result = localStorage.getItem('agreeApp');
   if (result == 'true') {
     loadApp.value = true;
+    return;
   }
+  loadApp.value = false;
 });
 </script>
 
