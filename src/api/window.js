@@ -150,6 +150,7 @@ export async function createBackgroundWindow() {
     });
   }
 }
+
 ipcMain.on('newest-timeline', (_, cookies) => {
   sendWindowMessage(win, 'newest-timeline', cookies);
 });
@@ -197,7 +198,10 @@ ipcMain.handle('close', (event) => {
 
 // 退出程序
 ipcMain.handle('exit', (event) => {
-  win.hide();
+  if (tray) {
+    tray.destroy();
+  }
+  app.quit();
 });
 
 // 在窗口关闭时，销毁托盘图标
