@@ -29,4 +29,12 @@ jobs:
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
 
-          release: true
+          release:
+            true
+            # upload build test reports
+      - name: Publish reports
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: electron-build-reports-${{ runner.os }}
+          path: runner/.npm/_logs/
