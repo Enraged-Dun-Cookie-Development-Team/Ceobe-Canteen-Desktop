@@ -60,4 +60,24 @@ app.whenReady().then(() => {
       clipboard.writeText(data.data);
     }
   });
+
+  // 是否开机自启
+  ipcMain.handle('bootSetting', async (event, isBoot) => {
+    console.log(isBoot)
+    if(isBoot){
+      //设置开机启动
+      app.setLoginItemSettings({
+        openAtLogin: true,
+        args: ["--openAsHidden"],
+      });
+    }else{
+      app.setLoginItemSettings({
+        openAtLogin: false
+      });
+    }
+    //获取是否开机启动
+    const { openAtLogin } = app.getLoginItemSettings();
+    console.log(openAtLogin)
+    return openAtLogin;
+  });
 });

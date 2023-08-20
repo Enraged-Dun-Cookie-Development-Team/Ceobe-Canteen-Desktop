@@ -55,7 +55,7 @@
 
     <div class="h-100 no-drag">
       <v-btn variant="text" icon="fas fa-comments-dollar" @click="donate.show = true"></v-btn>
-      <v-btn variant="text" icon="fas fa-gear"></v-btn>
+      <v-btn variant="text" icon="fas fa-gear" @click="setting.show = true"></v-btn>
       <v-btn variant="text" icon="fas fa-minus" @click="handleWindow.minus"></v-btn>
       <v-btn
         variant="text"
@@ -67,40 +67,11 @@
   </div>
 
   <v-dialog width="800" persistent v-model="donate.show" transition="dialog-top-transition">
-    <v-card>
-      <v-toolbar color="#e6a23c" title="朴实无华的捐助界面"></v-toolbar>
-      <v-card-text>
-        <div class="text-h4 pa-12">感谢大家对小刻食堂的支持</div>
-        未成年刀客塔请勿捐款，三连我们的账号就可以啦。<br />
-        如果在收支一览表内没有发现自己的捐助，那就是我们理智涣散，来群里面找我们添加！
-        <div class="text-h5">
-          由于捐助列表是程序自动生成，捐助的备注一定要以
-          <span class="online-yellow">刻</span>
-          字开头哦！
-        </div>
-      </v-card-text>
-      <v-card-item>
-        <div class="d-flex justify-space-between px-2 pt-2 pb-6">
-          <v-hover v-slot="{ isHovering, props }" v-for="item in donate.list" :key="item.text">
-            <v-card max-width="160" v-bind="props" :elevation="isHovering ? 12 : 6" class="pa-2">
-              <v-img width="150px" :src="getImage(item.img)" cover></v-img>
-              <v-card-title class="text-center">
-                <span v-if="!item.link">{{ item.text }}</span>
-                <v-btn variant="text" style="color: #e6a23c" v-else @click="donate.openUrl(item.link)"
-                  >{{ item.text }}
-                </v-btn>
-              </v-card-title>
-            </v-card>
-          </v-hover>
-        </div>
-      </v-card-item>
-      <v-card-actions class="justify-end">
-        <v-btn color="#e6a23c" @click="donate.openUrl('https://shimo.im/sheets/NJkbEgRmQRtpQ7qR')"
-          >查看收支一览表
-        </v-btn>
-        <v-btn @click="donate.show = false">关闭</v-btn>
-      </v-card-actions>
-    </v-card>
+    <donate-page  @close="donate.show = false"></donate-page>
+  </v-dialog>
+
+  <v-dialog width="400" persistent v-model="setting.show"  transition="dialog-top-transition">
+    <setting-page @close="setting.show = false"></setting-page>
   </v-dialog>
 </template>
 
@@ -108,38 +79,11 @@
 import { reactive, ref } from 'vue';
 import { getImage } from '@/utils/imageUtil';
 import { getAllDatasources, getDatasourceComb } from '@/api/list';
+import donatePage from './donate'
+import settingPage from './setting'
 
 const winMax = ref(false);
-const donate = ref({
-  show: false,
-  list: [
-    {
-      img: '/assets/image/donate/qq.png',
-      text: '加群聊天',
-      link: 'https://jq.qq.com/?_wv=1027&k=EOxqu7FL',
-    },
-    {
-      img: '/assets/image/donate/bilibili.png',
-      text: 'B站关注/充电',
-      link: 'https://space.bilibili.com/1723599428',
-    },
-    {
-      img: '/assets/image/donate/wechat.png',
-      text: '微信捐助',
-    },
-    {
-      img: '/assets/image/donate/zfb.jpg',
-      text: '支付宝捐助',
-    },
-  ],
-  // 查看收支一览表
-  openUrl(url) {
-    if (!url) {
-      return;
-    }
-    window.operate.openUrlInBrowser(url);
-  },
-});
+
 const menuShow = reactive({
   notOpened: true, // 没有打开过
   show: false,
@@ -232,6 +176,14 @@ const handleWindow = reactive({
     window.operate.close();
   },
 });
+
+const donate = reactive({
+  show:false
+})
+
+const setting = reactive({
+  show:false,
+})
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
