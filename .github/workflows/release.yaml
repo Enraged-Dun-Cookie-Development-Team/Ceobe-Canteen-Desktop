@@ -6,8 +6,42 @@ on:
       - release
 
 jobs:
+  create-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    outputs:
+      release_id: ${{ steps.create-release.outputs.result.id }}
+      upload_url: ${{ steps.create-release.outputs.result.upload_url }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: get version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: create release
+        id: create-release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `app-v${process.env.PACKAGE_VERSION}`,
+              name: `CeobeCanteenDesktop v${process.env.PACKAGE_VERSION}`,
+              draft: true,
+              prerelease: false
+            })
+            return data
+
   release:
     runs-on: ${{ matrix.os }}
+    needs:
+      - create-release
 
     strategy:
       matrix:
@@ -27,13 +61,48 @@ jobs:
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
+          build_script_name: 'electron:build'
+          release: true
 
-          release:
-            true
-            # upload build test reports
+      - name: find executable file(win)
+        if: startsWith(matrix.platform, 'windows')
+        run: |
+
+      - name: upload release assert
+        uses: actions/github-script@v6
+        run: |
+
+          await github.rest.repos.uploadReleaseAsset({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "${{ matrix.platform }}-CeobeCanteenDesktop"
+          })
+
+      # upload build test reports
       - name: Publish reports
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: electron-build-reports-${{ runner.os }}
           path: /home/runner/.npm/_logs/
+  publish-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    needs: [create-release, release]
+
+    steps:
+      - name: publish release
+        id: publish-release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.release_id,
+              draft: false,
+              prerelease: false
+            })
