@@ -45,11 +45,15 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: 
+          # - macos-latest
+          # - ubuntu-latest
+          - windows-latest
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
+
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
@@ -64,19 +68,31 @@ jobs:
           build_script_name: 'electron:build'
           release: true
 
+      - name: get version
+        id: get-version
+        run: node -p "require('./package.json').version"
+
+      - name: execute
+        id: execute-file
+        if: startsWith(matrix.platform, 'windows')
+        run: echo "${{steps.release.get-version.outputs.result}}.exe"
+
       - name: find executable file(win)
         if: startsWith(matrix.platform, 'windows')
-        run: |
+        run: echo "INSTALL_PACKAGE=./dist_electron/ceobe-canteen-electron Setup ${{steps.release.get-version.outputs.result}}.exe" >> $GITHUB_ENV
 
       - name: upload release assert
         uses: actions/github-script@v6
-        run: |
-
-          await github.rest.repos.uploadReleaseAsset({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: "${{ matrix.platform }}-CeobeCanteenDesktop"
-          })
+         with:
+          script: |
+            const fs = require('fs');
+            await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: "${{needs.create-release.outputs.release_id}}" ,
+                name: "${{ matrix.platform }}-CeobeCanteenDesktop-${{ steps.release.execute-file.outputs.result }}",
+                data: await fs.readFileSync(process.env.INSTALL_PACKAGE)
+            })
 
       # upload build test reports
       - name: Publish reports
