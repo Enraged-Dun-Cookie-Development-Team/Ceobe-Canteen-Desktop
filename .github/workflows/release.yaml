@@ -45,7 +45,7 @@ jobs:
 
     strategy:
       matrix:
-        os: 
+        os:
           # - macos-latest
           # - ubuntu-latest
           - windows-latest
@@ -53,7 +53,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
-
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
@@ -83,7 +82,7 @@ jobs:
 
       - name: upload release assert
         uses: actions/github-script@v6
-         with:
+        with:
           script: |
             const fs = require('fs');
             await github.rest.repos.uploadReleaseAsset({
