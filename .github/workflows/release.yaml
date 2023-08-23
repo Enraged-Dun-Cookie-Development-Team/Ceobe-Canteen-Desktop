@@ -65,6 +65,7 @@ jobs:
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
           build_script_name: 'electron:build'
+          use_vue_cli: true
           release: true
 
       - name: get version

@@ -1,4 +1,17 @@
 const { defineConfig } = require('@vue/cli-service');
+
+// https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported/72219174#72219174
+const crypto = require('crypto');
+
+try {
+  crypto.createHash('md4');
+} catch (e) {
+  console.warn('Crypto "MD4" is not supported anymore by this Node.js version');
+  const origCreateHash = crypto.createHash;
+  crypto.createHash = (alg, opts) => {
+    return origCreateHash(alg === 'md4' ? 'md5' : alg, opts);
+  };
+}
 module.exports = defineConfig({
   publicPath: './',
   transpileDependencies: true,

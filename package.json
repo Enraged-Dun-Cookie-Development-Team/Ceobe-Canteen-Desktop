@@ -6,7 +6,7 @@
   "author": "CeobeCanteen",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service electron:build",
+    "build": "vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
@@ -16,6 +16,7 @@
     "lint:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less}",
     "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix"
   },
+  "main": "background.js",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@mdi/font": "5.9.55",
