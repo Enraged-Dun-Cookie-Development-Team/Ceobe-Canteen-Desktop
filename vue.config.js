@@ -44,6 +44,16 @@ module.exports = defineConfig({
             },
           ],
         },
+        mac: {
+          icon: 'build/image/icon.ico',
+          category: 'public.app-category.productivity',
+          artifactName: '${productName}-${version}.${ext}',
+          target: ['dmg'],
+        },
+        linux: {
+          icon: 'build/image/icon.ico',
+          target: 'deb',
+        },
         extraResources: [
           {
             from: './public',

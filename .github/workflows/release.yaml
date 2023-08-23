@@ -45,9 +45,9 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-10.15
-          - ubuntu-20.04
-          - windows-2022
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
 
     steps:
       - name: Check out Git repository
@@ -80,6 +80,9 @@ jobs:
             }else{
               extension = ".deb"
             }
+
+            console.log(`find executable file ${file}`)
+
             const file = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
             .filter(dirent => dirent.isFile() && dirent.name.endsWith(extension))[0].name;
 
