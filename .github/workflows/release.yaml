@@ -34,7 +34,7 @@ jobs:
             })).data.map((tag) => tag.name);
             const tagName = `app-v${process.env.PACKAGE_VERSION}`;
 
-            console.log(`${tag} check is contain ${tagName}`);
+            console.log(`${tags} check is contain ${tagName}`);
 
             if (tags.includes(tagName)){
               core.setFailed(`tag name '${tagName}' Exist`);
