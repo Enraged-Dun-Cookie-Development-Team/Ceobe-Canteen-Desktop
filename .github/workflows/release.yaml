@@ -60,6 +60,11 @@ jobs:
       - name: install dependence
         run: npm install
 
+      - name: macos use python3
+        if: ${{ matrix.os == "macos-latest" }}
+        env:
+          PYTHON_PATH: /opt/homebrew/bin/python3
+      
       - name: build app
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
