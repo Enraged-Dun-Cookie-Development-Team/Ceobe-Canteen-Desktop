@@ -32,12 +32,17 @@
     <v-snackbar v-model="setting.showDownload" >
       检测到了新版本，即将跳转到下载网页
     </v-snackbar>
+    <v-snackbar v-model="setting.showAlreadyNewest" >
+      已经是最新版本，无需下载
+    </v-snackbar>
   </div>
 
 </template>
 
 <script setup name="setting">
 import {onMounted, reactive} from "vue";
+import { VERSION } from '../../constant/index';
+import { getVersion } from '../../api/list'
 const emits = defineEmits({
   close: null
 })
@@ -59,12 +64,33 @@ const setting = reactive({
   },
 
   showDownload:false,
+  showAlreadyNewest: false,
   checkVersion(){
-    setting.showDownload = true;
-    setTimeout(()=>{
-      window.operate.openUrlInBrowser('')
-      setting.showDownload = true
-    },3000)
+    getVersion(null).then((res)=> {
+      if (res.data.data == null) {
+        return
+      }
+      console.log(res)
+      window.version.judgmentVersion(res.data.data.version, VERSION).then(result=>{
+        if(result) {
+          setting.showDownload = true;
+          window.operate.openUrlInBrowser('https://www.ceobecanteen.top/#/')
+          setTimeout(()=>{
+            setting.showDownload = false
+          },3000)
+        } else {
+          setting.showAlreadyNewest = true;
+          setTimeout(()=>{
+            setting.showAlreadyNewest = false
+          },3000)
+        }
+      }).catch(()=>{
+        setting.showAlreadyNewest = true;
+          setTimeout(()=>{
+            setting.showAlreadyNewest = false
+          },3000)
+      });
+    })
   }
 })
 
