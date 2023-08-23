@@ -71,6 +71,7 @@ jobs:
           release_id: ${{ needs.create-release.outputs.release_id }}
         with:
           script: |
+            const fs = require('fs');
             let extension;
             if (process.platform === "win32"){
               extension = ".exe"
@@ -84,7 +85,6 @@ jobs:
             const version = require('./package.json').version;
             const name = `CeobeCanteenDesktop-${version}${extension}`
             const filename = `./dist_electron/${file}`
-            const fs = require('fs');
 
             console.log(`uploading ${process.env.release_id} | ${name} | ${filename}`)
 
