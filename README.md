@@ -1,5 +1,13 @@
 # ceobe-canteen-electron
 
+<div align="center">
+
+![LOGO](build/image/icon.png)
+
+帮小刻找好多好吃的饼
+
+</div>
+
 ## Project setup
 
 ```

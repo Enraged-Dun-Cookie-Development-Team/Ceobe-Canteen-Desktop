@@ -45,12 +45,13 @@ module.exports = defineConfig({
           ],
         },
         mac: {
-          icon: 'build/image/icon.png',
-          category: 'public.app-category.productivity',
+          icon: 'build/image/icon@512.png',
+          category: 'public.app-category.entertainment',
           artifactName: '${productName}-${version}.${ext}',
           target: ['dmg'],
         },
         linux: {
+          category: 'Network',
           icon: 'build/image/icon.png',
           target: ['deb'],
         },
