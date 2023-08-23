@@ -31,7 +31,7 @@ jobs:
             const tags = (await github.rest.repos.listTags({
               owner: context.repo.owner,
               repo: context.repo.repo,
-            })).data.map(tag => tag.name);
+            })).data.map((tag) => tag.name);
             const tagName = `app-v${process.env.PACKAGE_VERSION}`;
 
             console.log(`${tag} check is contain ${tagName}`);
