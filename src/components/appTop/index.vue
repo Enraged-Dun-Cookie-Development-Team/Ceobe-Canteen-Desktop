@@ -66,11 +66,11 @@
     </div>
   </div>
 
-  <v-dialog width="800" persistent v-model="donate.show" transition="dialog-top-transition">
+  <v-dialog v-model="donate.show" width="800" persistent transition="dialog-top-transition">
     <donate-page  @close="donate.show = false"></donate-page>
   </v-dialog>
 
-  <v-dialog width="400" persistent v-model="setting.show"  transition="dialog-top-transition">
+  <v-dialog v-model="setting.show" width="400" persistent  transition="dialog-top-transition">
     <setting-page @close="setting.show = false"></setting-page>
   </v-dialog>
 </template>

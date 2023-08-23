@@ -13,7 +13,7 @@
             <v-card-subtitle>每次开机就能自动蹲饼呢~</v-card-subtitle>
           </div>
           <div>
-            <v-switch color="#ffba4b" v-model="setting.isBoot" @change="setting.changeBoot"></v-switch>
+            <v-switch v-model="setting.isBoot" color="#ffba4b" @change="setting.changeBoot"></v-switch>
           </div>
         </div>
       </v-card-item>
@@ -38,7 +38,9 @@
 
 <script setup name="setting">
 import {onMounted, reactive} from "vue";
-const emits = defineEmits({})
+const emits = defineEmits({
+  close: null
+})
 
 const setting = reactive({
   isBoot:false,
@@ -49,7 +51,6 @@ const setting = reactive({
   },
   initBoot() {
     window.operate.getBootSetting().then(res=>{
-      console.log(res)
       setting.isBoot = res;
     });
   },
@@ -73,6 +74,4 @@ onMounted(() => {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.setting {
-}
 </style>

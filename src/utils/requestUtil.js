@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const baseUrl = 'http://server.ceobecanteen.top/api/v1';
+const BASE_URL = {
+  SERVER_URL: 'https://server.ceobecanteen.top/api/v1',
+  CDN_URL: 'https://cdn.ceobecanteen.top',
+  CDN_SERVER_URL: 'https://server-cdn.ceobecanteen.top/api/v1',
+}
 
 const showStatus = status => {
   let message = '';
@@ -68,10 +72,19 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    console.log(config)
-    if ((config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)) {
-      return config;
+    switch (config.urlChoice) {
+      case 'SERVER_URL':
+        config.baseURL = BASE_URL.SERVER_URL;
+        break;
+      case 'CDN_URL':
+        config.baseURL = BASE_URL.CDN_URL;
+        break;
+      case 'CDN_SERVER_URL':
+        config.baseURL = BASE_URL.CDN_SERVER_URL;
+        break;
     }
+    console.log(config)
+    return config;
   },
   err => {
     console.log(err);

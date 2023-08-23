@@ -18,12 +18,12 @@
       </v-card-text>
       <v-card-item>
         <div class="d-flex justify-space-between px-2 pt-2 pb-6">
-          <v-hover v-slot="{ isHovering, props }" v-for="item in donate.list" :key="item.text">
+          <v-hover v-for="item in donate.list" v-slot="{ isHovering, props }" :key="item.text">
             <v-card max-width="160" v-bind="props" :elevation="isHovering ? 12 : 6" class="pa-2">
               <v-img width="150px" :src="getImage(item.img)" cover></v-img>
               <v-card-title class="text-center">
                 <span v-if="!item.link">{{ item.text }}</span>
-                <v-btn variant="text" style="color: #e6a23c" v-else @click="donate.openUrl(item.link)"
+                <v-btn v-else variant="text" style="color: #e6a23c" @click="donate.openUrl(item.link)"
                 >{{ item.text }}
                 </v-btn>
               </v-card-title>
@@ -45,7 +45,9 @@
 
 import {getImage} from "@/utils/imageUtil";
 import {ref} from "vue";
-const emits = defineEmits({})
+const emits = defineEmits({
+  close: null
+})
 const donate = ref({
   show: false,
   list: [
@@ -82,6 +84,4 @@ const donate = ref({
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-.donate {
-}
 </style>
