@@ -79,6 +79,9 @@ jobs:
 
       - name: install dependence
         run: npm install
+      - name: install dmg-license
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: npm i dmg-license
 
       - name: build app (macos use python3)
         if: ${{ matrix.os == 'macos-latest' }}
