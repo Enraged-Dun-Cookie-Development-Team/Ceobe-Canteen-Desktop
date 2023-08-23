@@ -154,7 +154,7 @@ jobs:
             })
 
   remove-failure-release:
-    if: ${{ failure() && needs.release.conclusion  == 'failure' }}
+    if: ${{ failure() }}
     runs-on: ubuntu-20.04
     needs:
       - release
