@@ -162,7 +162,7 @@ jobs:
                 data: fs.readFileSync(portablePath)
               })
             });
-
+            archive.pipe(fs.createWriteStream(portablePath));
             archive.directory(`./dist_electron/${portable}`, false);
             archive.finalize();
 
