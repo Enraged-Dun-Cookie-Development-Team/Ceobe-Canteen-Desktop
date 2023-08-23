@@ -104,6 +104,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
+            const archiver = require('archiver');
             let extension;
             if (process.platform === "win32"){
               extension = ".exe"
@@ -120,6 +121,12 @@ jobs:
 
             console.log(`find executable file ${file}`)
 
+            //找到 *-unpacked 文件夹
+            const portable = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
+            .filter(dirent => dirent.isDirectory() && dirent.name.endsWith("-unpacked"))[0].name;
+
+            console.log(`find portable file ${portable}`)
+
             const version = require('./package.json').version;
             const name = `CeobeCanteenDesktop-${version}${extension}`
             const filename = `./dist_electron/${file}`
@@ -133,6 +140,30 @@ jobs:
                 name,
                 data: await fs.readFileSync(filename)
             })
+
+            const archive = archiver('zip', {
+              zlib: { level: 9 } // Sets the compression level.
+            });
+
+            const portableName = `CeobeCanteenDesktop-${version}-portable-${process.platform}.zip`
+            const portablePath = `./dist_electron/${portableName}`
+
+            archive.on("error", (err) => {
+              throw err;
+            });
+            archive.on("close", () => {
+              console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
+              github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: process.env.release_id ,
+                name: portableName,
+                data: fs.readFileSync(portablePath)
+              })
+            });
+
+            archive.directory(`./dist_electron/${portable}`, false);
+            archive.finalize();
 
       # upload build test reports
       - name: Publish reports
