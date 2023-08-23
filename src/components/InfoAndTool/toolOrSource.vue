@@ -4,7 +4,7 @@
       <v-card-text class="d-flex flex-wrap justify-start">
         <v-btn v-for="(item, index) in props.list" :key="index" class="mr-2 mb-2" @click.stop="openUrl(item.url)">
           <template #prepend>
-            <v-img width="20" class="btn-img" :src="getImage(item.img)"></v-img>
+            <v-img width="20" class="btn-img" :src="getImage(item.img, props.imgLocal)"></v-img>
           </template>
           {{ item.name }}
         </v-btn>
@@ -26,6 +26,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  imgLocal: {
+    type: Boolean,
+    default: () => true,
+  }
 });
 
 function openUrl(url) {
