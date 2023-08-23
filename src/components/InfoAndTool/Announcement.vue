@@ -21,7 +21,7 @@
 
 <script setup name="announcement">
 import { onMounted, reactive } from 'vue';
-import { changeToCCT } from '@/utils/timeUtil';
+import { changeToCCT } from '@/utils/timeUtil.ts';
 
 const announcementInfo = reactive({
   data: [],

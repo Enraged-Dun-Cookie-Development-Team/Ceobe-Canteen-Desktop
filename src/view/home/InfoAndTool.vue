@@ -19,7 +19,7 @@
 
 <script setup name="infoAndTool">
 import { reactive } from 'vue';
-import { sourceInfo, toolInfo } from '@/constant';
+import { sourceInfo, toolInfo } from '@/constant.ts';
 import VideoList from "@/components/InfoAndTool/VideoList.vue";
 import ToolOrSource from "@/components/InfoAndTool/ToolOrSource.vue";
 import Announcement from "@/components/InfoAndTool/Announcement.vue";

@@ -111,11 +111,11 @@
 
 <script setup name="timeLine">
 import { getCurrentInstance, nextTick, onMounted, reactive } from "vue";
-import { getImage } from "@/utils/imageUtil";
+import { getImage } from "@/utils/imageUtil.ts";
 import Info from "@/components/Card/Common.vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
-import { getCookieList, getCookieSearchList } from "@/api/list";
+import { getCookieList, getCookieSearchList } from "@/api/list.ts";
 
 const router = useRouter();
 getCurrentInstance();

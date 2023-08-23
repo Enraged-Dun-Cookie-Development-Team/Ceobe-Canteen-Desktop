@@ -41,9 +41,9 @@
 
 <script setup name="weeklyQuest">
 import { reactive, onMounted } from 'vue';
-import { dayInfo } from '@/constant';
-import { getImage } from '@/utils/imageUtil';
-import { changeToCCT, numberToWeek, calcDiff } from '@/utils/timeUtil';
+import { dayInfo } from '@/constant.ts';
+import { getImage } from '@/utils/imageUtil.ts';
+import { changeToCCT, numberToWeek, calcDiff } from '@/utils/timeUtil.ts';
 
 const quest = reactive({
   dayInfo: dayInfo,

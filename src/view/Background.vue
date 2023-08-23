@@ -4,7 +4,7 @@
 
 <script setup name="index" lang="ts">
 import { onBeforeMount } from "vue";
-import { backgroundInit } from "@/utils/backgroundUtil";
+import {backgroundInit} from "../utils/backgroundUtil.ts";
 
 onBeforeMount(() => {
     backgroundInit().then(() => {});

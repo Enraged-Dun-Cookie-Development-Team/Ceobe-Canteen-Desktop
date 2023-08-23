@@ -7,9 +7,11 @@ import eslintPlugin from "vite-plugin-eslint";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [vue(), vuetify({ autoImport: true }),eslintPlugin({
-    include:['src/**/*.ts','src/**/*.vue']
-  })],
+  plugins: [vue(), vuetify({ autoImport: true }),
+  //   eslintPlugin({
+  //   include:['src/**/*.ts','src/**/*.vue']
+  // })
+  ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

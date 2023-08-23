@@ -15,7 +15,7 @@
 </template>
 
 <script setup name="tool">
-import { getImage } from '@/utils/imageUtil';
+import { getImage } from '@/utils/imageUtil.ts';
 
 const props = defineProps({
   title: {

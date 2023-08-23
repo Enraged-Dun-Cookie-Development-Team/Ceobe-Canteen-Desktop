@@ -26,8 +26,8 @@
 
 <script setup name="video">
 import { onMounted, reactive } from 'vue';
-import { getVideoList } from '@/api/list';
-import { changeToCCT } from '@/utils/timeUtil';
+import { getVideoList } from '@/api/list.ts';
+import { changeToCCT } from '@/utils/timeUtil.ts';
 
 const videoInfo = reactive({
   list: [],

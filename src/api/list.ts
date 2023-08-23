@@ -1,4 +1,4 @@
-import service from '@/utils/requestUtil';
+import service from '@/utils/requestUtil.ts';
 
 /**
  * 获取列表

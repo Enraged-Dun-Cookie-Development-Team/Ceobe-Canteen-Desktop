@@ -1,4 +1,4 @@
-import { getResourceList, getDatasourceComb, getCookieNewestInfo, getCookieList } from '@/api/list';
+import { getResourceList, getDatasourceComb, getCookieNewestInfo, getCookieList } from '@/api/list.ts';
 
 let old_cookie_id, old_update_cookie_id;
 let datasource_comb_id;
