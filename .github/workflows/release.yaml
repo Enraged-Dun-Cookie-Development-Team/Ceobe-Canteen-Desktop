@@ -154,10 +154,11 @@ jobs:
             })
 
   remove-failure-release:
-    if: ${{ failure() }}
     runs-on: ubuntu-20.04
     needs:
       - release
+      - create-release
+    if: ${{ failure() }}
 
     steps:
       - name: publish release
@@ -166,8 +167,11 @@ jobs:
           release_id: ${{ needs.create-release.outputs.release_id }}
         with:
           script: |
+            const releaseId = process.env.release_id;
+            if ( releaseId ){
             github.rest.repos.deleteRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              release_id: process.env.release_id,
+              release_id: releaseId,
             })
+            }
