@@ -62,6 +62,8 @@ jobs:
         run: npm install
 
       - name: build app
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
       - name: get version
