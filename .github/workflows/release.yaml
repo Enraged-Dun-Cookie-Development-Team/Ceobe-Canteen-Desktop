@@ -61,14 +61,14 @@ jobs:
         run: npm install
 
       - name: build app (macos use python3)
-        if: ${{ matrix.os == "macos-latest" }}
+        if: ${{ matrix.os == 'macos-latest' }}
         env:
           PYTHON_PATH: /opt/homebrew/bin/python3
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
       
       - name: build app
-        if: ${{ matrix.os != "macos-latest" }}
+        if: ${{ matrix.os != 'macos-latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
