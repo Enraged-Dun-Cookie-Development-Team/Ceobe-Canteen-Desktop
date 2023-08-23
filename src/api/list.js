@@ -73,7 +73,7 @@ export function getDatasourceComb(uuids) {
  */
 export function getCookieNewestInfo(comb_id) {
   return service({
-    url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
+    url: `https://cdn.ceobecanteen.top/datasource-comb/${comb_id}`,
     method: 'GET',
   });
 }
@@ -87,7 +87,7 @@ export function getCookieNewestInfo(comb_id) {
  */
 export function getCookieList(comb_id, cookie_id, update_cookie_id) {
   return service({
-    url: `http://cdn-muelsyse-dev.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
+    url: `https://server-cdn.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
     params: {
       datasource_comb_id: comb_id,
       cookie_id: cookie_id,

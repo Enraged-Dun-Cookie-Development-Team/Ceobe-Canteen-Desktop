@@ -37,15 +37,20 @@
 </template>
 
 <script setup name="setting">
-import {reactive} from "vue";
+import {onMounted, reactive} from "vue";
 const emits = defineEmits({})
 
 const setting = reactive({
   isBoot:false,
   changeBoot(){
     window.operate.bootSetting(setting.isBoot).then(res=>{
+      
+    });
+  },
+  initBoot() {
+    window.operate.getBootSetting().then(res=>{
       console.log(res)
-      // setting.isBoot = res
+      setting.isBoot = res;
     });
   },
   close(){
@@ -61,6 +66,10 @@ const setting = reactive({
     },3000)
   }
 })
+
+onMounted(() => {
+  setting.initBoot();
+});
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

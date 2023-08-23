@@ -39,6 +39,7 @@ contextBridge.exposeInMainWorld('operate', {
   close: () => ipcRenderer.invoke('close'),
   exit: () => ipcRenderer.invoke('exit'),
   bootSetting:(isBoot) => ipcRenderer.invoke('bootSetting',isBoot),
+  getBootSetting:() => ipcRenderer.invoke('getBootSetting'),
 });
 
 contextBridge.exposeInMainWorld('notification', {
