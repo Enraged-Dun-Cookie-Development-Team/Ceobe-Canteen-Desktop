@@ -9,8 +9,8 @@
   </div>
 </template>
 
-<script setup name="home">
-import TimeLine from '@/view/home/timeLine';
+<script setup name="home" lang="ts">
+import TimeLine from "./TimeLine.vue";
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

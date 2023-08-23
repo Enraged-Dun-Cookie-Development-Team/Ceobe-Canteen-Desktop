@@ -1,24 +1,30 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
+import Navbar from "@/components/Navbar.vue";
+import Home from "@/view/home/Home.vue";
+import Background from "@/view/Background.vue";
+import Notification from "@/view/Notification.vue";
+import InfoAndTool from "@/view/home/InfoAndTool.vue";
+import Browser from "@/components/Browser.vue";
 
 const routes = [
   {
     path: '',
-    component: () => import('@/components/Navbar'),
+    component: Navbar,
     redirect: '/home/tool',
     children: [
       {
         path: '/home',
-        component: () => import('@/view/home/index'),
+        component: Home,
         name: 'Home',
         children: [
           {
             path: 'tool',
-            component: () => import('@/view/home/infoAndTool'),
+            component: InfoAndTool,
             name: 'Tool',
           },
           {
             path: 'browser',
-            component: () => import('@/components/Browser'),
+            component: Browser,
             name: 'Browser',
           },
         ],
@@ -27,11 +33,11 @@ const routes = [
   },
   {
     path: '/notification',
-    component: () => import('@/view/notification'),
+    component: Notification,
   },
   {
     path: '/background',
-    component: () => import('@/view/background'),
+    component: Background,
   },
 ];
 

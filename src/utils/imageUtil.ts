@@ -1,4 +1,4 @@
-export function getImage(url, isLocal = true) {
+export function getImage(url?:string, isLocal = true) {
   if (url) {
     return isLocal
       ? process.env.NODE_ENV === 'production'
@@ -11,7 +11,7 @@ export function getImage(url, isLocal = true) {
 }
 
 // 根据base64获取图片信息
-export function getImageFromBase64(base64String) {
+export function getImageFromBase64(base64String:string) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = function () {

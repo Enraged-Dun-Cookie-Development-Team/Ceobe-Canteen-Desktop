@@ -56,7 +56,7 @@ export function getResourceList() {
  * @param uuids list[uuid]
  * @returns {*}
  */
-export function getDatasourceComb(uuids) {
+export function getDatasourceComb(uuids: string) {
   return service({
     url: `/canteen/user/getDatasourceComb`,
     method: 'POST',
@@ -71,7 +71,7 @@ export function getDatasourceComb(uuids) {
  * @param comb_id string
  * @returns {*}
  */
-export function getCookieNewestInfo(comb_id) {
+export function getCookieNewestInfo(comb_id: string) {
   return service({
     url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
     method: 'GET',
@@ -85,7 +85,7 @@ export function getCookieNewestInfo(comb_id) {
  * @param update_cookie_id string
  * @returns {*}
  */
-export function getCookieList(comb_id, cookie_id, update_cookie_id) {
+export function getCookieList(comb_id: string, cookie_id: string, update_cookie_id: string) {
   return service({
     url: `http://cdn-muelsyse-dev.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
     params: {
@@ -112,7 +112,7 @@ export function getAllDatasources() {
  * 获取饼搜索列表
  * @returns {*}
  */
-export function getCookieSearchList(cookie_id, datasource_comb_id, search_word) {
+export function getCookieSearchList(cookie_id: string, datasource_comb_id: string, search_word: string) {
   let params = {
     datasource_comb_id: datasource_comb_id,
     search_word: search_word,

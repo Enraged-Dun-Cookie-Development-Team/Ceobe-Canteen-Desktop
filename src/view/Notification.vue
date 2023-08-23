@@ -22,8 +22,8 @@
 </template>
 
 <script setup name="index">
-import { getImage } from '@/utils/imageUtil';
 import { reactive } from 'vue';
+import {getImage} from "@/utils/imageUtil.ts";
 
 const info = reactive({
   imgUrl: getImage('/assets/image/logo/icon.png'),

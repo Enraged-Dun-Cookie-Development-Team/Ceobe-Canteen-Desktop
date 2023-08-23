@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run serve",
+    "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:8080",
     "distDir": "../dist"
   },
@@ -61,7 +61,19 @@
       },
       {
         "label": "background",
-        "visible": false
+        "visible": true,
+        "title": "background",
+        "url": "/#/background"
+      },
+      {
+        "label": "notification",
+        "title": "notification",
+        "width": 400,
+        "height": 355,
+        "resizable": false,
+        "alwaysOnTop": true,
+        "visible": false,
+        "url": "#/notification"
       }
     ]
   }

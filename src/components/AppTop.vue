@@ -67,102 +67,102 @@
 </template>
 
 <script setup name="index">
-import { reactive, ref } from 'vue';
-import { getImage } from '@/utils/imageUtil';
-import { getAllDatasources, getDatasourceComb } from '@/api/list';
+import { reactive, ref } from "vue";
+import {getDatasourceComb} from "@/api/list.ts";
+import {getAllDatasources} from "@/api/list.ts";
 
 const winMax = ref(false);
 const menuShow = reactive({
-  notOpened: true, // 没有打开过
-  show: false,
-  datasourceList: [],
-  changeSelectSource(data) {
-    data.check = !data.check;
-  },
-  async changeDatasourceOpen(value) {
-    if (value) {
-      if (menuShow.notOpened) {
-        menuShow.notOpened = false;
-      }
-      let datasourceConfig = JSON.parse(window.localStorage.getItem('datasource-config'));
-      // 打开列表
-      getAllDatasources().then((data) => {
-        if (data.status == 200) {
-          menuShow.datasourceList = data.data.data;
-          if (datasourceConfig) {
-            let datasourceConfigUuidMap = {};
-            for (let datasource of datasourceConfig) {
-              datasourceConfigUuidMap[datasource] = true;
+    notOpened: true, // 没有打开过
+    show: false,
+    datasourceList: [],
+    changeSelectSource(data) {
+        data.check = !data.check;
+    },
+    async changeDatasourceOpen(value) {
+        if (value) {
+            if (menuShow.notOpened) {
+                menuShow.notOpened = false;
             }
-            menuShow.datasourceList.forEach((element) => {
-              if (datasourceConfigUuidMap[element.unique_id]) {
-                element.check = true;
-              }
+            let datasourceConfig = JSON.parse(window.localStorage.getItem("datasource-config"));
+            // 打开列表
+            getAllDatasources().then((data) => {
+                if (data.status == 200) {
+                    menuShow.datasourceList = data.data.data;
+                    if (datasourceConfig) {
+                        let datasourceConfigUuidMap = {};
+                        for (let datasource of datasourceConfig) {
+                            datasourceConfigUuidMap[datasource] = true;
+                        }
+                        menuShow.datasourceList.forEach((element) => {
+                            if (datasourceConfigUuidMap[element.unique_id]) {
+                                element.check = true;
+                            }
+                        });
+                    } else {
+                        menuShow.datasourceList.forEach((element) => {
+                            element.check = true;
+                        });
+                    }
+                }
             });
-          } else {
-            menuShow.datasourceList.forEach((element) => {
-              element.check = true;
-            });
-          }
+        } else {
+            if (menuShow.notOpened) {
+                return;
+            }
+            // 关闭列表
+            let datasourceConfig = menuShow.datasourceList
+                .filter((element) => {
+                    return element.check;
+                })
+                .map((element) => {
+                    return element.unique_id;
+                });
+            let comb_resp = await getDatasourceComb(datasourceConfig);
+            let comb_id = comb_resp.data.data.datasource_comb_id;
+            let datasourceComb = window.localStorage.getItem("datasource-comb");
+            // 如果组合id和之前一样，不进行刷新
+            if (datasourceComb == comb_id) {
+                return;
+            }
+            window.localStorage.setItem("datasource-config", JSON.stringify(datasourceConfig));
+            window.localStorage.setItem("datasource-comb", comb_id);
+            window.datasourceConfig.updateDatasourceComb();
         }
-      });
-    } else {
-      if (menuShow.notOpened) {
-        return;
-      }
-      // 关闭列表
-      let datasourceConfig = menuShow.datasourceList
-        .filter((element) => {
-          return element.check;
-        })
-        .map((element) => {
-          return element.unique_id;
-        });
-      let comb_resp = await getDatasourceComb(datasourceConfig);
-      let comb_id = comb_resp.data.data.datasource_comb_id;
-      let datasourceComb = window.localStorage.getItem('datasource-comb');
-      // 如果组合id和之前一样，不进行刷新
-      if (datasourceComb == comb_id) {
-        return;
-      }
-      window.localStorage.setItem('datasource-config', JSON.stringify(datasourceConfig));
-      window.localStorage.setItem('datasource-comb', comb_id);
-      window.datasourceConfig.updateDatasourceComb();
-    }
-  },
+    },
 });
 const search = reactive({
-  show: false,
-  wordShow: '',
-  searchWord: null,
-  searching() {
+    show: false,
+    wordShow: "",
+    searchWord: null,
+    searching() {
     // 将搜索词发送给timeline进行处理
-    window.searchWordEvent.sendSearchWord(search.searchWord);
-    search.wordShow = search.searchWord;
-  },
-  searchChange() {
+        window.searchWordEvent.sendSearchWord(search.searchWord);
+        search.wordShow = search.searchWord;
+    },
+    searchChange() {
     // 如果为空 同步到timeline
-    if (search.searchWord === '' || !search.searchWord) {
-      window.searchWordEvent.sendSearchWord(search.searchWord);
-      search.wordShow = '';
-    }
-  },
+        if (search.searchWord === "" || !search.searchWord) {
+            window.searchWordEvent.sendSearchWord(search.searchWord);
+            search.wordShow = "";
+        }
+    },
 });
 
 const handleWindow = reactive({
-  // 最小化
-  minus() {
-    window.operate.minus();
-  },
-  // 最大化 重置大小
-  maximize() {
-    winMax.value = !winMax.value;
-    window.operate.maximize();
-  },
-  // 关闭
-  close() {
-    window.operate.close();
-  },
+    // 最小化
+    minus() {
+        window.operate.minus();
+    },
+    // 最大化 重置大小
+    maximize() {
+        winMax.value = !winMax.value;
+        window.operate.maximize();
+    },
+    // 关闭
+    close() {
+        window.operate.close();
+    },
 });
 </script>
 

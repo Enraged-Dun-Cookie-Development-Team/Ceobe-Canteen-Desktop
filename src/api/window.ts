@@ -6,43 +6,6 @@ const { BrowserWindow, screen } = require('electron');
 
 let tray = null;
 
-export let win = null;
-
-app.whenReady().then(() => {
-  ipcMain.handle('openNotificationWindow', (event, data) => {
-    createNotificationWindow(data);
-  });
-  // 托盘
-  if (process.env.NODE_ENV === 'development') {
-    tray = new Tray(path.join(__dirname, '../public/icon.png'));
-  } else {
-    tray = new Tray(path.join(path.dirname(app.getPath('exe')), '/resources/public/icon.png'));
-  }
-  tray.setToolTip('小刻食堂持续蹲饼中');
-  // 菜单
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: '退出小刻食堂',
-      click: () => {
-        app.quit(); // 退出应用程序
-      },
-    },
-  ]);
-  tray.setContextMenu(contextMenu);
-
-  if (process.platform !== 'darwin') {
-    tray.on('click', () => {
-      if (win && !win.isDestroyed()) {
-        // 在窗口存在且未被销毁时打开窗口
-        win.show();
-      } else {
-        // 在窗口不存在或已被销毁时创建新的窗口 （一般不会）
-        createWindow().then();
-      }
-    });
-  }
-});
-
 export async function createWindow() {
   // 主页面窗口状态
   win = new BrowserWindow({

@@ -23,26 +23,26 @@
 </template>
 
 <script setup name="index">
-import { useRoute } from 'vue-router';
-import { onMounted, reactive, ref, watch } from 'vue';
-import router from '@/router';
-import { getImage } from '@/utils/imageUtil';
+import {useRoute, useRouter} from "vue-router";
+import { onMounted, reactive, ref, watch } from "vue";
+import { getImage } from "@/utils/imageUtil.ts";
 
+const router = useRouter();
 const route = useRoute();
 const query = ref({});
 
 const webviewWindow = reactive({
-  webview: null,
-  init() {
-    webviewWindow.webview = document.querySelector('webview');
-    webviewWindow.webview.addEventListener('dom-ready', (data) => {
-      webviewWindow.insertCss();
-      // webviewWindow.insertJs();
-    });
-  },
-  insertCss() {
+    webview: null,
+    init() {
+        webviewWindow.webview = document.querySelector("webview");
+        webviewWindow.webview.addEventListener("dom-ready", () => {
+            webviewWindow.insertCss();
+            // webviewWindow.insertJs();
+        });
+    },
+    insertCss() {
     // b站
-    webviewWindow.webview.insertCSS(`
+        webviewWindow.webview.insertCSS(`
         #bili-header-container,
         #internationalHeader,
         .van-popover,
@@ -55,8 +55,8 @@ const webviewWindow = reactive({
         }
         `);
 
-    // 微博
-    webviewWindow.webview.insertCSS(`
+        // 微博
+        webviewWindow.webview.insertCSS(`
     [class^="Frame_top_"],
     [class^="Frame_side_"],
     [class^="Bar_main_"],
@@ -67,31 +67,31 @@ const webviewWindow = reactive({
           display:none!important
         }
         `);
-  },
-  insertJs() {
-    webviewWindow.webview.executeJavaScript(``).then((res) => {
-      console.log(res);
-    });
-  },
+    },
+    insertJs() {
+        webviewWindow.webview.executeJavaScript("").then((res) => {
+            console.log(res);
+        });
+    },
 });
 
 function back() {
-  router.push({
-    path: '/',
-  });
+    router.push({
+        path: "/",
+    });
 }
 
 watch(
-  () => route.query,
-  (val) => {
-    query.value = route.query;
-    webviewWindow.init();
-  }
+    () => route.query,
+    () => {
+        query.value = route.query;
+        webviewWindow.init();
+    }
 );
 
 onMounted(() => {
-  query.value = route.query;
-  webviewWindow.init();
+    query.value = route.query;
+    webviewWindow.init();
 });
 </script>
 

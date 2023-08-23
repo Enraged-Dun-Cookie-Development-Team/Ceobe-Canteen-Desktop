@@ -19,12 +19,11 @@
 
 <script setup name="infoAndTool">
 import { reactive } from 'vue';
-import { changeToCCT } from '@/utils/timeUtil';
-import Announcement from '@/components/InfoAndTool/announcement';
-import WeeklyQuest from '@/components/InfoAndTool/weeklyQuest';
-import ToolOrSource from '@/components/InfoAndTool/toolOrSource';
 import { sourceInfo, toolInfo } from '@/constant';
-import VideoList from '@/components/InfoAndTool/videoList';
+import VideoList from "@/components/InfoAndTool/VideoList.vue";
+import ToolOrSource from "@/components/InfoAndTool/ToolOrSource.vue";
+import Announcement from "@/components/InfoAndTool/Announcement.vue";
+import WeeklyQuest from "@/components/InfoAndTool/WeeklyQuest.vue";
 
 const source = reactive({
   list: sourceInfo,
