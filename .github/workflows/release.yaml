@@ -71,7 +71,8 @@ jobs:
         with:
           node-version: 16
 
-      - uses: actions/setup-python@v4
+      - name: install py2.7 for macos
+        uses: actions/setup-python@v4
         if: ${{ matrix.os == 'macos-latest' }}
         id: setup-py
         with:
@@ -83,7 +84,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         run: npm i dmg-license
 
-      - name: build app (macos use python3)
+      - name: build app for macos
         if: ${{ matrix.os == 'macos-latest' }}
         env:
           PYTHON_PATH: ${{ steps.setup-py.outputs.python-path }}
