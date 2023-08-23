@@ -97,6 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
+      - run: npm install archiver
       - name: upload release assert
         uses: actions/github-script@v6
         env:
