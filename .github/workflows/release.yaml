@@ -70,13 +70,20 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 16
+
+      - uses: actions/setup-python@v4
+        if: ${{ matrix.os == 'macos-latest' }}
+        id: setup-py
+        with:
+          python-version: '3.10'
+
       - name: install dependence
         run: npm install
 
       - name: build app (macos use python3)
         if: ${{ matrix.os == 'macos-latest' }}
         env:
-          PYTHON_PATH: /opt/homebrew/bin/python3
+          PYTHON_PATH: ${{ steps.setup-py.outputs.python-path }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
