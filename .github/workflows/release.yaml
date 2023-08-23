@@ -154,10 +154,11 @@ jobs:
             })
 
   remove-failure-release:
-    if: ${{ failure() && jobs.create-release.conclusion  == 'failure' }}
+    if: ${{ failure() && needs.release.conclusion  == 'failure' }}
     runs-on: ubuntu-20.04
     needs:
       - release
+
     steps:
       - name: publish release
         uses: actions/github-script@v6
