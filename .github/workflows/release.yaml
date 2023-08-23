@@ -79,7 +79,7 @@ jobs:
           PYTHON_PATH: /opt/homebrew/bin/python3
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
-      
+
       - name: build app
         if: ${{ matrix.os != 'macos-latest' }}
         env:
@@ -130,6 +130,7 @@ jobs:
         with:
           name: electron-build-reports-${{ runner.os }}
           path: /home/runner/.npm/_logs/
+
   publish-release:
     permissions:
       contents: write
@@ -150,4 +151,22 @@ jobs:
               release_id: process.env.release_id,
               draft: false,
               prerelease: false
+            })
+
+  remove-failure-release:
+    if: ${{ failure() && jobs.create-release.conclusion  == 'failure' }}
+    runs-on: ubuntu-20.04
+    needs:
+      - release
+    steps:
+      - name: publish release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            github.rest.repos.repos.deleteRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.release_id,
             })
