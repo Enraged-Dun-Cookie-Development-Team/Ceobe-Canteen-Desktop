@@ -11,8 +11,7 @@ jobs:
       contents: write
     runs-on: ubuntu-20.04
     outputs:
-      release_id: ${{ steps.create-release.outputs.result.id }}
-      upload_url: ${{ steps.create-release.outputs.result.upload_url }}
+      release_id: ${{ steps.create-release.outputs.result }}
 
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +35,7 @@ jobs:
               draft: true,
               prerelease: false
             })
-            return data
+            return data.id
 
   release:
     runs-on: ${{ matrix.os }}
@@ -66,30 +65,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
-      - name: get version
-        id: get-version
-        run: node -p "require('./package.json').version"
-
-      - name: execute
-        id: execute-file
-        #        if: matrix.platform == 'windows-2022'
-        run: echo "${{steps.release.get-version.outputs.result}}.exe"
-
-      - name: find executable file(win)
-        #        if: matrix.platform == 'windows-2022'
-        run: echo "INSTALL_PACKAGE=./dist_electron/ceobe-canteen-electron Setup ${{steps.release.get-version.outputs.result}}.exe" >> $GITHUB_ENV
-
       - name: upload release assert
         uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
         with:
           script: |
+            let extension;
+            if (process.platform === "win32"){
+              extension = ".exe"
+            }else if (process.platform === "darwin"){
+              extension = ".dmg"
+            }else{
+              extension = ".deb"
+            }
+            const file = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
+            .filter(dirent => dirent.isFile() && dirent.name.endsWith(extension))[0];
+            const version = require('./package.json').version;
+            const name = `CeobeCanteenDesktop-${version}${extension}`
+            const filename = `./dist_electron/${file}`
             const fs = require('fs');
+
+            console.log(`uploading ${process.env.release_id} | ${name} | ${filename}`)
+
             await github.rest.repos.uploadReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                release_id: "${{needs.create-release.outputs.release_id}}" ,
-                name: "${{ matrix.platform }}-CeobeCanteenDesktop-${{ steps.release.execute-file.outputs.result }}",
-                data: await fs.readFileSync(process.env.INSTALL_PACKAGE)
+                release_id: process.env.release_id ,
+                name,
+                data: await fs.readFileSync(filename)
             })
 
       # upload build test reports
