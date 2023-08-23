@@ -82,6 +82,9 @@ jobs:
             }
             const file = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
             .filter(dirent => dirent.isFile() && dirent.name.endsWith(extension))[0].name;
+
+            console.log(`find executable file ${file}`)
+
             const version = require('./package.json').version;
             const name = `CeobeCanteenDesktop-${version}${extension}`
             const filename = `./dist_electron/${file}`
