@@ -75,7 +75,7 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         id: setup-py
         with:
-          python-version: '3.10'
+          python-version: '2.7'
 
       - name: install dependence
         run: npm install
