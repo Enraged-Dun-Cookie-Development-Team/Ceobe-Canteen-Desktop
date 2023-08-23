@@ -81,7 +81,7 @@ jobs:
               extension = ".deb"
             }
 
-            console.log(`find executable file ${file}`)
+            console.log(`find executable file ${extension}`)
 
             const file = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
             .filter(dirent => dirent.isFile() && dirent.name.endsWith(extension))[0].name;
