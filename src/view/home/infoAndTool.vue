@@ -12,7 +12,7 @@
     <!--推荐视频-->
     <video-list></video-list>
     <div class="d-flex justify-center ma-2">
-      Powered By &nbsp;<a href="https://www.ceobecanteen.top/#/"> CeobeCanteen</a>
+      Powered By &nbsp;<v-btn class='pl-0' variant="plain" density="compact" @click="openUrlInBrowser('https://www.ceobecanteen.top/#/')">CeobeCanteen</v-btn>
     </div>
   </div>
 </template>
@@ -33,6 +33,10 @@ const source = reactive({
 const tool = reactive({
   list: toolInfo,
 });
+
+const openUrlInBrowser = (url) => {
+  window.operate.openUrlInBrowser(url);
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

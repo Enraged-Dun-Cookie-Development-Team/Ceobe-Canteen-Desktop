@@ -62,8 +62,8 @@ const setting = reactive({
   checkVersion(){
     setting.showDownload = true;
     setTimeout(()=>{
-      // window.operate.openUrlInBrowser('')
-      setting.showDownload = false
+      window.operate.openUrlInBrowser('')
+      setting.showDownload = true
     },3000)
   }
 })
