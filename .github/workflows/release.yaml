@@ -72,11 +72,11 @@ jobs:
 
       - name: execute
         id: execute-file
-        if: matrix.platform == 'windows-2022'
+        #        if: matrix.platform == 'windows-2022'
         run: echo "${{steps.release.get-version.outputs.result}}.exe"
 
       - name: find executable file(win)
-        if: matrix.platform == 'windows-2022'
+        #        if: matrix.platform == 'windows-2022'
         run: echo "INSTALL_PACKAGE=./dist_electron/ceobe-canteen-electron Setup ${{steps.release.get-version.outputs.result}}.exe" >> $GITHUB_ENV
 
       - name: upload release assert
