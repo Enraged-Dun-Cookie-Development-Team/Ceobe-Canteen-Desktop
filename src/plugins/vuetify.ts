@@ -14,7 +14,7 @@ export default createVuetify({
     aliases,
     sets: {
       fa,
-      mdi
-    }
-  }
+      mdi,
+    },
+  },
 });

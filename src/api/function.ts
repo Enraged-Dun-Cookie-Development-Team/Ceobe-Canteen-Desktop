@@ -9,9 +9,9 @@ app.whenReady().then(() => {
     return new Promise((resolve, reject) => {
       const request = net.request(url);
       request.setHeader('Referer', referer);
-      request.on('response', response => {
+      request.on('response', (response) => {
         let chunks = [];
-        response.on('data', chunk => {
+        response.on('data', (chunk) => {
           chunks.push(chunk);
         });
         response.on('end', () => {
@@ -20,7 +20,7 @@ app.whenReady().then(() => {
           resolve(base64);
         });
       });
-      request.on('error', error => {
+      request.on('error', (error) => {
         reject(error);
       });
       request.end();
@@ -31,7 +31,7 @@ app.whenReady().then(() => {
   });
 
   // 获取文件
-  const getLocalFileText = path => {
+  const getLocalFileText = (path) => {
     return new Promise((resolve, reject) => {
       fs.readFile(path, { encoding: 'utf-8' }, (err, data) => {
         console.log(err);

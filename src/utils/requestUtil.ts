@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseUrl = 'http://server-dev.ceobecanteen.top/api/v1';
 
-const showStatus = status => {
+const showStatus = (status) => {
   let message = '';
   switch (status) {
     case 400:
@@ -49,12 +49,12 @@ const service = axios.create({
   headers: {
     get: {
       'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
+      'Cache-Control': 'no-cache',
     },
     post: {
       'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
-    }
+      'Cache-Control': 'no-cache',
+    },
   },
   // 是否跨站点访问控制请求
   withCredentials: true,
@@ -62,18 +62,18 @@ const service = axios.create({
   validateStatus() {
     // 使用async-await，处理reject情况较为繁琐，所以全部返回resolve，在业务代码中处理异常
     return true;
-  }
+  },
 });
 
 // 请求拦截器
 service.interceptors.request.use(
-  config => {
-    console.log(config)
+  (config) => {
+    console.log(config);
     if ((config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)) {
       return config;
     }
   },
-  err => {
+  (err) => {
     console.log(err);
     err.message = '服务器异常，请联系管理员！';
     // 错误抛到业务代码
@@ -83,7 +83,7 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-  response => {
+  (response) => {
     const status = response.status;
     let msg = '';
     if (status < 200 || (status >= 300 && status != 401 && status != 500)) {
@@ -103,7 +103,7 @@ service.interceptors.response.use(
       return response;
     }
   },
-  err => {
+  (err) => {
     err.message = '请求超时或服务器异常，请检查网络或联系管理员！';
     return Promise.reject(err);
   }

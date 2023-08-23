@@ -20,7 +20,7 @@ export function format(date, formatText) {
     //分
     'm+': date.getMinutes(),
     //秒
-    's+': date.getSeconds()
+    's+': date.getSeconds(),
     // 季度和毫秒的格式化：可以支持，但没必要
     // //季度
     // "q+": Math.floor((date.getMonth() + 3) / 3),
@@ -55,7 +55,7 @@ export function calcDiff(endDate, startDate = new Date()) {
   const timeUnits = [
     [24 * 3600 * 1000, '天'],
     [3600 * 1000, '小时'],
-    [60 * 1000, '分钟']
+    [60 * 1000, '分钟'],
   ];
   let text = '';
   let time = Math.abs(endTime - startTime);
