@@ -66,6 +66,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           build_script_name: 'electron:build'
           use_vue_cli: true
+          skip_build: true
           release: true
 
       - name: get version
