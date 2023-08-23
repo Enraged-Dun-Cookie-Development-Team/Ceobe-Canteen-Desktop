@@ -26,6 +26,7 @@
     "prettier": "^3.0.0",
     "roboto-fontface": "*",
     "sass-loader": "^13.2.2",
+    "typescript": "^5.1.6",
     "vue": "^3.2.13",
     "vue-router": "^4.1.6",
     "vuetify": "^3.1.4",
@@ -48,6 +49,7 @@
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard-scss": "^4.0.0",
     "stylelint-order": "^5.0.0",
+    "ts-migrate": "^0.1.35",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "webpack-plugin-vuetify": "^2.0.0-alpha.0"
   },
