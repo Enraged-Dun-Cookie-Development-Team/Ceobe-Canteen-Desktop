@@ -166,7 +166,7 @@ jobs:
           release_id: ${{ needs.create-release.outputs.release_id }}
         with:
           script: |
-            github.rest.repos.repos.deleteRelease({
+            github.rest.repos.deleteRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: process.env.release_id,
