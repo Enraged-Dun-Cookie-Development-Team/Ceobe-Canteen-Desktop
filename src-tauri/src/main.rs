@@ -2,14 +2,30 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod hidden_window;
+mod single_instance;
 
+use std::io;
+use std::io::ErrorKind;
 use std::sync::OnceLock;
+use std::thread::spawn;
 use base64::Engine;
 use tauri::{generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, WindowEvent, command};
 use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
 use hidden_window::init_preview;
+use crate::single_instance::{run_sev, try_start};
+
 fn main() {
     Builder::default().setup(|app| {
+        // single instance
+        if let Ok(true)| Err(_) = try_start(){
+            let main_window = app.get_window("main").unwrap();
+            spawn(move||run_sev(main_window));
+        }else {
+            let err = io::Error::new(ErrorKind::AlreadyExists,"anther instance is running");
+            Err(err)?;
+        }
+
+
         let handle = app.handle();
         SystemTray::new().with_tooltip("小刻食堂持续蹲饼中").on_event(move |event| match event {
             SystemTrayEvent::LeftClick { .. } => {
@@ -30,15 +46,13 @@ fn main() {
         let handle = app.handle();
         let window = handle.get_window("main").unwrap();
 
-        window.clone().on_window_event(move |event| match event {
-            WindowEvent::CloseRequested { api, .. } => {
-                api.prevent_close();
-                window.hide().unwrap();
-            }
-            _ => {}
+        window.clone().on_window_event(move |event| if let WindowEvent::CloseRequested { api, .. } = event {
+            api.prevent_close();
+            window.hide().unwrap();
         });
         #[cfg(debug_assertions)]
         app.windows().values().into_iter().for_each(|window| window.open_devtools());
+
         Ok(())
     })
         .invoke_handler(tauri::generate_handler![request_refer_image,init_preview])

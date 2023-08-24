@@ -33,6 +33,14 @@
       },
       "window": {
         "all": true
+      },
+      "path": {
+        "all": true
+      },
+      "protocol": {
+        "asset": true,
+        "all": true,
+        "assetScope": []
       }
     },
     "bundle": {
@@ -59,7 +67,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": ["../src/assets"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
