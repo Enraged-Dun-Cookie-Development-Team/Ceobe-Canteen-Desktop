@@ -158,19 +158,21 @@ jobs:
               archive.on("error", (err) => {
                 throw err;
               });
-              archive.on("close", async () => {
-                console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
-                await github.rest.repos.uploadReleaseAsset({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  release_id: process.env.release_id ,
-                  name: portableName,
-                  data: fs.readFileSync(portablePath)
-                })
+              archive.on("close", () => {
+                console.log("archive ok")
               });
               archive.pipe(fs.createWriteStream(portablePath));
               archive.directory(`./dist_electron/${portable}`, false);
               archive.finalize();
+
+              console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
+              await github.rest.repos.uploadReleaseAsset({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: process.env.release_id ,
+                name: portableName,
+                data: fs.readFileSync(portablePath)
+              })
             }
   
       # upload build test reports
