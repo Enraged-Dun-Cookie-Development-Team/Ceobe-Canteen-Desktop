@@ -37,8 +37,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "",
-      "copyright": "",
+      "category": "SocialNetworking",
+      "copyright": "CeobeCanteen",
       "deb": {
         "depends": []
       },
@@ -98,7 +98,7 @@
         "resizable": false,
         "alwaysOnTop": true,
         "visible": false,
-        "url": "#/notification"
+        "url": "/#/notification"
       }
     ]
   }

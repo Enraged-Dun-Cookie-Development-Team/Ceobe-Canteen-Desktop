@@ -62,4 +62,4 @@ async fn request_refer_image(url:& str, refer: & str) -> tauri::Result<String> {
     let payload = base64::engine::general_purpose::STANDARD.encode(payload.data);
     Ok(payload)
 
-    }
+}

@@ -1,11 +1,17 @@
-import { emit, EventCallback, once } from "@tauri-apps/api/event";
+import {
+  emit,
+  EventCallback,
+  listen,
+  once,
+  UnlistenFn,
+} from "@tauri-apps/api/event";
 import { DatasourceItem } from "../resourceFetcher/datasourceList";
 
 class NewestTimeline {
   async getTimeline(
     callback: (event: string, payload: DatasourceItem) => void,
-  ) {
-    await once<Timeline>(
+  ): Promise<UnlistenFn> {
+    return await listen<Timeline>(
       "newest-timeline",
       (event: EventCallback<Timeline>) => {
         callback(event.event, event.payload);
@@ -19,8 +25,10 @@ class NewestTimeline {
     await emit("newest-timeline", data);
   }
 
-  async knowNeedTimeline(callback: (event: string) => void) {
-    await once<void>("need-timeline", (event: EventCallback<void>) => {
+  async knowNeedTimeline(
+    callback: (event: string) => void,
+  ): Promise<UnlistenFn> {
+    return await once<void>("need-timeline", (event: EventCallback<void>) => {
       callback(event.payload);
     });
   }

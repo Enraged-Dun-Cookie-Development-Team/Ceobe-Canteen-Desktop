@@ -1,6 +1,22 @@
+import {
+  emit,
+  EventCallback,
+  listen,
+  UnlistenFn,
+  Event,
+} from "@tauri-apps/api/event";
+
 class SearchWordEvent {
-  getSearchWord<T>(callback: (event: string, payload: T) => void) {}
-  sendSearchWord(data: string) {}
+  async getSearchWord(
+    callback: (event: string, payload: string) => void,
+  ): Promise<UnlistenFn> {
+    return await listen<string>("search-word", (event: Event<string>) => {
+      callback(event.event, event.payload);
+    });
+  }
+  async sendSearchWord(data: string) {
+    await emit("search-word", data);
+  }
 }
 
 const searchWordEvent = new SearchWordEvent();

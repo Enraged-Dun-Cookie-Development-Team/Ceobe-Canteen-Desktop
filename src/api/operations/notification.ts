@@ -1,7 +1,18 @@
-class NotificationOperate {
-  getInfo<T>(callback: (event: string, payload: T) => void) {}
+import { window } from "@tauri-apps/api";
+import { appWindow } from "@tauri-apps/api/window";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { Cookie } from "../resourceFetcher/cookieList";
 
-  closeWindow() {}
+class NotificationOperate {
+  async getInfo(
+    callback: (event: string, payload: Cookie) => void,
+  ): Promise<UnlistenFn> {
+    return await listen<Cookie>("info", callback);
+  }
+
+  async closeWindow() {
+    await appWindow.hide();
+  }
 }
 const notification = new NotificationOperate();
 
