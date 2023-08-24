@@ -37,7 +37,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "",
       "copyright": "",
       "deb": {
         "depends": []
@@ -50,7 +50,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.ceobe-canteen.desktop",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
