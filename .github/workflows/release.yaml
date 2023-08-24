@@ -110,9 +110,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           release_dir="./release/"
-          for (file in $release_dir/*); do
-            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "$file"
-          done
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            for %%F in ("%release_dir%*") do (
+              gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "%%F"
+            )
+          else
+            for file in $release_dir*; do
+              if [ -f "$file" ]; then
+                gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "$file"
+              fi
+            done
+          fi
 
       # upload build test reports
       - name: Publish reports
