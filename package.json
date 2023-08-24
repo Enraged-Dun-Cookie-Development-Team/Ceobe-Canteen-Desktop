@@ -67,9 +67,6 @@
     "pre-commit": "lint-staged --concurrent false --quiet --verbose"
   },
   "lint-staged": {
-    "src/**/*.{vue,css,sass,scss,less}": [
-      "stylelint --fix"
-    ],
     "**/{*,.*}": [
       "prettier --ignore-unknown --write"
     ]
