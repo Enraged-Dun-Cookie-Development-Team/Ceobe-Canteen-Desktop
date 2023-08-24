@@ -8,7 +8,7 @@
     <!--快捷工具-->
     <tool-or-source title="快捷工具" :list="tool.list"></tool-or-source>
     <!--发源地-->
-    <tool-or-source title="饼的发源地" :imgLocal="false" :list="source.list"></tool-or-source>
+    <tool-or-source title="饼的发源地" :img-local="false" :list="source.list"></tool-or-source>
     <!--推荐视频-->
     <video-list></video-list>
     <div class="d-flex justify-center ma-2">

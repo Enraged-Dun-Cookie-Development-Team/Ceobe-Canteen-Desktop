@@ -52,8 +52,7 @@ const service = axios.create({
   // 联调
   headers: {
     get: {
-      'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
+      'Content-Type': 'application/json;charset=utf-8'
     },
     post: {
       'Content-Type': 'application/json;charset=utf-8',

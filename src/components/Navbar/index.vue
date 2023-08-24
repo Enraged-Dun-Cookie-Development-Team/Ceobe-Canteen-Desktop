@@ -87,6 +87,7 @@ const exitApp = () => {
 };
 const agreeApp = () => {
   localStorage.setItem('agreeApp', 'true');
+  window.operate.bootSetting(true).then(()=>{});
   loadApp.value = true;
 };
 

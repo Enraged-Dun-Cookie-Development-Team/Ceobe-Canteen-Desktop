@@ -70,6 +70,9 @@ export function getCookieNewestInfo(comb_id) {
     urlChoice: 'CDN_URL',
     url: `/datasource-comb/${comb_id}`,
     method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+    }
   });
 }
 
@@ -89,7 +92,7 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id) {
       cookie_id: cookie_id,
       update_cookie_id: update_cookie_id,
     },
-    method: 'GET',
+    method: 'GET'
   });
 }
 
