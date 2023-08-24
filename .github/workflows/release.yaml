@@ -59,8 +59,8 @@ jobs:
       matrix:
         os:
           - macos-latest
-          - ubuntu-latest
-          - windows-latest
+          # - ubuntu-latest
+          # - windows-latest
       fail-fast: false
     steps:
       - name: Check out Git repository
@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
-      - run: npm install archiver
+      - run: npm install archiver && ls -al ./dist_electron
       - name: upload release assert
         uses: actions/github-script@v6
         env:
@@ -152,9 +152,9 @@ jobs:
             archive.on("error", (err) => {
               throw err;
             });
-            archive.on("close", () => {
+            archive.on("close", async () => {
               console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
-              github.rest.repos.uploadReleaseAsset({
+              await github.rest.repos.uploadReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 release_id: process.env.release_id ,
