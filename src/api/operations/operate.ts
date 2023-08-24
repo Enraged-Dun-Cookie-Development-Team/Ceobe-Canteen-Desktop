@@ -2,7 +2,7 @@ import { copyInfo, openUrlInUserBrowser } from "../function";
 import { appWindow } from "@tauri-apps/api/window";
 
 class Operate {
-  openNotificationWindow(cookie) {}
+  openNotificationWindow(cookie: any) {}
 
   async copy(param: { data: string; type: string }) {
     await copyInfo(param);

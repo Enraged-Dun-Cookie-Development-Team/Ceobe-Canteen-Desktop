@@ -22,7 +22,6 @@ export function format(date: number | string | Date, formatText: string) {
     // //毫秒
     // "S": date.getMilliseconds()
   };
-  let v = o["M+"];
 
   if (/(y+)/.test(formatText)) {
     formatText = formatText.replace(

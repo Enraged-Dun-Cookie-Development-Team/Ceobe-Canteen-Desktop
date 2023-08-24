@@ -136,7 +136,7 @@
 </template>
 
 <script lang="ts" name="timeLine" setup>
-import { getCurrentInstance, nextTick, onMounted, reactive } from "vue";
+import { nextTick, onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
 import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
@@ -291,7 +291,7 @@ const scroll = reactive({
     if (document.querySelector(".time-line") !== e.target) {
       return;
     }
-    scroll.scrollShow = e.target.scrollTop > 600 ? true : false;
+    scroll.scrollShow = e.target.scrollTop > 600;
 
     // 因为有些情况会导致高度不能正好相等，给个差值小于5来扩大判断范围
     if (

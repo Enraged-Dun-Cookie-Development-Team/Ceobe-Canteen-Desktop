@@ -1,5 +1,4 @@
 import requestClient, { Payload } from "../../utils/requestUtil";
-import { AxiosResponse } from "axios";
 import { Response } from "@tauri-apps/api/http";
 
 export interface DatasourceItem {

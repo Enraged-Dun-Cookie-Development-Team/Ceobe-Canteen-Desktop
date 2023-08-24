@@ -18,9 +18,9 @@ tauri-build = { version = "1.4.0", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.4.0", features = [ "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
-reqwest = "0.11.20"
+reqwest = "0.11"
 base64 = "0.21.2"
-regex = "1.9.3"
+regex = "1"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

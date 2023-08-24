@@ -1,7 +1,6 @@
 import { readTextFile } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
 import { writeText } from "@tauri-apps/api/clipboard";
-import { fetch, ResponseType } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api";
 
 // 获取文件

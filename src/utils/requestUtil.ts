@@ -1,14 +1,9 @@
-import axios, {
-  AxiosInstance,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from "axios";
 import { Client, getClient, HttpOptions, Response } from "@tauri-apps/api/http";
 
 const baseUrl = "http://server-dev.ceobecanteen.top/api/v1";
 
 const showStatus = (status: number) => {
-  let message = "";
+  let message: string;
   switch (status) {
     case 400:
       message = "请求错误(400)";
@@ -109,72 +104,6 @@ class RequestClient {
 }
 
 const requestClient = new RequestClient();
-// const requestClient: AxiosInstance = axios.create({
-//   // 联调
-//   headers: {
-//     get: {
-//       "Content-Type": "application/json;charset=utf-8",
-//       "Cache-Control": "no-cache",
-//     },
-//     post: {
-//       "Content-Type": "application/json;charset=utf-8",
-//       "Cache-Control": "no-cache",
-//     },
-//   }, // 是否跨站点访问控制请求
-//   withCredentials: true,
-//   timeout: 30000,
-//   validateStatus() {
-//     // 使用async-await，处理reject情况较为繁琐，所以全部返回resolve，在业务代码中处理异常
-//     return true;
-//   },
-// });
-//
-// // 请求拦截器
-//
-// requestClient.interceptors.request.use(
-//   (config: InternalAxiosRequestConfig) => {
-//     console.log(config);
-//     if (
-//       (config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)
-//     ) {
-//       return config;
-//     }
-//   },
-//   (err: any) => {
-//     console.log(err);
-//     err.message = "服务器异常，请联系管理员！";
-//     // 错误抛到业务代码
-//     return Promise.reject(err);
-//   },
-// );
-//
-// // 响应拦截器
-// requestClient.interceptors.response.use(
-//   (response: AxiosResponse) => {
-//     const status = response.status;
-//     let msg = "";
-//     if (status < 200 || (status >= 300 && status != 401 && status != 500)) {
-//       // 处理http错误，抛到业务代码
-//       msg = showStatus(status);
-//       if (typeof response.data === "string") {
-//         response.data = { msg };
-//       } else {
-//         response.data.message = msg;
-//       }
-//       return response;
-//     } else if (status == 200) {
-//       return response;
-//     } else if (status == 500) {
-//       msg = showStatus(status);
-//       response.data = { msg: msg };
-//       return response;
-//     }
-//   },
-//   (err: any) => {
-//     err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
-//     return Promise.reject(err);
-//   },
-// );
 
 export default requestClient;
 

@@ -1,24 +1,4 @@
-import {
-  createNotificationWindow,
-  createWindow,
-  createBackgroundWindow,
-  backgroundWindow,
-  win,
-} from "@/api/window";
-
-// 当所有窗口都关闭时，退出应用程序。
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
-
-app.on("activate", () => {
-  // 在 macOS 上，当单击 dock 图标并且没有其他窗口打开时，通常会重新创建应用程序中的窗口。
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
+import { createWindow, createBackgroundWindow, win } from "@/api/window";
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -50,12 +30,4 @@ if (!gotTheLock) {
     await createBackgroundWindow();
     // await createNotificationWindow()
   });
-}
-
-function sendWindowMessage(targetWindow, message, payload) {
-  if (typeof targetWindow === "undefined") {
-    console.log("Target window does not exist");
-    return;
-  }
-  targetWindow.webContents.send(message, payload);
 }
