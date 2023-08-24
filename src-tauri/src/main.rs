@@ -1,13 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod hidden_window;
+
 use std::sync::OnceLock;
 use base64::Engine;
-use reqwest::header::HeaderValue;
-use reqwest::{get, Method, Url};
 use tauri::{generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, WindowEvent, command};
 use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
-
+use hidden_window::init_preview;
 fn main() {
     Builder::default().setup(|app| {
         let handle = app.handle();
@@ -41,7 +41,7 @@ fn main() {
         app.windows().values().into_iter().for_each(|window| window.open_devtools());
         Ok(())
     })
-        .invoke_handler(tauri::generate_handler![request_refer_image])
+        .invoke_handler(tauri::generate_handler![request_refer_image,init_preview])
         .run(generate_context!()).expect("error while running tauri application");
 }
 

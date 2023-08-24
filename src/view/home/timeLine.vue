@@ -139,13 +139,14 @@
 import { getCurrentInstance, nextTick, onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
-import newestTimeline from "../../api/operations/newestTimeline";
+import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
 import searchWordEvent from "../../api/operations/searchWordEvent";
 import { getCookieSearchList } from "../../api/resourceFetcher/searchCookie";
 import operate from "../../api/operations/operate";
 import { getImage } from "../../utils/imageUtil";
 import { getCookieList } from "../../api/resourceFetcher/cookieList";
 import Common from "../../components/Card/Common.vue";
+import { previewUrl } from "../../utils/previewUtil";
 
 const router = useRouter();
 
@@ -252,11 +253,12 @@ function searchTimeline() {
 const card = reactive({
   isCopyImage: false, // 当前是否在截图
   copyImageId: null,
-  openUrlInThis(data) {
-    router.push({
-      path: "/home/Browser",
-      query: data,
-    });
+  openUrlInThis(data: { url: string; icon: string; source: string }) {
+    previewUrl(data.url, data.source);
+    // router.push({
+    //   path: "/home/Browser",
+    //   query: data,
+    // });
   },
   copyImage(id) {
     card.copyImageId = id;

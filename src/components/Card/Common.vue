@@ -65,6 +65,7 @@ const common = reactive({
       source: props.info.datasource,
       icon: props.info.icon,
     };
+    console.log(data);
     emits("openUrl", data);
   },
 });

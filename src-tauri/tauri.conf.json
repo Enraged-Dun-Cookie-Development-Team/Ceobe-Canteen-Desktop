@@ -4,7 +4,8 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:8080",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "withGlobalTauri": true
   },
   "package": {
     "productName": "ceobe-canteen-electron",
@@ -85,7 +86,7 @@
       },
       {
         "label": "background",
-        "visible": true,
+        "visible": false,
         "title": "background",
         "url": "/#/background"
       },
