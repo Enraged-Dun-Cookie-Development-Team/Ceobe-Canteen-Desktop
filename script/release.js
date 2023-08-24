@@ -12,6 +12,7 @@ fs.promises.readdir(ProjectPath.DIST_DIR, { withFileTypes: true })
         let exeFile = dirent
             .filter(dirent => dirent.isFile() && dirent.name.endsWith(ProjectPath.EXTENSION))[0].name;
         console.log(`find executable file ${exeFile}`)
+        if (!exeFile) return;
         // 复制可执行文件到 release 目录
         const exeReleaseOutputPath = path.resolve(ProjectPath.RELEASE_PATH, ProjectPath.EXE_RELEASE_NAME)
         fs.copyFileSync(
@@ -26,8 +27,11 @@ fs.promises.readdir(ProjectPath.DIST_DIR, { withFileTypes: true })
 // 查找免安装文件
 fs.promises.readdir(ProjectPath.DIST_DIR, { withFileTypes: true })
     .then(dirent => {
+        if (!ProjectPath.PORTABLE) return;
+
         let portableDir = dirent.filter(dirent => dirent.isDirectory() && dirent.name.endsWith("-unpacked"))[0].name;
         console.log(`find portable file ${portableDir}`)
+        if (!portableDir) return;
         // 打包免安装文件到 release 目录
         const portablePackOutputPath = path.resolve(ProjectPath.RELEASE_PATH, ProjectPath.PORTABLE_RELEASE_NAME)
         const archive = archiver('zip', {

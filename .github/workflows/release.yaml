@@ -97,12 +97,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
-      - run: ls -al ./dist_electron
       - name: pack release file to /release
         run: |
           npm add archiver
           npm run pack:release
-          ls -al ./release
       
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
