@@ -109,7 +109,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} ./release/* 
+          release_dir="./release/"
+          for file in $release_dir/*; do
+            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "$file"
+          done
 
       # upload build test reports
       - name: Publish reports
