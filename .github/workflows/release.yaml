@@ -104,12 +104,14 @@ jobs:
           npm run pack:release
           ls -al ./release
       
+      - name: get version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+  
       - name: upload to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "TAG_NAME=app-v$(node -p "require('./package.json').version")" >> $GITHUB_ENV
-          gh release upload --clobber ${{ env.TAG_NAME }} ./release/* 
+          gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} ./release/* 
 
       # upload build test reports
       - name: Publish reports
