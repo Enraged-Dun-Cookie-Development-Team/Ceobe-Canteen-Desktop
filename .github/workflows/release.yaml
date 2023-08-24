@@ -110,8 +110,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           release_dir="./release/"
-          ls $release_dir | while read file; do
-            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "$release_dir$file"
+          for file in ($release_dir/*); do
+            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} "$file"
           done
 
       # upload build test reports
