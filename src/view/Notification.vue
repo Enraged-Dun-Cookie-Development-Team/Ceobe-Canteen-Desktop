@@ -1,14 +1,22 @@
 <template>
   <div class="notification">
     <v-card>
-      <v-img height="190" :src="info.imgUrl" cover class="text-white" @click="closeThis">
+      <v-img
+        height="190"
+        :src="info.imgUrl"
+        cover
+        class="text-white"
+        @click="closeThis"
+      >
         <v-toolbar color="rgba(0, 0, 0, 0)" theme="dark">
           <template #append>
             <v-btn size="small" icon="fas fa-circle-xmark"></v-btn>
           </template>
         </v-toolbar>
       </v-img>
-      <v-card-title class="pb-1 pt-1"> 小刻在{{ info.dataSource }}蹲到饼了！ </v-card-title>
+      <v-card-title class="pb-1 pt-1">
+        小刻在{{ info.dataSource }}蹲到饼了！
+      </v-card-title>
       <v-card-subtitle>{{ info.cookieTime }}</v-card-subtitle>
       <v-card-text class="pt-1 pb-0 text">{{ info.cookieText }}</v-card-text>
       <v-card-actions class="pt-0">
@@ -21,15 +29,17 @@
   </div>
 </template>
 
-<script setup name="index">
-import { reactive } from 'vue';
-import {getImage} from "@/utils/imageUtil.ts";
+<script setup name="index" lang="ts">
+import { reactive } from "vue";
+import { getImage } from "../utils/imageUtil";
+import ceobeRequest from "../api/operations/ceobeRequest";
+import notification from "../api/operations/notification";
 
 const info = reactive({
-  imgUrl: getImage('/assets/image/logo/icon.png'),
-  dataSource: '',
-  cookieTime: '',
-  cookieText: '',
+  imgUrl: getImage("/assets/image/logo/icon.png"),
+  dataSource: "",
+  cookieTime: "",
+  cookieText: "",
 });
 
 const updatePageData = (newData) => {
@@ -39,24 +49,26 @@ const updatePageData = (newData) => {
 
   let images = newData.default_cookie.images;
   if (images) {
-    if (newData.datasource.includes('微博')) {
-      window.ceobeRequest.getHasRefererImageBase64(images[0].origin_url).then((res) => {
-        info.imgUrl = 'data:image/jpeg;base64,' + res;
-      });
+    if (newData.datasource.includes("微博")) {
+      ceobeRequest
+        .getHasRefererImageBase64(images[0].origin_url)
+        .then((res) => {
+          info.imgUrl = "data:image/jpeg;base64," + res;
+        });
     } else {
       info.imgUrl = images[0].origin_url;
     }
   } else {
-    console.log('no image');
+    console.log("no image");
   }
 };
 
-window.notification.getInfo((_, data) => {
+notification.getInfo((_, data) => {
   updatePageData(data);
 });
 
 function closeThis() {
-  window.notification.closeWindow();
+  notification.closeWindow();
 }
 </script>
 

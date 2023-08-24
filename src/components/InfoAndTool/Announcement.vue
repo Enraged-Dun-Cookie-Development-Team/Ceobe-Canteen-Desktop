@@ -19,18 +19,21 @@
   </div>
 </template>
 
-<script setup name="announcement">
-import { onMounted, reactive } from 'vue';
-import { changeToCCT } from '@/utils/timeUtil.ts';
+<script setup name="announcement" lang="ts">
+import { onMounted, reactive } from "vue";
+import ceobeRequest from "../../api/operations/ceobeRequest";
+import { changeToCCT } from "../../utils/timeUtil";
 
 const announcementInfo = reactive({
   data: [],
   index: 0,
   getData() {
-    window.ceobeRequest.getAnnouncementInfo().then((res) => {
+    ceobeRequest.getAnnouncementInfo().then((res) => {
       if (res.status == 200) {
         announcementInfo.data = res.data.data.filter(
-          (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
+          (x) =>
+            new Date(x.start_time) <= changeToCCT(new Date()) &&
+            new Date(x.over_time) >= changeToCCT(new Date()),
         );
       }
     });

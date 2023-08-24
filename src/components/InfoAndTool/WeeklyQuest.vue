@@ -7,20 +7,33 @@
             <div v-for="(item, index) in quest.countdown" :key="index">
               <div>
                 距离
-                <v-tooltip v-if="item.remark" location="bottom" :text="item.remark">
+                <v-tooltip
+                  v-if="item.remark"
+                  location="bottom"
+                  :text="item.remark"
+                >
                   <template #activator="{ props }">
-                    <span v-bind="props" class="online-orange cursor-pointer">{{ item.text }}</span>
+                    <span v-bind="props" class="online-orange cursor-pointer">{{
+                      item.text
+                    }}</span>
                   </template>
                 </v-tooltip>
                 <span v-else class="online-orange">{{ item.text }}</span>
-                <span title="国服 UTC-8">{{ ' ' + quest.calcActivityDiff(item.time) }}</span>
+                <span title="国服 UTC-8">{{
+                  " " + quest.calcActivityDiff(item.time)
+                }}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="d-flex flex-row justify-space-around mt-2">
           <span v-for="item in quest.resources" :key="item.name">
-            <v-tooltip location="bottom" :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(item.day)}`">
+            <v-tooltip
+              location="bottom"
+              :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(
+                item.day,
+              )}`"
+            >
               <template #activator="{ props }">
                 <v-img
                   class="cursor-pointer"
@@ -39,11 +52,12 @@
   </div>
 </template>
 
-<script setup name="weeklyQuest">
-import { reactive, onMounted } from 'vue';
-import { dayInfo } from '@/constant.ts';
-import { getImage } from '@/utils/imageUtil.ts';
-import { changeToCCT, numberToWeek, calcDiff } from '@/utils/timeUtil.ts';
+<script setup name="weeklyQuest" lang="ts">
+import { reactive, onMounted } from "vue";
+import { dayInfo } from "../../constant";
+import ceobeRequest from "../../api/operations/ceobeRequest";
+import { calcDiff, changeToCCT, numberToWeek } from "../../utils/timeUtil";
+import { getImage } from "../../utils/imageUtil";
 
 const quest = reactive({
   dayInfo: dayInfo,
@@ -52,7 +66,7 @@ const quest = reactive({
   resources: [],
   countdown: [],
   getData() {
-    window.ceobeRequest.getResourceInfo().then((res) => {
+    ceobeRequest.getResourceInfo().then((res) => {
       quest.resourceInfo = res.data.data;
       quest.resourcesNotToday();
       quest.calcCountdown();
@@ -61,7 +75,9 @@ const quest = reactive({
   calcCountdown() {
     // 倒计时
     quest.countdown = quest.resourceInfo.countdown.filter(
-      (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
+      (x) =>
+        new Date(x.start_time) <= changeToCCT(new Date()) &&
+        new Date(x.over_time) >= changeToCCT(new Date()),
     );
   },
   // 今天有没有该资源可以刷
@@ -99,15 +115,15 @@ const quest = reactive({
     let startDate = changeToCCT(new Date());
     const diff = calcDiff(endDate, startDate);
     if (diff) {
-      return '剩' + diff;
+      return "剩" + diff;
     } else {
-      return '已结束';
+      return "已结束";
     }
   },
   // 计算资源关卡开启时间
   calcResourceOpenDay(days) {
     if (quest.openResources) {
-      return '活动期间，“资源收集”限时全天开放';
+      return "活动期间，“资源收集”限时全天开放";
     } else {
       return days.map((x) => numberToWeek(x)).join();
     }

@@ -2,7 +2,12 @@
   <div class="tool">
     <v-card class="mt-2 position-relative">
       <v-card-text class="d-flex flex-wrap justify-start">
-        <v-btn v-for="(item, index) in props.list" :key="index" class="mr-2 mb-2" @click.stop="openUrl(item.url)">
+        <v-btn
+          v-for="(item, index) in props.list"
+          :key="index"
+          class="mr-2 mb-2"
+          @click.stop="openUrl(item.url)"
+        >
           <template #prepend>
             <v-img width="20" class="btn-img" :src="getImage(item.img)"></v-img>
           </template>
@@ -14,13 +19,14 @@
   </div>
 </template>
 
-<script setup name="tool">
-import { getImage } from '@/utils/imageUtil.ts';
+<script setup name="tool" lang="ts">
+import { getImage } from "../../utils/imageUtil";
+import operate from "../../api/operations/operate";
 
 const props = defineProps({
   title: {
     type: String,
-    default: () => '',
+    default: () => "",
   },
   list: {
     type: Array,
@@ -29,7 +35,7 @@ const props = defineProps({
 });
 
 function openUrl(url) {
-  window.operate.openUrlInBrowser(url);
+  operate.openUrlInBrowser(url);
 }
 </script>
 

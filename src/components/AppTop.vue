@@ -1,14 +1,26 @@
 <template>
-  <div class="app-top d-flex justify-space-between align-center w-100 pa-2">
+  <div
+    data-tauri-drag-region
+    class="app-top d-flex justify-space-between align-center w-100 pa-2"
+  >
     <div class="h-100 d-flex align-center">
-      <v-img src="../../assets/image/logo/icon.png" width="40"></v-img>
+      <v-img src="icon.png" width="40"></v-img>
       <span class="title ml-2 mt-1">小刻食堂</span>
     </div>
 
     <div class="h-100 no-drag">
-      <v-menu v-model="search.show" :close-on-content-click="false" location="bottom" transition="slide-y-transition">
+      <v-menu
+        v-model="search.show"
+        :close-on-content-click="false"
+        location="bottom"
+        transition="slide-y-transition"
+      >
         <template #activator="{ props }">
-          <v-btn variant="text" icon="fas fa-magnifying-glass" v-bind="props"></v-btn>
+          <v-btn
+            variant="text"
+            icon="fas fa-magnifying-glass"
+            v-bind="props"
+          ></v-btn>
         </template>
         <v-card class="mx-auto" color="grey-lighten-3" min-width="400">
           <v-text-field
@@ -55,114 +67,128 @@
 
     <div class="h-100 no-drag">
       <v-btn variant="text" icon="fas fa-gear"></v-btn>
-      <v-btn variant="text" icon="fas fa-minus" @click="handleWindow.minus"></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-minus"
+        @click="handleWindow.minus"
+      ></v-btn>
       <v-btn
         variant="text"
         :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
         @click="handleWindow.maximize"
       ></v-btn>
-      <v-btn variant="text" icon="fas fa-circle-xmark" color="error" @click="handleWindow.close"></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-circle-xmark"
+        color="error"
+        @click="handleWindow.close"
+      ></v-btn>
     </div>
   </div>
 </template>
 
-<script setup name="index">
+<script setup name="index" lang="ts">
 import { reactive, ref } from "vue";
-import {getDatasourceComb} from "@/api/list.ts";
-import {getAllDatasources} from "@/api/list.ts";
-
+import storage from "../api/operations/localStorage";
+import { getConfigDatasourceList } from "../api/resourceFetcher/datasourceList";
+import { getDatasourceComb } from "../api/resourceFetcher/datasourceCombine";
+import datasourceConfigOperate from "../api/operations/datasourceConfig";
+import searchWordEvent from "../api/operations/searchWordEvent";
+import operate from "../api/operations/operate";
 const winMax = ref(false);
 const menuShow = reactive({
-    notOpened: true, // 没有打开过
-    show: false,
-    datasourceList: [],
-    changeSelectSource(data) {
-        data.check = !data.check;
-    },
-    async changeDatasourceOpen(value) {
-        if (value) {
-            if (menuShow.notOpened) {
-                menuShow.notOpened = false;
+  notOpened: true, // 没有打开过
+  show: false,
+  datasourceList: [],
+  changeSelectSource(data) {
+    data.check = !data.check;
+  },
+  async changeDatasourceOpen(value) {
+    if (value) {
+      if (menuShow.notOpened) {
+        menuShow.notOpened = false;
+      }
+      let datasourceConfig = JSON.parse(
+        <string>storage.getItem("datasource-config"),
+      );
+      // 打开列表
+      getConfigDatasourceList().then((data) => {
+        if (data.status == 200) {
+          menuShow.datasourceList = data.data.data;
+          if (datasourceConfig) {
+            let datasourceConfigUuidMap = {};
+            for (let datasource of datasourceConfig) {
+              datasourceConfigUuidMap[datasource] = true;
             }
-            let datasourceConfig = JSON.parse(window.localStorage.getItem("datasource-config"));
-            // 打开列表
-            getAllDatasources().then((data) => {
-                if (data.status == 200) {
-                    menuShow.datasourceList = data.data.data;
-                    if (datasourceConfig) {
-                        let datasourceConfigUuidMap = {};
-                        for (let datasource of datasourceConfig) {
-                            datasourceConfigUuidMap[datasource] = true;
-                        }
-                        menuShow.datasourceList.forEach((element) => {
-                            if (datasourceConfigUuidMap[element.unique_id]) {
-                                element.check = true;
-                            }
-                        });
-                    } else {
-                        menuShow.datasourceList.forEach((element) => {
-                            element.check = true;
-                        });
-                    }
-                }
+            menuShow.datasourceList.forEach((element) => {
+              if (datasourceConfigUuidMap[element.unique_id]) {
+                element.check = true;
+              }
             });
-        } else {
-            if (menuShow.notOpened) {
-                return;
-            }
-            // 关闭列表
-            let datasourceConfig = menuShow.datasourceList
-                .filter((element) => {
-                    return element.check;
-                })
-                .map((element) => {
-                    return element.unique_id;
-                });
-            let comb_resp = await getDatasourceComb(datasourceConfig);
-            let comb_id = comb_resp.data.data.datasource_comb_id;
-            let datasourceComb = window.localStorage.getItem("datasource-comb");
-            // 如果组合id和之前一样，不进行刷新
-            if (datasourceComb == comb_id) {
-                return;
-            }
-            window.localStorage.setItem("datasource-config", JSON.stringify(datasourceConfig));
-            window.localStorage.setItem("datasource-comb", comb_id);
-            window.datasourceConfig.updateDatasourceComb();
+          } else {
+            menuShow.datasourceList.forEach((element) => {
+              element.check = true;
+            });
+          }
         }
-    },
+      });
+    } else {
+      if (menuShow.notOpened) {
+        return;
+      }
+      // 关闭列表
+      let datasourceConfig = menuShow.datasourceList
+        .filter((element) => {
+          return element.check;
+        })
+        .map((element) => {
+          return element.unique_id;
+        });
+      let comb_resp = await getDatasourceComb(datasourceConfig);
+      let comb_id = comb_resp.data.data.datasource_comb_id;
+      let datasourceComb = storage.getItem("datasource-comb");
+      // 如果组合id和之前一样，不进行刷新
+      if (datasourceComb == comb_id) {
+        return;
+      }
+      storage.setItem("datasource-config", JSON.stringify(datasourceConfig));
+      storage.setItem("datasource-comb", comb_id);
+      datasourceConfigOperate.updateDatasourceComb();
+    }
+  },
 });
 const search = reactive({
-    show: false,
-    wordShow: "",
-    searchWord: null,
-    searching() {
+  show: false,
+  wordShow: "",
+  searchWord: null,
+  searching() {
     // 将搜索词发送给timeline进行处理
-        window.searchWordEvent.sendSearchWord(search.searchWord);
-        search.wordShow = search.searchWord;
-    },
-    searchChange() {
+    searchWordEvent.sendSearchWord(search.searchWord);
+    search.wordShow = search.searchWord;
+  },
+  searchChange() {
     // 如果为空 同步到timeline
-        if (search.searchWord === "" || !search.searchWord) {
-            window.searchWordEvent.sendSearchWord(search.searchWord);
-            search.wordShow = "";
-        }
-    },
+    if (search.searchWord === "" || !search.searchWord) {
+      searchWordEvent.sendSearchWord(search.searchWord);
+      search.wordShow = "";
+    }
+  },
 });
 
 const handleWindow = reactive({
-    // 最小化
-    minus() {
-        window.operate.minus();
-    },
-    // 最大化 重置大小
-    maximize() {
-        winMax.value = !winMax.value;
-        window.operate.maximize();
-    },
-    // 关闭
-    close() {
-        window.operate.close();
-    },
+  // 最小化
+  minus() {
+    operate.minus();
+  },
+  // 最大化 重置大小
+  maximize() {
+    winMax.value = !winMax.value;
+    operate.maximize();
+  },
+  // 关闭
+  close() {
+    operate.close();
+  },
 });
 </script>
 
@@ -179,7 +205,7 @@ const handleWindow = reactive({
 
   .title {
     font-size: 26px;
-    font-family: 'DOUYUfont', sans-serif;
+    font-family: "DOUYUfont", sans-serif;
     color: #707070;
   }
 }

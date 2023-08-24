@@ -12,7 +12,9 @@
       <v-card-title class="text-shadow-none white-space-normal">
         {{ info.componentData.title }}
       </v-card-title>
-      <v-card-subtitle>最新话：{{ info.componentData.episodes[0].title }}</v-card-subtitle>
+      <v-card-subtitle
+        >最新话：{{ info.componentData.episodes[0].title }}</v-card-subtitle
+      >
       <v-card-actions>
         <slot :info="info"></slot>
       </v-card-actions>
@@ -40,48 +42,51 @@
 
 <script setup>
 import { onMounted, reactive } from "vue";
+import ceobeRequest from "@/api/ceobeRequest.ts";
 
 const props = defineProps({
-    info: {
-        type: Object,
-        default: () => {},
-    },
+  info: {
+    type: Object,
+    default: () => {},
+  },
 });
 const emits = defineEmits({
-    openUrl: null,
+  openUrl: null,
 });
 
 const terra = reactive({
-    imgUrl: [],
-    show: false,
+  imgUrl: [],
+  show: false,
 
-    getImg() {
-        if (props.info.dataSource.includes("微博")) {
-            window.ceobeRequest.getHasRefererImageBase64(props.info.coverImage).then((res) => {
-                terra.imgUrl = "data:image/jpeg;base64," + res;
-            });
-        } else {
-            terra.imgUrl = props.info.coverImage;
-        }
-    },
-    openImage() {},
-    openUrl(cid) {
+  getImg() {
+    if (props.info.dataSource.includes("微博")) {
+      ceobeRequest
+        .getHasRefererImageBase64(props.info.coverImage)
+        .then((res) => {
+          Terra.imgUrl = "data:image/jpeg;base64," + res;
+        });
+    } else {
+      Terra.imgUrl = props.info.coverImage;
+    }
+  },
+  openImage() {},
+  openUrl(cid) {
     // 统一格式 只需要标题和url和icon
-        let data = {
-            url: `https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
-            source: props.info.dataSource,
-            icon: props.info.parent.img,
-            width: "428px",
-            useragent:
+    let data = {
+      url: `https://terra-historicus.hypergryph.com/comic/${props.info.componentData.cid}/episode/${cid}`,
+      source: props.info.dataSource,
+      icon: props.info.parent.img,
+      width: "428px",
+      useragent:
         "Mozilla/5.0 (iPhone; CPU iPhone OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1",
-        };
-        emits("openUrl", data);
-    },
+    };
+    emits("openUrl", data);
+  },
 });
 
 onMounted(() => {
-    if (props.info.coverImage) {
-        terra.getImg(props.info.coverImage);
-    }
+  if (props.info.coverImage) {
+    Terra.getImg(props.info.coverImage);
+  }
 });
 </script>

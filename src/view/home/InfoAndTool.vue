@@ -12,18 +12,20 @@
     <!--推荐视频-->
     <video-list></video-list>
     <div class="d-flex justify-center ma-2">
-      Powered By &nbsp;<a href="https://www.ceobecanteen.top/#/"> CeobeCanteen</a>
+      Powered By &nbsp;<a href="https://www.ceobecanteen.top/#/">
+        CeobeCanteen</a
+      >
     </div>
   </div>
 </template>
 
-<script setup name="infoAndTool">
-import { reactive } from 'vue';
-import { sourceInfo, toolInfo } from '@/constant.ts';
-import VideoList from "@/components/InfoAndTool/VideoList.vue";
-import ToolOrSource from "@/components/InfoAndTool/ToolOrSource.vue";
-import Announcement from "@/components/InfoAndTool/Announcement.vue";
-import WeeklyQuest from "@/components/InfoAndTool/WeeklyQuest.vue";
+<script setup name="infoAndTool" lang="ts">
+import { reactive } from "vue";
+import { sourceInfo, toolInfo } from "../../constant";
+import ToolOrSource from "../../components/InfoAndTool/ToolOrSource.vue";
+import VideoList from "../../components/InfoAndTool/VideoList.vue";
+import Announcement from "../../components/InfoAndTool/Announcement.vue";
+import WeeklyQuest from "../../components/InfoAndTool/WeeklyQuest.vue";
 
 const source = reactive({
   list: sourceInfo,

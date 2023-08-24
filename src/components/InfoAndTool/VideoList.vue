@@ -8,7 +8,12 @@
       @click="openUrl(item.video_link)"
     >
       <!--      {{ item.video_link }}-->
-      <v-img class="align-end text-white" width="100%" :src="item.cover_img.split('@')[0]" cover>
+      <v-img
+        class="align-end text-white"
+        width="100%"
+        :src="item.cover_img.split('@')[0]"
+        cover
+      >
         <v-card-title class="text-right">{{ item.author }}</v-card-title>
       </v-img>
 
@@ -24,10 +29,11 @@
   </div>
 </template>
 
-<script setup name="video">
-import { onMounted, reactive } from 'vue';
-import { getVideoList } from '@/api/list.ts';
-import { changeToCCT } from '@/utils/timeUtil.ts';
+<script setup name="video" lang="ts">
+import { onMounted, reactive } from "vue";
+import { getVideoList } from "../../api/resourceFetcher/videoList";
+import { changeToCCT } from "../../utils/timeUtil";
+import operate from "../../api/operations/operate";
 
 const videoInfo = reactive({
   list: [],
@@ -35,13 +41,15 @@ const videoInfo = reactive({
     getVideoList().then((res) => {
       // 快捷连接
       videoInfo.list = res.data.data.filter(
-        (x) => new Date(x.start_time) <= changeToCCT(new Date()) && new Date(x.over_time) >= changeToCCT(new Date())
+        (x) =>
+          new Date(x.start_time) <= changeToCCT(new Date()) &&
+          new Date(x.over_time) >= changeToCCT(new Date()),
       );
     });
   },
 });
 function openUrl(url) {
-  window.operate.openUrlInBrowser(url);
+  operate.openUrlInBrowser(url);
 }
 
 onMounted(() => {

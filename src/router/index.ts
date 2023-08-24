@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from "vue-router";
 import Navbar from "@/components/Navbar.vue";
 import Home from "@/view/home/Home.vue";
 import Background from "@/view/Background.vue";
@@ -8,35 +8,35 @@ import Browser from "@/components/Browser.vue";
 
 const routes = [
   {
-    path: '',
+    path: "",
     component: Navbar,
-    redirect: '/home/tool',
+    redirect: "/home/tool",
     children: [
       {
-        path: '/home',
+        path: "/home",
         component: Home,
-        name: 'Home',
+        name: "Home",
         children: [
           {
-            path: 'tool',
+            path: "tool",
             component: InfoAndTool,
-            name: 'Tool',
+            name: "Tool",
           },
           {
-            path: 'browser',
+            path: "browser",
             component: Browser,
-            name: 'Browser',
+            name: "Browser",
           },
         ],
       },
     ],
   },
   {
-    path: '/notification',
+    path: "/notification",
     component: Notification,
   },
   {
-    path: '/background',
+    path: "/background",
     component: Background,
   },
 ];
