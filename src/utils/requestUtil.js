@@ -1,4 +1,7 @@
 import axios from 'axios';
+import {axiosETAGCache } from 'axios-etag-cache';
+
+const service = axiosETAGCache(axios);
 
 const BASE_URL = {
   SERVER_URL: 'https://server.ceobecanteen.top/api/v1',
@@ -48,26 +51,6 @@ const showStatus = status => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
-const service = axios.create({
-  // 联调
-  headers: {
-    get: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    post: {
-      'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
-    }
-  },
-  // 是否跨站点访问控制请求
-  withCredentials: true,
-  timeout: 30000,
-  validateStatus() {
-    // 使用async-await，处理reject情况较为繁琐，所以全部返回resolve，在业务代码中处理异常
-    return true;
-  }
-});
-
 // 请求拦截器
 service.interceptors.request.use(
   config => {
@@ -82,7 +65,6 @@ service.interceptors.request.use(
         config.baseURL = BASE_URL.CDN_SERVER_URL;
         break;
     }
-    console.log(config)
     return config;
   },
   err => {
