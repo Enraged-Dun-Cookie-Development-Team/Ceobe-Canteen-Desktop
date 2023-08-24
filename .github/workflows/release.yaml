@@ -140,9 +140,9 @@ jobs:
                 data: await fs.readFileSync(filename)
             })
 
-            // 免安装版 release
-            //找到 *-unpacked 文件夹
-            if (hasPortable) {
+            async function doPortableRelease() {
+              // 免安装版 release
+              //找到 *-unpacked 文件夹
               const portable = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
               .filter(dirent => dirent.isDirectory() && dirent.name.endsWith("-unpacked"))[0].name;
 
@@ -165,14 +165,24 @@ jobs:
               archive.directory(`./dist_electron/${portable}`, false);
               archive.finalize();
 
+              const portableData = fs.readFileSync(portablePath)
+              cosole.log(`portableData: ${portableData.length} B`)
+
               console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
               await github.rest.repos.uploadReleaseAsset({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 release_id: process.env.release_id ,
                 name: portableName,
-                data: fs.readFileSync(portablePath)
+                data: portableData,
               })
+            }
+
+            if (hasPortable) {
+              doPortableRelease().catch(err => {
+                console.error(err);
+                process.exit(1);
+              });
             }
   
       # upload build test reports
