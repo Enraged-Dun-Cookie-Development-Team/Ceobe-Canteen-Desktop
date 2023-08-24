@@ -17,7 +17,8 @@
     "lint:eslint": "eslint --ext .js,.vue src",
     "fix:eslint": "eslint --ext .js,.vue src --fix",
     "lint:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less}",
-    "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix"
+    "fix:stylelint": "stylelint src/**/*.{vue,scss,css,sass,less} --fix",
+    "pack:release": "node script/release.js"
   },
   "main": "background.js",
   "resolutions": {

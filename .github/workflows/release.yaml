@@ -97,94 +97,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build
 
-      - run: npm install archiver && ls -al ./dist_electron
-      - name: upload release assert
-        uses: actions/github-script@v6
+      - run: ls -al ./dist_electron
+      - name: pack release file to /release
+        run: |
+          npm run pack:release
+          ls -al ./release
+      
+      - name: upload to release
         env:
-          release_id: ${{ needs.create-release.outputs.release_id }}
-        with:
-          script: |
-            const fs = require('fs');
-            const archiver = require('archiver');
-            let extension, hasPortable;
-            if (process.platform === "win32"){
-              extension = ".exe"
-              hasPortable = true
-            }else if (process.platform === "darwin"){
-              extension = ".dmg"
-              hasPortable = false
-            }else{
-              extension = ".deb"
-              hasPortable = true
-            }
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload app-v${{ env.PACKAGE_VERSION }} release/* --append
 
-            console.log(`find executable file ${extension}`)
-
-            // 可执行文件 release
-            const file = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
-            .filter(dirent => dirent.isFile() && dirent.name.endsWith(extension))[0].name;
-
-            console.log(`find executable file ${file}`)
-
-            const version = require('./package.json').version;
-            const name = `CeobeCanteenDesktop-${version}${extension}`
-            const filename = `./dist_electron/${file}`
-
-            console.log(`uploading ${process.env.release_id} | ${name} | ${filename}`)
-
-            await github.rest.repos.uploadReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: process.env.release_id ,
-                name,
-                data: await fs.readFileSync(filename)
-            })
-
-            async function doPortableRelease() {
-              // 免安装版 release
-              //找到 *-unpacked 文件夹
-              const portable = (await fs.promises.readdir("./dist_electron",{withFileTypes:true}))
-              .filter(dirent => dirent.isDirectory() && dirent.name.endsWith("-unpacked"))[0].name;
-
-              console.log(`find portable file ${portable}`)
-
-              const archive = archiver('zip', {
-                zlib: { level: 9 } // Sets the compression level.
-              });
-
-              const portableName = `CeobeCanteenDesktop-${version}-portable-${process.platform}.zip`
-              const portablePath = `./dist_electron/${portableName}`
-
-              archive.on("error", (err) => {
-                throw err;
-              });
-              archive.on("close", () => {
-                console.log("archive ok")
-              });
-              archive.pipe(fs.createWriteStream(portablePath));
-              archive.directory(`./dist_electron/${portable}`, false);
-              archive.finalize();
-
-              const portableData = fs.readFileSync(portablePath)
-              cosole.log(`portableData: ${portableData.length} B`)
-
-              console.log(`uploading ${process.env.release_id} | ${portableName} | ${portablePath}`)
-              await github.rest.repos.uploadReleaseAsset({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                release_id: process.env.release_id ,
-                name: portableName,
-                data: portableData,
-              })
-            }
-
-            if (hasPortable) {
-              doPortableRelease().catch(err => {
-                console.error(err);
-                process.exit(1);
-              });
-            }
-  
       # upload build test reports
       - name: Publish reports
         if: always()
