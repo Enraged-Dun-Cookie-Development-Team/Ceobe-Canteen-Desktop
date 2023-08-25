@@ -10,6 +10,8 @@ import {
 } from "../api/resourceFetcher/datasourceList";
 import { getCookieList } from "../api/resourceFetcher/cookieList";
 
+class BackgroundRunner {}
+
 let old_cookie_id, old_update_cookie_id;
 let datasource_comb_id;
 let old_cookie_id_map = {};
