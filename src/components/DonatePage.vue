@@ -61,13 +61,18 @@
 </template>
 
 <script setup name="donate" lang="ts">
-import { getImage } from "@/utils/imageUtil";
 import { ref } from "vue";
 import operate from "../api/operations/operate";
+import { getImage } from "../utils/imageUtil";
 const emits = defineEmits({
   close: null,
 });
-const donate = ref({
+const donate = ref<{
+  show: boolean;
+  list: { img: string; text: string; link?: string }[];
+  openUrl(url: string);
+  close();
+}>({
   show: false,
   list: [
     {
