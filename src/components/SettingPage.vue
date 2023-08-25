@@ -29,14 +29,7 @@
         <div class="d-flex justify-space-between align-center w-100">
           <div>
             <v-card-title>版本</v-card-title>
-            <v-card-subtitle
-              >当前版本
-              {{
-                (async () => {
-                  await app.getVersion();
-                })()
-              }}</v-card-subtitle
-            >
+            <v-card-subtitle>当前版本 {{ version }}</v-card-subtitle>
           </div>
           <div>
             <v-btn color="#ffba4b" @click="setting.checkVersion"
@@ -56,16 +49,17 @@
 </template>
 
 <script setup name="setting" lang="ts">
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { VERSION } from "../constant";
 import updater from "../api/operations/updater";
 import operate from "../api/operations/operate";
 import { getVersion } from "../api/resourceFetcher/version";
 import { app } from "@tauri-apps/api";
+import { appWindow } from "@tauri-apps/api/window";
 const emits = defineEmits({
   close: null,
 });
-
+const version = ref("0.0.0");
 const setting = reactive({
   isBoot: false,
   changeBoot() {
@@ -115,8 +109,9 @@ const setting = reactive({
   },
 });
 
-onMounted(() => {
+onMounted(async () => {
   setting.initBoot();
+  version.value = await app.getVersion();
 });
 </script>
 
