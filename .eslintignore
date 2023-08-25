@@ -1,4 +1,3 @@
 build/*.js
-public/assets
 public
 dist

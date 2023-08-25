@@ -3,7 +3,6 @@ import vue from "@vitejs/plugin-vue";
 // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
 import vuetify from "vite-plugin-vuetify";
 import eslintPlugin from "vite-plugin-eslint";
-import path from "path";
 import { fileURLToPath, URL } from "node:url";
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
@@ -12,9 +11,9 @@ export default defineConfig(async () => {
     plugins: [
       vue(),
       vuetify({ autoImport: true }),
-      //   eslintPlugin({
-      //   include:['src/**/*.ts','src/**/*.vue']
-      // })
+      // eslintPlugin({
+      // include:['src/**/*.ts','src/**/*.vue']
+      // }),
     ],
 
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`

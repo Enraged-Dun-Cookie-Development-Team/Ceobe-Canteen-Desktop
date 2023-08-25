@@ -34,7 +34,7 @@
 <script lang="ts" name="index" setup>
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref, watch } from "vue";
-import { getImage } from "@/utils/imageUtil.ts";
+import { getImage } from "../utils/imageUtil";
 
 const router = useRouter();
 const route = useRoute();

@@ -3,7 +3,7 @@ use interprocess::local_socket::{LocalSocketListener, LocalSocketStream};
 use std::io;
 use std::io::{Read, Write};
 
-use tauri::{Window};
+use tauri::Window;
 
 const LOCAL_SOCKET_NAME: &str = "SINGLE_INSTANCE";
 
@@ -20,7 +20,7 @@ pub fn run_sev(window: Window) {
     }
 }
 
-fn show_window(window:&Window)->tauri::Result<()>{
+fn show_window(window: &Window) -> tauri::Result<()> {
     window.show()?;
     if window.is_minimized()? {
         window.unminimize()?
@@ -33,14 +33,12 @@ pub fn try_start() -> io::Result<bool> {
         Ok(mut conn) => {
             Packet {
                 msg: "CREATE_INSTANCE".into(),
-            }.write(&mut conn)?;
+            }
+            .write(&mut conn)?;
             false
         }
-        Err(_) => {
-            true
-        }
-    }
-    )
+        Err(_) => true,
+    })
 }
 
 struct Packet {

@@ -85,6 +85,7 @@
                   <img
                     :src="getImage('/assets/image/logo/icon.png')"
                     width="35"
+                    alt=""
                   />
                   <v-divider class="mx-2" vertical></v-divider>
                   <div>

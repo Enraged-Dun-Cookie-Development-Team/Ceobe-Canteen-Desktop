@@ -1,12 +1,12 @@
+use reqwest::Url;
 use std::thread::sleep;
 use std::time::Duration;
-use reqwest::{ Url};
-use tauri::{AppHandle, command, Manager, WindowBuilder, WindowEvent, WindowUrl};
 use tauri::http::{Request, Response};
+use tauri::{command, AppHandle, Manager, WindowBuilder, WindowEvent, WindowUrl};
 
 const WINDOWS_NAME: &str = "Preview";
 
-const INSERT :&str = r#"<style type="text/css">
+const INSERT: &str = r#"<style type="text/css">
 #bili-header-container,
 #internationalHeader,
 .van-popover,
@@ -43,9 +43,11 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
             .on_web_resource_request(handle_inject_css)
             .build()?;
         let win = w.clone();
-        w.on_window_event(move |ev| if let WindowEvent::CloseRequested { api, .. } = ev {
-            api.prevent_close();
-            win.hide().ok();
+        w.on_window_event(move |ev| {
+            if let WindowEvent::CloseRequested { api, .. } = ev {
+                api.prevent_close();
+                win.hide().ok();
+            }
         });
         // wait window open
         w
@@ -58,11 +60,13 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
     Ok(())
 }
 
-
-
-fn handle_inject_css(_:&Request,resp:&mut Response){
-
-    if let Some(true) | None = resp.headers().get("content-type").and_then(|v|v.to_str().ok()).map(|s|s.starts_with("text/html")) {
+fn handle_inject_css(_: &Request, resp: &mut Response) {
+    if let Some(true) | None = resp
+        .headers()
+        .get("content-type")
+        .and_then(|v| v.to_str().ok())
+        .map(|s| s.starts_with("text/html"))
+    {
         println!("inject");
         let payload = String::from_utf8_lossy(resp.body());
         let patten = regex::Regex::new(r#"<html [^>]+?><head>"#).expect("Bad regex");

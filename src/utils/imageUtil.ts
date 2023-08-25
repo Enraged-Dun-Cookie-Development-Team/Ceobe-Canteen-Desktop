@@ -1,11 +1,5 @@
-export function getImage(url: string, isLocal = true): string {
-  // url =url;
-  // const path = await resolveResource(url);
-  const ur = url;
-  // const ur = new URL(url).href;
-  console.log(import.meta);
-  console.log(ur);
-  return ur;
+export function getImage(url: string): string {
+  return url;
 }
 
 // 根据base64获取图片信息
