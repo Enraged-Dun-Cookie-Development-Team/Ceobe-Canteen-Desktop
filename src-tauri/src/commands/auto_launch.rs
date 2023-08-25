@@ -1,12 +1,8 @@
-use std::{env, io};
-use std::path::PathBuf;
-use auto_launch::{AutoLaunch, AutoLaunchBuilder};
-use once_cell::sync::{Lazy, OnceCell};
+use std::{io};
+use auto_launch::{AutoLaunch};
 use serde::{Serialize, Serializer};
 use tauri::{AppHandle, command};
-
-static APP_NAME: OnceCell<String> = OnceCell::new();
-static CURRENT_EXE: OnceCell<PathBuf> = OnceCell::new();
+use crate::state::{get_app_name, get_current_exe};
 
 #[derive(Debug, thiserror::Error)]
 pub enum AutoLaunchError {
@@ -25,20 +21,9 @@ impl Serialize for AutoLaunchError {
 }
 
 fn fetch_auto_launch(app: AppHandle) -> Result<AutoLaunch, AutoLaunchError> {
-    let current_exe = CURRENT_EXE.get_or_try_init(
-        || env::current_exe()
-    )?;
+    let current_exe = get_current_exe()?;
 
-    let app_name = APP_NAME.get_or_init(
-        {
-            let app = app.clone();
-            move || {
-                let config = &app.config().package;
-                format!("{}-{}",
-                        config.product_name.as_deref().unwrap_or("CeobeCanteen"),
-                        config.version.as_deref().unwrap_or("0.0.0"))
-            }
-        });
+    let app_name = get_app_name(app);
     let auto = AutoLaunch::new(
         app_name, current_exe.to_str().ok_or(AutoLaunchError::UnsupportedOsStringEncode)?,
         &[
