@@ -112,7 +112,7 @@ jobs:
         run: |
           $release_dir="./release/"
           foreach ($file in (dir $release_dir)) {
-            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} $release$file.Name
+            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} $release$file
           }
 
       - name: upload to release
