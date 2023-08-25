@@ -3,7 +3,6 @@ import { open } from "@tauri-apps/api/shell";
 import { writeText } from "@tauri-apps/api/clipboard";
 import { invoke } from "@tauri-apps/api";
 
-
 // 获取文件
 export async function getLocalFileText(path: string): Promise<string> {
   return await readTextFile(path);
@@ -15,7 +14,7 @@ export async function openUrlInUserBrowser(url: string) {
 }
 
 export async function copyInfo(data: { data: string; type: string }) {
-  console.log(data)
+  console.log(data);
   if (data.type == "text") {
     await writeText(data.data);
   } else {
@@ -35,66 +34,14 @@ export async function getHasRefererImageBase64(
   });
 }
 
-export async function bootStartSetting(isBoot: boolean):Promise<boolean> {
+export async function bootStartSetting(isBoot: boolean): Promise<boolean> {
   if (isBoot) {
     return await invoke<boolean>("set_auto_launch", { autoLaunch: true });
   } else {
-    return await invoke<boolean>("set_auto_launch", { autoLaunch: false});
+    return await invoke<boolean>("set_auto_launch", { autoLaunch: false });
   }
 }
 
 export async function getBootStartSetting(): Promise<boolean> {
   return await invoke<boolean>("auto_launch_setting");
 }
-//
-// // 是否开机自启
-// ipcMain.handle("bootSetting", async (event, isBoot) => {
-//   if (isBoot) {
-//     //设置开机启动
-//     app.setLoginItemSettings({
-//       openAtLogin: true,
-//       openAsHidden: true,
-//     });
-//   } else {
-//     app.setLoginItemSettings({
-//       openAtLogin: false,
-//       openAsHidden: false,
-//     });
-//   }
-//   //获取是否开机启动
-//   const { openAtLogin } = app.getLoginItemSettings();
-//   return openAtLogin;
-// });
-//
-// ipcMain.handle("getBootSetting", async (event) => {
-//   //获取是否开机启动
-//   const { openAtLogin } = app.getLoginItemSettings();
-//   return openAtLogin;
-// });
-//
-// // 判断版本号大小
-// ipcMain.handle("judgmentVersion", async (event, v1, v2) => {
-//   console.log(v1);
-//   console.log(v2);
-//   if (v1 == v2) {
-//     return false;
-//   }
-//
-//   const vs1 = v1.split(".").map((a) => parseInt(a));
-//   const vs2 = v2.split(".").map((a) => parseInt(a));
-//
-//   const digit = Math.min(vs1.length, vs2.length);
-//   for (let i = 0; i < digit; i++) {
-//     if (vs1[i] > vs2[i]) {
-//       return true;
-//     } else if (vs1[i] < vs2[i]) {
-//       return false;
-//     }
-//   }
-//
-//   if (digit == vs1.length) {
-//     return false;
-//   } else {
-//     return true;
-//   }
-// });

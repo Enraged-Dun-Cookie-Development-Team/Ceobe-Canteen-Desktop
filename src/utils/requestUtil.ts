@@ -1,9 +1,5 @@
-import {
-  HttpOptions,
-  HttpVerb,
-  Response,
-} from "@tauri-apps/api/http";
-import {invoke} from "@tauri-apps/api";
+import { HttpVerb, Response } from "@tauri-apps/api/http";
+import { invoke } from "@tauri-apps/api";
 
 const BASE_URL: Record<string, string> = {
   SERVER_URL: "https://server.ceobecanteen.top/api/v1",
@@ -52,25 +48,21 @@ const showStatus = (status: number) => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
-export interface RequestOptions extends HttpOptions {
+export interface RequestOptions {
   requestTarget?: "Server" | "CDN" | "ServeCDN";
   method: HttpVerb;
   url: string;
   headers?: Record<string, any>;
   query?: Record<string, any>;
-  body?: Body;
-  timeout?: number ;
+  body?: any;
+  timeout?: number;
   responseType?: ResponseType;
 }
 
-
 class RequestClient {
-
-  constructor() {
-  }
+  constructor() {}
 
   async request<T>(options: RequestOptions): Response<Payload<T>> {
-
     options.headers = {
       "Content-Type": "application/json;charset=utf-8",
     };
@@ -92,8 +84,9 @@ class RequestClient {
       console.log(`sending request`);
       console.log(options);
 
-      const response: Response<Payload<T>> = await invoke("send_request",{options:options});
-
+      const response: Response<Payload<T>> = await invoke("send_request", {
+        options: options,
+      });
 
       const status = response.status;
       let msg = "";
