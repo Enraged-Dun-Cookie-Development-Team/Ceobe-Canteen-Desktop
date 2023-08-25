@@ -110,10 +110,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ls
           $release_dir="./release/"
           foreach ($file in (dir $release_dir)) {
-            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} $file
+            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} $file.Name
           }
 
       - name: upload to release
