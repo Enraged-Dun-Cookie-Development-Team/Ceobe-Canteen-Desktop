@@ -57,7 +57,7 @@
             v-for="(item, i) in menuShow.datasourceList"
             :key="i"
             :class="
-              item.check ? 'bg-light-blue-lighten-4' : 'bg-grey-lighten-1'
+              item.check ? '' : 'not'
             "
             :prepend-avatar="item.avatar"
             :title="item.nickname"
