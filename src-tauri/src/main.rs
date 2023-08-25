@@ -3,7 +3,9 @@
 
 mod preview_page;
 mod single_instance;
+mod clipboard;
 
+use clipboard::copy_image;
 use base64::Engine;
 use std::sync::OnceLock;
 use std::thread::spawn;
@@ -63,7 +65,7 @@ fn main() {
 
                 Ok(())
             })
-            .invoke_handler(tauri::generate_handler![request_refer_image, read_detail])
+            .invoke_handler(tauri::generate_handler![request_refer_image, read_detail,copy_image])
             .run(generate_context!())
             .expect("error while running tauri application");
     }

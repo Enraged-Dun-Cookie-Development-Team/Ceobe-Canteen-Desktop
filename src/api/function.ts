@@ -3,6 +3,7 @@ import { open } from "@tauri-apps/api/shell";
 import { writeText } from "@tauri-apps/api/clipboard";
 import { invoke } from "@tauri-apps/api";
 
+
 // 获取文件
 export async function getLocalFileText(path: string): Promise<string> {
   return await readTextFile(path);
@@ -14,10 +15,11 @@ export async function openUrlInUserBrowser(url: string) {
 }
 
 export async function copyInfo(data: { data: string; type: string }) {
+  console.log(data)
   if (data.type == "text") {
     await writeText(data.data);
   } else {
-    throw Error(`type:${data.type} not support yet`);
+    await invoke("copy_image", { image: data.data });
   }
 }
 
