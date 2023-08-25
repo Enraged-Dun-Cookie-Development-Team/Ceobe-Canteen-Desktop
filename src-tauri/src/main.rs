@@ -4,6 +4,7 @@
 mod preview_page;
 mod single_instance;
 mod clipboard;
+mod auto_launch;
 
 use clipboard::copy_image;
 use base64::Engine;
@@ -17,7 +18,7 @@ use tauri::{
 use crate::single_instance::{run_sev, try_start};
 use preview_page::read_detail;
 use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
-
+use crate::auto_launch::{set_auto_launch,auto_launch_setting};
 fn main() {
     if let Ok(true) | Err(_) = try_start() {
         Builder::default()
@@ -65,7 +66,13 @@ fn main() {
 
                 Ok(())
             })
-            .invoke_handler(tauri::generate_handler![request_refer_image, read_detail,copy_image])
+            .invoke_handler(tauri::generate_handler![
+                request_refer_image,
+                read_detail,
+                copy_image,
+                set_auto_launch,
+                auto_launch_setting
+            ])
             .run(generate_context!())
             .expect("error while running tauri application");
     }

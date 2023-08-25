@@ -35,13 +35,12 @@ export async function getHasRefererImageBase64(
   });
 }
 
-export async function bootStartSetting(isBoot: boolean) {
+export async function bootStartSetting(isBoot: boolean):Promise<boolean> {
   if (isBoot) {
-    await invoke("set_auto_launch", { auto_launch: true, hidden: true });
+    return await invoke<boolean>("set_auto_launch", { autoLaunch: true });
   } else {
-    await invoke("set_auto_launch", { auto_launch: false, hidden: false });
+    return await invoke<boolean>("set_auto_launch", { autoLaunch: false});
   }
-  return await getBootStartSetting();
 }
 
 export async function getBootStartSetting(): Promise<boolean> {
