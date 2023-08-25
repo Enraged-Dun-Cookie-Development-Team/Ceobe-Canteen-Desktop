@@ -52,7 +52,6 @@
           <v-list-item
             v-for="(item, i) in menuShow.datasourceList"
             :key="i"
-            :class="item.check ? '' : 'not'"
             :prepend-avatar="item.avatar"
             :title="item.nickname"
             :value="item"
@@ -64,7 +63,7 @@
         </v-list>
       </v-menu>
     </div>
-
+    <!-- right control panel -->
     <div class="h-100 no-drag">
       <v-btn
         variant="text"
@@ -117,7 +116,10 @@
 <script lang="ts" name="index" setup>
 import { reactive, ref } from "vue";
 import storage from "../api/operations/localStorage";
-import { getConfigDatasourceList } from "../api/resourceFetcher/datasourceList";
+import {
+  DatasourceItem,
+  getConfigDatasourceList,
+} from "../api/resourceFetcher/datasourceList";
 import { getDatasourceComb } from "../api/resourceFetcher/datasourceCombine";
 import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import searchWordEvent from "../api/operations/searchWordEvent";
@@ -127,7 +129,13 @@ import SettingPage from "./SettingPage.vue";
 
 const winMax = ref(false);
 
-const menuShow = reactive({
+const menuShow = reactive<{
+  notOpened: boolean;
+  show: boolean;
+  datasourceList: DatasourceItem[];
+  changeSelectSource: (DatasourceItem) => void;
+  changeDatasourceOpen: (DatasourceItem) => void;
+}>({
   notOpened: true, // 没有打开过
   show: false,
   datasourceList: [],
@@ -145,6 +153,7 @@ const menuShow = reactive({
       // 打开列表
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
+          console.log(data);
           menuShow.datasourceList = data.data.data;
           if (datasourceConfig) {
             let datasourceConfigUuidMap = {};
