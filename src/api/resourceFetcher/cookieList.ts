@@ -25,7 +25,7 @@ export interface Cookie {
   /**
    * 这个下面有些平台自己的字段，写的时候再对接吧
    */
-  item: Item;
+  item: Record<string, any>;
   /**
    * 数据源信息
    */
@@ -56,20 +56,6 @@ export interface Image {
    * 原图
    */
   origin_url: string;
-}
-
-/**
- * 这个下面有些平台自己的字段，写的时候再对接吧
- */
-export interface Item {
-  /**
-   * 单条id
-   */
-  id: string;
-  /**
-   * 跳转链接
-   */
-  url: string;
 }
 
 /**
