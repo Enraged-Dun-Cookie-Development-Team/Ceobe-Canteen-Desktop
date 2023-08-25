@@ -54,7 +54,7 @@ import updater from "../api/operations/updater";
 import operate from "../api/operations/operate";
 import { getVersion } from "../api/resourceFetcher/version";
 import { app } from "@tauri-apps/api";
-import { appWindow } from "@tauri-apps/api/window";
+
 const emits = defineEmits({
   close: null,
 });
@@ -62,7 +62,7 @@ const version = ref("0.0.0");
 const setting = reactive({
   isBoot: false,
   changeBoot() {
-    operate.bootSetting(setting.isBoot).then((res) => {});
+    operate.bootSetting(setting.isBoot).then(() => {});
   },
   initBoot() {
     operate.getBootSetting().then((res) => {

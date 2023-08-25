@@ -37,7 +37,12 @@ const emits = defineEmits({
   openUrl: null,
 });
 
-const common = reactive({
+const common = reactive<{
+  imgUrl: string | string[];
+  getImg(): string | string[];
+  openImage();
+  openUrl();
+}>({
   imgUrl: [],
   getImg() {
     if (!props.info.default_cookie.images) {
@@ -70,7 +75,7 @@ const common = reactive({
 
 onMounted(() => {
   if (props.info.default_cookie.images) {
-    common.getImg(props.info.default_cookie.images);
+    common.getImg();
   }
 });
 </script>

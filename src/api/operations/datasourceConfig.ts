@@ -1,4 +1,4 @@
-import { emit, listen, once, UnlistenFn } from "@tauri-apps/api/event";
+import { emit, listen, UnlistenFn } from "@tauri-apps/api/event";
 
 class DatasourceConfig {
   async datasourceCombUpdated(callback: () => void): Promise<UnlistenFn> {

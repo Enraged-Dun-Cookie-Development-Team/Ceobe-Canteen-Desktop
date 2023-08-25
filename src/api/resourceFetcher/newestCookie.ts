@@ -1,4 +1,4 @@
-import requestClient, { Payload } from "../../utils/requestUtil";
+import requestClient from "../../utils/requestUtil";
 import { Response } from "@tauri-apps/api/http";
 
 export interface NewestCookies {
