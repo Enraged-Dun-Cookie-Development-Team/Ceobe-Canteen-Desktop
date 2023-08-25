@@ -6,6 +6,7 @@ mod single_instance;
 mod setup;
 mod storage;
 mod state;
+mod request_client;
 
 
 use std::thread::spawn;
@@ -14,7 +15,15 @@ use tauri::{
     SystemTrayMenu, WindowEvent,
 };
 
-use crate::commands::{copy_image,auto_launch_setting,set_auto_launch,read_detail,request_refer_image,get_item,set_item};
+use crate::commands::{copy_image,
+                      auto_launch_setting,
+                      set_auto_launch,
+                      read_detail,
+                      request_refer_image,
+                      get_item,
+                      set_item,
+                      send_request
+};
 use crate::single_instance::{run_sev, try_start};
 
 
@@ -75,6 +84,7 @@ fn main() {
                 auto_launch_setting,
                 get_item,
                 set_item,
+                send_request
             ]);
 
         let app = builder.build(generate_context!()).expect("Create App Failure");

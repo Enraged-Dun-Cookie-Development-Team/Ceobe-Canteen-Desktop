@@ -1,11 +1,9 @@
 import {
-  Client,
-  Duration,
-  getClient,
   HttpOptions,
   HttpVerb,
   Response,
 } from "@tauri-apps/api/http";
+import {invoke} from "@tauri-apps/api";
 
 const BASE_URL: Record<string, string> = {
   SERVER_URL: "https://server.ceobecanteen.top/api/v1",
@@ -61,29 +59,17 @@ export interface RequestOptions extends HttpOptions {
   headers?: Record<string, any>;
   query?: Record<string, any>;
   body?: Body;
-  timeout?: number | Duration;
+  timeout?: number ;
   responseType?: ResponseType;
 }
 
-//todo: ETAG base cache
+
 class RequestClient {
-  client?: Client;
-  waitInit: () => void;
 
   constructor() {
-    this.waitInit = () =>
-      new Promise<void>((resolve) => {
-        getClient({ connectTimeout: 3 }).then((client: Client) => {
-          console.log("client Ready");
-          this.client = client;
-          resolve();
-        });
-      });
   }
 
   async request<T>(options: RequestOptions): Response<Payload<T>> {
-    await this.waitInit();
-    const client = this.client;
 
     options.headers = {
       "Content-Type": "application/json;charset=utf-8",
@@ -106,7 +92,9 @@ class RequestClient {
       console.log(`sending request`);
       console.log(options);
 
-      const response: Response<Payload<T>> = await client?.request(options);
+      const response: Response<Payload<T>> = await invoke("send_request",{options:options});
+
+
       const status = response.status;
       let msg = "";
       if (status < 200 || (status >= 300 && status != 401 && status != 500)) {
