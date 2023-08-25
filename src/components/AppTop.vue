@@ -26,17 +26,12 @@
           <v-text-field
             v-model="search.searchWord"
             append-inner-icon="fa fa-magnifying-glass"
-            autofocus
             clearable
             density="compact"
-            hide-details
             label="查找饼仓"
             variant="solo"
-            label="查找饼仓"
             autofocus
-            append-inner-icon="fa fa-magnifying-glass"
             hide-details
-            clearable
             @click:append-inner="search.searching"
             @update:model-value="search.searchChange"
           ></v-text-field>
@@ -71,9 +66,21 @@
     </div>
 
     <div class="h-100 no-drag">
-      <v-btn variant="text" icon="fas fa-comments-dollar" @click="donate.show = true"></v-btn>
-      <v-btn variant="text" icon="fas fa-gear" @click="setting.show = true"></v-btn>
-      <v-btn variant="text" icon="fas fa-minus" @click="handleWindow.minus"></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-comments-dollar"
+        @click="donate.show = true"
+      ></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-gear"
+        @click="setting.show = true"
+      ></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-minus"
+        @click="handleWindow.minus"
+      ></v-btn>
       <v-btn
         variant="text"
         :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
@@ -88,11 +95,21 @@
     </div>
   </div>
 
-  <v-dialog v-model="donate.show" width="800" persistent transition="dialog-top-transition">
-    <donate-page  @close="donate.show = false"></donate-page>
+  <v-dialog
+    v-model="donate.show"
+    width="800"
+    persistent
+    transition="dialog-top-transition"
+  >
+    <donate-page @close="donate.show = false"></donate-page>
   </v-dialog>
 
-  <v-dialog v-model="setting.show" width="400" persistent  transition="dialog-top-transition">
+  <v-dialog
+    v-model="setting.show"
+    width="400"
+    persistent
+    transition="dialog-top-transition"
+  >
     <setting-page @close="setting.show = false"></setting-page>
   </v-dialog>
 </template>
@@ -105,6 +122,8 @@ import { getDatasourceComb } from "../api/resourceFetcher/datasourceCombine";
 import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import searchWordEvent from "../api/operations/searchWordEvent";
 import operate from "../api/operations/operate";
+import DonatePage from "./DonatePage.vue";
+import SettingPage from "./SettingPage.vue";
 
 const winMax = ref(false);
 
@@ -206,12 +225,12 @@ const handleWindow = reactive({
 });
 
 const donate = reactive({
-  show:false
-})
+  show: false,
+});
 
 const setting = reactive({
-  show:false,
-})
+  show: false,
+});
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

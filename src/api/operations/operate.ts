@@ -1,4 +1,9 @@
-import { copyInfo, openUrlInUserBrowser } from "../function";
+import {
+  bootStartSetting,
+  copyInfo,
+  getBootStartSetting,
+  openUrlInUserBrowser,
+} from "../function";
 import {
   appWindow,
   currentMonitor,
@@ -47,6 +52,14 @@ class Operate {
     await appWindow.hide();
   }
   async exit() {}
+
+  async bootSetting(isBoot: boolean) {
+    return await bootStartSetting(isBoot);
+  }
+
+  async getBootSetting() {
+    return await getBootStartSetting();
+  }
 }
 
 const operate = new Operate();

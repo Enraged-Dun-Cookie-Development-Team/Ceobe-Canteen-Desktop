@@ -1,10 +1,4 @@
-import {
-  emit,
-  EventCallback,
-  listen,
-  UnlistenFn,
-  Event,
-} from "@tauri-apps/api/event";
+import { emit, listen, UnlistenFn, Event } from "@tauri-apps/api/event";
 
 class SearchWordEvent {
   async getSearchWord(

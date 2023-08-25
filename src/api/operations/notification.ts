@@ -1,4 +1,3 @@
-import { window } from "@tauri-apps/api";
 import { appWindow } from "@tauri-apps/api/window";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
 import { Cookie } from "../resourceFetcher/cookieList";

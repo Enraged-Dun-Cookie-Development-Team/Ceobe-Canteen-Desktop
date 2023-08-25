@@ -37,7 +37,7 @@ export async function backgroundInit() {
     datasource_comb_id = datasource_comb_id_resp.data.data.datasource_comb_id;
     storage.setItem("datasource-comb", datasource_comb_id);
   }
-  datasourceConfigOperate.datasourceCombUpdated(async () => {
+  await datasourceConfigOperate.datasourceCombUpdated(async () => {
     datasource_comb_id = storage.getItem("datasource-comb");
     old_cookie_id = null;
     old_update_cookie_id = null;

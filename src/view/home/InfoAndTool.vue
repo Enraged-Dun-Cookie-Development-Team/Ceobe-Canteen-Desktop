@@ -8,23 +8,34 @@
     <!--快捷工具-->
     <tool-or-source title="快捷工具" :list="tool.list"></tool-or-source>
     <!--发源地-->
-    <tool-or-source title="饼的发源地" :img-local="false" :list="source.list"></tool-or-source>
+    <tool-or-source
+      title="饼的发源地"
+      :img-local="false"
+      :list="source.list"
+    ></tool-or-source>
     <!--推荐视频-->
     <video-list></video-list>
     <div class="d-flex justify-center ma-2">
-      Powered By &nbsp;<v-btn class='pl-0' variant="plain" density="compact" @click="openUrlInBrowser('https://www.ceobecanteen.top/#/')">CeobeCanteen</v-btn
+      Powered By &nbsp;<v-btn
+        class="pl-0"
+        variant="plain"
+        density="compact"
+        @click="openUrlInBrowser('https://www.ceobecanteen.top/#/')"
+        >CeobeCanteen</v-btn
       >
     </div>
   </div>
 </template>
 
 <script setup name="infoAndTool" lang="ts">
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { sourceInfo, toolInfo } from "../../constant";
 import ToolOrSource from "../../components/InfoAndTool/ToolOrSource.vue";
 import VideoList from "../../components/InfoAndTool/VideoList.vue";
 import Announcement from "../../components/InfoAndTool/Announcement.vue";
 import WeeklyQuest from "../../components/InfoAndTool/WeeklyQuest.vue";
+import operate from "../../api/operations/operate";
+import { getResourceList } from "../../api/resourceFetcher/datasourceList";
 
 const source = reactive({
   list: [],
@@ -35,11 +46,11 @@ const source = reactive({
         return {
           url: datasource.jump_url,
           name: datasource.nickname,
-          img: datasource.avatar
-        }
-      })
-    })
-  }
+          img: datasource.avatar,
+        };
+      });
+    });
+  },
 });
 
 const tool = reactive({
@@ -47,12 +58,12 @@ const tool = reactive({
 });
 
 const openUrlInBrowser = (url) => {
-  window.operate.openUrlInBrowser(url);
-}
+  operate.openUrlInBrowser(url);
+};
 
 onMounted(() => {
   source.getSource();
-})
+});
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

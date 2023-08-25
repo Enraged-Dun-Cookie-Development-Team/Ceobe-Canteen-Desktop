@@ -1,7 +1,17 @@
-import { Client, getClient, HttpOptions, Response } from "@tauri-apps/api/http";
+import {
+  Client,
+  Duration,
+  getClient,
+  HttpOptions,
+  HttpVerb,
+  Response,
+} from "@tauri-apps/api/http";
 
-const baseUrl = "http://server-dev.ceobecanteen.top/api/v1";
-
+const BASE_URL: Record<string, string> = {
+  SERVER_URL: "https://server.ceobecanteen.top/api/v1",
+  CDN_URL: "https://cdn.ceobecanteen.top",
+  CDN_SERVER_URL: "https://server-cdn.ceobecanteen.top/api/v1",
+};
 const showStatus = (status: number) => {
   let message: string;
   switch (status) {
@@ -44,6 +54,18 @@ const showStatus = (status: number) => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
+export interface RequestOptions extends HttpOptions {
+  requestTarget?: "Server" | "CDN" | "ServeCDN";
+  method: HttpVerb;
+  url: string;
+  headers?: Record<string, any>;
+  query?: Record<string, any>;
+  body?: Body;
+  timeout?: number | Duration;
+  responseType?: ResponseType;
+}
+
+//todo: ETAG base cache
 class RequestClient {
   client?: Client;
   waitInit: () => void;
@@ -59,17 +81,26 @@ class RequestClient {
       });
   }
 
-  async request<T>(options: HttpOptions): Response<Payload<T>> {
+  async request<T>(options: RequestOptions): Response<Payload<T>> {
     await this.waitInit();
     const client = this.client;
 
     options.headers = {
       "Content-Type": "application/json;charset=utf-8",
-      "Cache-Control": "no-cache",
     };
-    if (!options.url.startsWith("http")) {
-      options.url = `${baseUrl}${options.url}`;
+    let base;
+
+    if (options.requestTarget === "Server") {
+      base = BASE_URL.SERVER_URL;
+    } else if (options.requestTarget === "CDN") {
+      base = BASE_URL.CDN_URL;
+    } else if (options.requestTarget === "ServeCDN") {
+      base = BASE_URL.CDN_SERVER_URL;
+    } else {
+      base = BASE_URL.SERVER_URL;
     }
+
+    options.url = `${base}${options.url}`;
 
     try {
       console.log(`sending request`);

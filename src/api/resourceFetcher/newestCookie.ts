@@ -10,7 +10,11 @@ export function getCookieNewestInfo(
   comb_id: string,
 ): Promise<Response<Payload<any>>> {
   return requestClient.request({
-    url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
+    requestTarget: "CDN",
+    url: `/datasource-comb/${comb_id}`,
     method: "GET",
+    headers: {
+      "Cache-Control": "no-cache",
+    },
   });
 }

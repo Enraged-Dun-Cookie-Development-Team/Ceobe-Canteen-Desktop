@@ -50,3 +50,4 @@ export function getConfigDatasourceList(): Promise<
 }
 
 export const getResourceList = getConfigDatasourceList;
+export const getAllDatasources = getConfigDatasourceList;
