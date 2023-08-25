@@ -1,7 +1,7 @@
 use arboard::{Clipboard, ImageData};
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
-use image::{EncodableLayout, load_from_memory};
+use image::{load_from_memory, EncodableLayout};
 use serde::{Serialize, Serializer};
 use std::borrow::Cow;
 use tauri::command;
@@ -33,7 +33,13 @@ pub fn copy_image(image: String) -> Result<(), CopyError> {
     let buffer = STANDARD.decode(image)?;
     // byte array -> image
     let image = load_from_memory(&buffer)?.to_rgba8();
-    println!("{}x{} = {} : {}",image.width(),image.height(),image.width()*image.height()*4,image.as_bytes().len());
+    println!(
+        "{}x{} = {} : {}",
+        image.width(),
+        image.height(),
+        image.width() * image.height() * 4,
+        image.as_bytes().len()
+    );
 
     let image = ImageData {
         width: image.width() as _,

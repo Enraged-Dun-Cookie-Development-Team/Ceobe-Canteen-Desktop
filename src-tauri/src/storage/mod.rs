@@ -1,8 +1,8 @@
 use crate::state::get_config_dir;
 use parking_lot::RwLock;
+use pickledb::PickleDb;
 use pickledb::PickleDbDumpPolicy::AutoDump;
 use pickledb::SerializationMethod::Bin;
-use pickledb::{PickleDb};
 use serde_json::Value;
 
 use once_cell::sync::OnceCell;

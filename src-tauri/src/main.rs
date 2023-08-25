@@ -2,12 +2,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod commands;
-mod single_instance;
-mod setup;
-mod storage;
-mod state;
 mod request_client;
-
+mod setup;
+mod single_instance;
+mod state;
+mod storage;
 
 use std::thread::spawn;
 use tauri::{
@@ -15,22 +14,14 @@ use tauri::{
     SystemTrayMenu, WindowEvent,
 };
 
-use crate::commands::{copy_image,
-                      auto_launch_setting,
-                      set_auto_launch,
-                      read_detail,
-                      request_refer_image,
-                      get_item,
-                      set_item,
-                      send_request
+use crate::commands::{
+    auto_launch_setting, copy_image, get_item, read_detail, request_refer_image, send_request,
+    set_auto_launch, set_item,
 };
 use crate::single_instance::{run_sev, try_start};
 
-
 fn main() {
     if let Ok(true) | Err(_) = try_start() {
-
-
         let builder = Builder::default()
             .setup(|app| {
                 // single instance
@@ -87,8 +78,9 @@ fn main() {
                 send_request
             ]);
 
-        let app = builder.build(generate_context!()).expect("Create App Failure");
-        app.run(|_,_|{});
+        let app = builder
+            .build(generate_context!())
+            .expect("Create App Failure");
+        app.run(|_, _| {});
     }
 }
-
