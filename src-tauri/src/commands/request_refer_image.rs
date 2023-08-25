@@ -1,19 +1,29 @@
-use std::sync::OnceLock;
+
 use base64::Engine;
-use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
-use tauri::command;
+
+use tauri::{AppHandle, command};
+use thiserror::Error;
+use crate::request_client::RequestClient;
+
+#[derive(Debug,Error)]
+pub enum RefImgError{
+    #[error("Request Error: {0}")]
+    Reqwest(#[from]reqwest::Error),
+    #[error("Sending Request Error: {0}")]
+    Middleware(#[from]reqwest_middleware::Error)
+}
 
 #[command]
-pub async fn request_refer_image(url: &str, refer: &str) -> tauri::Result<String> {
-    static CLIENT: std::sync::OnceLock<Client> = OnceLock::new();
-    let client =
-        CLIENT.get_or_init(|| ClientBuilder::new().build().expect("create Client Failure"));
+pub async fn request_refer_image(url: &str, refer: &str,app:AppHandle) -> Result<String,RefImgError> {
+    let client =RequestClient::get_this(app);
 
-    let builder = HttpRequestBuilder::new("GET", url)?
-        .header("Referer", refer)?
-        .response_type(ResponseType::Binary);
-    let resp = client.send(builder).await?;
+    let builder = client.inner.get(url)
+        .header("Referer",refer)
+        .build()?;
+
+    let resp = client.inner.execute(builder).await?;
     let payload = resp.bytes().await?;
-    let payload = base64::engine::general_purpose::STANDARD.encode(payload.data);
+
+    let payload = base64::engine::general_purpose::STANDARD.encode(payload);
     Ok(payload)
 }
