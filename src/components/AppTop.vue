@@ -41,12 +41,16 @@
       <v-menu
         v-model="menuShow.show"
         :close-on-content-click="false"
-        :on-update:model-value="menuShow.changeDatasourceOpen"
-        location="bottom"
+        location="right"
         transition="slide-y-transition"
       >
         <template #activator="{ props }">
-          <v-btn icon="fas fa-database" v-bind="props" variant="text"></v-btn>
+          <v-btn
+            icon="fa fa-filter"
+            v-bind="props"
+            variant="text"
+            @click="menuShow.changeDatasourceOpen(menuShow.show)"
+          ></v-btn>
         </template>
         <v-list density="compact">
           <v-list-item
@@ -56,6 +60,9 @@
             :title="item.nickname"
             :value="item"
             class="menuShow-item"
+            :class="
+              item.check ? 'bg-light-blue-lighten-4' : 'bg-grey-lighten-1'
+            "
             color="primary"
             @click="menuShow.changeSelectSource(item)"
           >
@@ -134,7 +141,7 @@ const menuShow = reactive<{
   show: boolean;
   datasourceList: DatasourceItem[];
   changeSelectSource: (DatasourceItem) => void;
-  changeDatasourceOpen: (DatasourceItem) => void;
+  changeDatasourceOpen: (boolean) => void;
 }>({
   notOpened: true, // 没有打开过
   show: false,
@@ -143,18 +150,18 @@ const menuShow = reactive<{
     data.check = !data.check;
   },
   async changeDatasourceOpen(value) {
-    console.log(value);
     if (value) {
       if (menuShow.notOpened) {
         menuShow.notOpened = false;
       }
-      let datasourceConfig = storage.getItem<string[]>("datasource-config");
+      let datasourceConfig = await storage.getItem<string[]>(
+        "datasource-config",
+      );
       // 打开列表
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
-          console.log("datasource");
-          console.log(data);
-          console.log(datasourceConfig);
+          console.log("data", data);
+          console.log("datacource: ", datasourceConfig);
           menuShow.datasourceList = data.data.data;
           if (datasourceConfig) {
             let datasourceConfigUuidMap: Record<string, boolean> = {};
