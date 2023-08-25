@@ -21,7 +21,7 @@ let timeoutId = null;
 
 export async function backgroundInit() {
   // 获取内存组合id配置
-  datasource_comb_id = storage.getItem("datasource-comb");
+  datasource_comb_id = await storage.getItem<string>("datasource-comb");
   console.log(datasource_comb_id);
   if (!datasource_comb_id) {
     console.log("get resource");
@@ -35,10 +35,10 @@ export async function backgroundInit() {
     let datasource_comb_id_resp = await getDatasourceComb(uuids);
     console.log(datasource_comb_id_resp);
     datasource_comb_id = datasource_comb_id_resp.data.data.datasource_comb_id;
-    storage.setItem("datasource-comb", datasource_comb_id);
+    await storage.setItem("datasource-comb", datasource_comb_id);
   }
   await datasourceConfigOperate.datasourceCombUpdated(async () => {
-    datasource_comb_id = storage.getItem("datasource-comb");
+    datasource_comb_id = await storage.getItem<string>("datasource-comb");
     old_cookie_id = null;
     old_update_cookie_id = null;
     init_fetched = false;

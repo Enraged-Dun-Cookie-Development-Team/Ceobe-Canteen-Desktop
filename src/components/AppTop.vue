@@ -143,20 +143,21 @@ const menuShow = reactive<{
     data.check = !data.check;
   },
   async changeDatasourceOpen(value) {
+    console.log(value);
     if (value) {
       if (menuShow.notOpened) {
         menuShow.notOpened = false;
       }
-      let datasourceConfig = JSON.parse(
-        <string>storage.getItem("datasource-config"),
-      );
+      let datasourceConfig = storage.getItem<string[]>("datasource-config");
       // 打开列表
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
+          console.log("datasource");
           console.log(data);
+          console.log(datasourceConfig);
           menuShow.datasourceList = data.data.data;
           if (datasourceConfig) {
-            let datasourceConfigUuidMap = {};
+            let datasourceConfigUuidMap: Record<string, boolean> = {};
             for (let datasource of datasourceConfig) {
               datasourceConfigUuidMap[datasource] = true;
             }
@@ -186,13 +187,13 @@ const menuShow = reactive<{
         });
       let comb_resp = await getDatasourceComb(datasourceConfig);
       let comb_id = comb_resp.data.data.datasource_comb_id;
-      let datasourceComb = storage.getItem("datasource-comb");
+      let datasourceComb = await storage.getItem<string>("datasource-comb");
       // 如果组合id和之前一样，不进行刷新
       if (datasourceComb == comb_id) {
         return;
       }
-      storage.setItem("datasource-config", JSON.stringify(datasourceConfig));
-      storage.setItem("datasource-comb", comb_id);
+      await storage.setItem("datasource-config", datasourceConfig);
+      await storage.setItem("datasource-comb", comb_id);
       await datasourceConfigOperate.updateDatasourceComb();
     }
   },

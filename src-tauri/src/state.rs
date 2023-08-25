@@ -1,4 +1,5 @@
 use std::{env, io};
+use std::fs::create_dir_all;
 use std::path::PathBuf;
 use once_cell::sync::OnceCell;
 use tauri::api::path::{app_config_dir, config_dir};
@@ -30,5 +31,11 @@ pub fn get_current_exe()->io::Result<&'static PathBuf>{
 pub static CONFIG_DIR:OnceCell<PathBuf> = OnceCell::new();
 
 pub fn get_config_dir(app:AppHandle)->&'static PathBuf{
-    CONFIG_DIR.get_or_init(move||app_config_dir(&app.config()).expect("Platform not support"))
-}    
+    CONFIG_DIR.get_or_init(move|| {
+        let path = app_config_dir(&app.config()).expect("Platform not support");
+        create_dir_all(&path).expect("Cannot Create Config Dir");
+        path
+    }
+
+    )
+}

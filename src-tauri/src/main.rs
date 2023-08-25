@@ -16,13 +16,14 @@ use tauri::{
 
 use crate::commands::{copy_image,auto_launch_setting,set_auto_launch,read_detail,request_refer_image,get_item,set_item};
 use crate::single_instance::{run_sev, try_start};
-use crate::storage::LocalStorage;
+
 
 fn main() {
     if let Ok(true) | Err(_) = try_start() {
-        Builder::default()
+
+
+        let builder = Builder::default()
             .setup(|app| {
-                app.manage(LocalStorage::new(app.app_handle()));
                 // single instance
                 let main_window = app.get_window("main").expect("cannot found main window");
                 spawn(move || run_sev(main_window));
@@ -74,9 +75,10 @@ fn main() {
                 auto_launch_setting,
                 get_item,
                 set_item,
-            ])
-            .run(generate_context!())
-            .expect("error while running tauri application");
+            ]);
+
+        let app = builder.build(generate_context!()).expect("Create App Failure");
+        app.run(|_,_|{});
     }
 }
 

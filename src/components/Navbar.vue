@@ -102,15 +102,15 @@ const dialog = ref(false);
 const exitApp = () => {
   operate.exit();
 };
-const agreeApp = () => {
-  storage.setItem("agreeApp", "true");
+const agreeApp = async () => {
+  await storage.setItem("agreeApp", true);
   operate.bootSetting(true).then(() => {});
   loadApp.value = true;
 };
 
-onMounted(() => {
-  let result = storage.getItem("agreeApp");
-  if (result == "true") {
+onMounted(async () => {
+  let result = await storage.getItem<boolean>("agreeApp");
+  if (result) {
     loadApp.value = true;
     return;
   }
