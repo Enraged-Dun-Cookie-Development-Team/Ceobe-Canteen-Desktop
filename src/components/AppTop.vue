@@ -26,12 +26,12 @@
           <v-text-field
             v-model="search.searchWord"
             append-inner-icon="fa fa-magnifying-glass"
+            autofocus
             clearable
             density="compact"
+            hide-details
             label="查找饼仓"
             variant="solo"
-            autofocus
-            hide-details
             @click:append-inner="search.searching"
             @update:model-value="search.searchChange"
           ></v-text-field>
@@ -56,13 +56,13 @@
           <v-list-item
             v-for="(item, i) in menuShow.datasourceList"
             :key="i"
+            :class="
+              item.check ? 'bg-light-blue-lighten-4' : 'bg-grey-lighten-1'
+            "
             :prepend-avatar="item.avatar"
             :title="item.nickname"
             :value="item"
             class="menuShow-item"
-            :class="
-              item.check ? 'bg-light-blue-lighten-4' : 'bg-grey-lighten-1'
-            "
             color="primary"
             @click="menuShow.changeSelectSource(item)"
           >
@@ -73,23 +73,23 @@
     <!-- right control panel -->
     <div class="h-100 no-drag">
       <v-btn
-        variant="text"
         icon="fas fa-comments-dollar"
+        variant="text"
         @click="donate.show = true"
       ></v-btn>
       <v-btn
-        variant="text"
         icon="fas fa-gear"
+        variant="text"
         @click="setting.show = true"
       ></v-btn>
       <v-btn
-        variant="text"
         icon="fas fa-minus"
+        variant="text"
         @click="handleWindow.minus"
       ></v-btn>
       <v-btn
-        variant="text"
         :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
+        variant="text"
         @click="handleWindow.maximize"
       ></v-btn>
       <v-btn
@@ -103,18 +103,18 @@
 
   <v-dialog
     v-model="donate.show"
-    width="800"
     persistent
     transition="dialog-top-transition"
+    width="800"
   >
     <donate-page @close="donate.show = false"></donate-page>
   </v-dialog>
 
   <v-dialog
     v-model="setting.show"
-    width="400"
     persistent
     transition="dialog-top-transition"
+    width="400"
   >
     <setting-page @close="setting.show = false"></setting-page>
   </v-dialog>
@@ -164,8 +164,6 @@ const menuShow = reactive<{
       // 打开列表
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
-          console.log("data", data);
-          console.log("datasource: ", datasourceConfig);
           menuShow.datasourceList = data.data.data.map(
             (data: ViewDataSourceItem) => {
               data.check = false;

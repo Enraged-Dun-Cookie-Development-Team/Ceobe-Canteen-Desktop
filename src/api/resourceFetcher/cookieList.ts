@@ -97,16 +97,21 @@ export interface Timestamp {
 export function getCookieList(
   comb_id: string,
   cookie_id: string,
-  update_cookie_id: string,
+  update_cookie_id?: string,
 ): Promise<Response<Payload<CookieList>>> {
+  let query: Record<string, any> = {
+    datasource_comb_id: comb_id,
+    cookie_id: cookie_id,
+  };
+
+  if (update_cookie_id) {
+    query.update_cookie_id = update_cookie_id;
+  }
+
   return requestClient.request<CookieList>({
     requestTarget: "ServeCDN",
     url: `/cdn/cookie/mainList/cookieList`,
-    query: {
-      datasource_comb_id: comb_id,
-      cookie_id: cookie_id,
-      update_cookie_id: update_cookie_id,
-    },
+    query: query,
     method: "GET",
   });
 }

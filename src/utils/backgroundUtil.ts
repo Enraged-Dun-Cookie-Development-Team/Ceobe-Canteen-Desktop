@@ -79,9 +79,11 @@ export class BackgroundRunner {
 
     let { cookie_id, update_cookie_id } = newestCookieInfo.data;
     if (
-      cookie_id !== this.old_cookie_id ||
-      update_cookie_id !== this.old_update_cookie_id
+      cookie_id != null &&
+      (cookie_id !== this.old_cookie_id ||
+        update_cookie_id !== this.old_update_cookie_id)
     ) {
+      console.log(this.datasource_comb_id, cookie_id, update_cookie_id);
       let cookies_data = await getCookieList(
         this.datasource_comb_id,
         cookie_id,

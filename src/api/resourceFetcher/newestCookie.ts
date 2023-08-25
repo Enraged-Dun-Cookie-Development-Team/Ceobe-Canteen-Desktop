@@ -2,8 +2,14 @@ import requestClient from "../../utils/requestUtil";
 import { Response } from "@tauri-apps/api/http";
 
 export interface NewestCookies {
-  cookie_id: string;
-  update_cookie_id: string;
+  /**
+   * 最新饼id
+   */
+  cookie_id: null | string;
+  /**
+   * 最新更新饼id
+   */
+  update_cookie_id: null | string;
 }
 
 /**

@@ -74,11 +74,14 @@ export function getCookieSearchList({
   datasource_comb_id: string;
   search_word: string;
 }): Promise<Response<Payload<CookiePagination>>> {
-  let params = {
+  let params: Record<string, any> = {
     datasource_comb_id: datasource_comb_id,
     search_word: search_word,
-    cookie_id: cookie_id,
   };
+
+  if (cookie_id) {
+    params.cookie_id = cookie_id;
+  }
 
   return requestClient.request({
     url: `/canteen/cookie/search/list`,
