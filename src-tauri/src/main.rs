@@ -1,24 +1,28 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod preview_page;
+mod commands;
+mod request_client;
+mod setup;
 mod single_instance;
+mod state;
+mod storage;
 
-use base64::Engine;
-use std::sync::OnceLock;
 use std::thread::spawn;
 use tauri::{
-    command, generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
+    generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
     SystemTrayMenu, WindowEvent,
 };
 
+use crate::commands::{
+    auto_launch_setting, copy_image, get_item, read_detail, request_refer_image, send_request,
+    set_auto_launch, set_item,
+};
 use crate::single_instance::{run_sev, try_start};
-use preview_page::read_detail;
-use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
 
 fn main() {
     if let Ok(true) | Err(_) = try_start() {
-        Builder::default()
+        let builder = Builder::default()
             .setup(|app| {
                 // single instance
                 let main_window = app.get_window("main").expect("cannot found main window");
@@ -63,23 +67,20 @@ fn main() {
 
                 Ok(())
             })
-            .invoke_handler(tauri::generate_handler![request_refer_image, read_detail])
-            .run(generate_context!())
-            .expect("error while running tauri application");
+            .invoke_handler(tauri::generate_handler![
+                request_refer_image,
+                read_detail,
+                copy_image,
+                set_auto_launch,
+                auto_launch_setting,
+                get_item,
+                set_item,
+                send_request
+            ]);
+
+        let app = builder
+            .build(generate_context!())
+            .expect("Create App Failure");
+        app.run(|_, _| {});
     }
-}
-
-#[command]
-async fn request_refer_image(url: &str, refer: &str) -> tauri::Result<String> {
-    static CLIENT: OnceLock<Client> = OnceLock::new();
-    let client =
-        CLIENT.get_or_init(|| ClientBuilder::new().build().expect("create Client Failure"));
-
-    let builder = HttpRequestBuilder::new("GET", url)?
-        .header("Referer", refer)?
-        .response_type(ResponseType::Binary);
-    let resp = client.send(builder).await?;
-    let payload = resp.bytes().await?;
-    let payload = base64::engine::general_purpose::STANDARD.encode(payload.data);
-    Ok(payload)
 }

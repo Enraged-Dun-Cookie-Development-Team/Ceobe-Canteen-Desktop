@@ -83,6 +83,6 @@ export function getCookieSearchList({
   return requestClient.request({
     url: `/canteen/cookie/search/list`,
     method: "GET",
-    params: params,
+    query: params,
   });
 }

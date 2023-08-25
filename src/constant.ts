@@ -1,3 +1,4 @@
+const VERSION = '1.0.0';
 const toolInfo = [
   {
     url: 'http://prts.wiki/',
@@ -187,4 +188,4 @@ const dayInfo = [
   },
 ];
 
-export { toolInfo, sourceInfo, dayInfo };
+export { toolInfo, sourceInfo, dayInfo, VERSION };

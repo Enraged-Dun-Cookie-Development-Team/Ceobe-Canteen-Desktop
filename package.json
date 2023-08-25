@@ -21,12 +21,13 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@mdi/font": "5.9.55",
     "@tauri-apps/api": "^1.4.0",
-    "axios": "^1.3.5",
     "core-js": "^3.8.3",
     "html-to-image": "^1.11.11",
     "i": "^0.3.7",
+    "joi": "^17.9.2",
     "node-sass": "^8.0.0",
     "prettier": "^3.0.0",
+    "rebuild": "^0.1.2",
     "roboto-fontface": "*",
     "sass-loader": "^13.2.2",
     "typescript": "^5.1.6",
@@ -63,10 +64,13 @@
     "not dead",
     "not ie 11"
   ],
-  "gitHooks": {
-    "pre-commit": "lint-staged --concurrent false --quiet --verbose"
-  },
   "lint-staged": {
+    "src/**/*.{js,vue}": [
+      "vue-cli-service lint"
+    ],
+    "src/**/*.{vue,css,sass,scss,less}": [
+      "stylelint --fix"
+    ],
     "**/{*,.*}": [
       "prettier --ignore-unknown --write"
     ]

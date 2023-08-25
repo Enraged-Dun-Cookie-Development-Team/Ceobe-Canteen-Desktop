@@ -114,7 +114,8 @@ export function getCookieList(
   update_cookie_id: string,
 ): Promise<Response<Payload<CookieList>>> {
   return requestClient.request<CookieList>({
-    url: `http://cdn-muelsyse-dev.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
+    requestTarget: "ServeCDN",
+    url: `/cdn/cookie/mainList/cookieList`,
     query: {
       datasource_comb_id: comb_id,
       cookie_id: cookie_id,

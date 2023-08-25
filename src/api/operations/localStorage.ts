@@ -1,9 +1,11 @@
+import {invoke} from "@tauri-apps/api";
+
 class LocalStorage {
-  getItem(key: string): string | null {
-    return localStorage.getItem(key);
+  async getItem<T>(key: string): Promise<T | null> {
+    return await  invoke<T|null>("get_item",{key:key});
   }
-  setItem(key: string, value: string) {
-    localStorage.setItem(key, value);
+  async setItem<T>(key: string, value: T) {
+    return await invoke("set_item",{key,value})
   }
 }
 

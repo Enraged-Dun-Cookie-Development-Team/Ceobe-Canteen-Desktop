@@ -1,7 +1,11 @@
-import { Client, getClient, HttpOptions, Response } from "@tauri-apps/api/http";
+import { HttpVerb, Response } from "@tauri-apps/api/http";
+import { invoke } from "@tauri-apps/api";
 
-const baseUrl = "http://server-dev.ceobecanteen.top/api/v1";
-
+const BASE_URL: Record<string, string> = {
+  SERVER_URL: "https://server.ceobecanteen.top/api/v1",
+  CDN_URL: "https://cdn.ceobecanteen.top",
+  CDN_SERVER_URL: "https://server-cdn.ceobecanteen.top/api/v1",
+};
 const showStatus = (status: number) => {
   let message: string;
   switch (status) {
@@ -44,38 +48,46 @@ const showStatus = (status: number) => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
+export interface RequestOptions {
+  requestTarget?: "Server" | "CDN" | "ServeCDN";
+  method: HttpVerb;
+  url: string;
+  headers?: Record<string, any>;
+  query?: Record<string, any>;
+  body?: any;
+  timeout?: number;
+  responseType?: ResponseType;
+}
+
 class RequestClient {
-  client?: Client;
-  waitInit: () => void;
+  constructor() {}
 
-  constructor() {
-    this.waitInit = () =>
-      new Promise<void>((resolve) => {
-        getClient({ connectTimeout: 3 }).then((client: Client) => {
-          console.log("client Ready");
-          this.client = client;
-          resolve();
-        });
-      });
-  }
-
-  async request<T>(options: HttpOptions): Response<Payload<T>> {
-    await this.waitInit();
-    const client = this.client;
-
+  async request<T>(options: RequestOptions): Response<Payload<T>> {
     options.headers = {
       "Content-Type": "application/json;charset=utf-8",
-      "Cache-Control": "no-cache",
     };
-    if (!options.url.startsWith("http")) {
-      options.url = `${baseUrl}${options.url}`;
+    let base;
+
+    if (options.requestTarget === "Server") {
+      base = BASE_URL.SERVER_URL;
+    } else if (options.requestTarget === "CDN") {
+      base = BASE_URL.CDN_URL;
+    } else if (options.requestTarget === "ServeCDN") {
+      base = BASE_URL.CDN_SERVER_URL;
+    } else {
+      base = BASE_URL.SERVER_URL;
     }
+
+    options.url = `${base}${options.url}`;
 
     try {
       console.log(`sending request`);
       console.log(options);
 
-      const response: Response<Payload<T>> = await client?.request(options);
+      const response: Response<Payload<T>> = await invoke("send_request", {
+        options: options,
+      });
+
       const status = response.status;
       let msg = "";
       if (status < 200 || (status >= 300 && status != 401 && status != 500)) {

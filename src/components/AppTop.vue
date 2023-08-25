@@ -26,12 +26,12 @@
           <v-text-field
             v-model="search.searchWord"
             append-inner-icon="fa fa-magnifying-glass"
-            autofocus
             clearable
             density="compact"
-            hide-details
             label="查找饼仓"
             variant="solo"
+            autofocus
+            hide-details
             @click:append-inner="search.searching"
             @update:model-value="search.searchChange"
           ></v-text-field>
@@ -52,7 +52,6 @@
           <v-list-item
             v-for="(item, i) in menuShow.datasourceList"
             :key="i"
-            :class="item.check ? '' : 'not'"
             :prepend-avatar="item.avatar"
             :title="item.nickname"
             :value="item"
@@ -64,17 +63,26 @@
         </v-list>
       </v-menu>
     </div>
-
+    <!-- right control panel -->
     <div class="h-100 no-drag">
-      <v-btn icon="fas fa-gear" variant="text"></v-btn>
       <v-btn
-        icon="fas fa-minus"
         variant="text"
+        icon="fas fa-comments-dollar"
+        @click="donate.show = true"
+      ></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-gear"
+        @click="setting.show = true"
+      ></v-btn>
+      <v-btn
+        variant="text"
+        icon="fas fa-minus"
         @click="handleWindow.minus"
       ></v-btn>
       <v-btn
-        :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
         variant="text"
+        :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
         @click="handleWindow.maximize"
       ></v-btn>
       <v-btn
@@ -85,19 +93,49 @@
       ></v-btn>
     </div>
   </div>
+
+  <v-dialog
+    v-model="donate.show"
+    width="800"
+    persistent
+    transition="dialog-top-transition"
+  >
+    <donate-page @close="donate.show = false"></donate-page>
+  </v-dialog>
+
+  <v-dialog
+    v-model="setting.show"
+    width="400"
+    persistent
+    transition="dialog-top-transition"
+  >
+    <setting-page @close="setting.show = false"></setting-page>
+  </v-dialog>
 </template>
 
 <script lang="ts" name="index" setup>
 import { reactive, ref } from "vue";
 import storage from "../api/operations/localStorage";
-import { getConfigDatasourceList } from "../api/resourceFetcher/datasourceList";
+import {
+  DatasourceItem,
+  getConfigDatasourceList,
+} from "../api/resourceFetcher/datasourceList";
 import { getDatasourceComb } from "../api/resourceFetcher/datasourceCombine";
 import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import searchWordEvent from "../api/operations/searchWordEvent";
 import operate from "../api/operations/operate";
+import DonatePage from "./DonatePage.vue";
+import SettingPage from "./SettingPage.vue";
 
 const winMax = ref(false);
-const menuShow = reactive({
+
+const menuShow = reactive<{
+  notOpened: boolean;
+  show: boolean;
+  datasourceList: DatasourceItem[];
+  changeSelectSource: (DatasourceItem) => void;
+  changeDatasourceOpen: (DatasourceItem) => void;
+}>({
   notOpened: true, // 没有打开过
   show: false,
   datasourceList: [],
@@ -105,19 +143,21 @@ const menuShow = reactive({
     data.check = !data.check;
   },
   async changeDatasourceOpen(value) {
+    console.log(value);
     if (value) {
       if (menuShow.notOpened) {
         menuShow.notOpened = false;
       }
-      let datasourceConfig = JSON.parse(
-        <string>storage.getItem("datasource-config"),
-      );
+      let datasourceConfig = storage.getItem<string[]>("datasource-config");
       // 打开列表
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
+          console.log("datasource");
+          console.log(data);
+          console.log(datasourceConfig);
           menuShow.datasourceList = data.data.data;
           if (datasourceConfig) {
-            let datasourceConfigUuidMap = {};
+            let datasourceConfigUuidMap: Record<string, boolean> = {};
             for (let datasource of datasourceConfig) {
               datasourceConfigUuidMap[datasource] = true;
             }
@@ -147,13 +187,13 @@ const menuShow = reactive({
         });
       let comb_resp = await getDatasourceComb(datasourceConfig);
       let comb_id = comb_resp.data.data.datasource_comb_id;
-      let datasourceComb = storage.getItem("datasource-comb");
+      let datasourceComb = await storage.getItem<string>("datasource-comb");
       // 如果组合id和之前一样，不进行刷新
       if (datasourceComb == comb_id) {
         return;
       }
-      storage.setItem("datasource-config", JSON.stringify(datasourceConfig));
-      storage.setItem("datasource-comb", comb_id);
+      await storage.setItem("datasource-config", datasourceConfig);
+      await storage.setItem("datasource-comb", comb_id);
       await datasourceConfigOperate.updateDatasourceComb();
     }
   },
@@ -192,6 +232,14 @@ const handleWindow = reactive({
   close() {
     operate.close();
   },
+});
+
+const donate = reactive({
+  show: false,
+});
+
+const setting = reactive({
+  show: false,
 });
 </script>
 

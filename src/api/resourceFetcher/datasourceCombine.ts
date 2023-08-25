@@ -19,8 +19,8 @@ export function getDatasourceComb(
   return requestClient.request({
     url: `/canteen/user/getDatasourceComb`,
     method: "POST",
-    body: Body.json({
+    body: {
       datasource_push: uuids,
-    }),
+    },
   });
 }
