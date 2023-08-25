@@ -16,7 +16,7 @@
         elevation="0"
         prepend-icon="fas fa-arrows-rotate"
         rounded="xl"
-        @click.stop="timeline.refreshTimeline"
+        @click.stop="refreshTimeline"
       >
         <template #prepend>
           <v-icon color="#fff"></v-icon>
@@ -57,7 +57,7 @@
           <v-avatar :image="cookie.icon" rounded></v-avatar>
         </template>
         <component
-          :is="component.getComponentName(cookie)"
+          :is="component.getComponentName()"
           :id="cookie.item.id"
           :info="cookie"
           @open-url="card.openUrlInThis"
@@ -167,7 +167,8 @@ const timeline = reactive<Timeline>({
 });
 
 async function getData() {
-  newestTimeline.getTimeline((_, arg) => {
+  await newestTimeline.getTimeline((_, arg) => {
+    console.log(arg);
     if (arg == null) {
       return;
     }
@@ -176,18 +177,18 @@ async function getData() {
       timeline.tempTimelineData = arg.cookies;
       timeline.combId = arg.comb_id;
       timeline.updateCookieId = arg.update_cookie_id;
-      timeline.tempNextPageId = arg.next_page_id;
+      timeline.tempNextPageId = arg.next_page_id ?? null;
     } else if (!timeline.timelineData || !scroll.scrollShow) {
       timeline.timelineData = arg.cookies;
       timeline.combId = arg.comb_id;
       timeline.updateCookieId = arg.update_cookie_id;
-      timeline.nextPageId = arg.next_page_id;
+      timeline.nextPageId = arg.next_page_id ?? null;
       document.querySelector(".time-line").scrollTop = 0;
     } else {
       timeline.refreshTimelineData = arg.cookies;
       timeline.refreshCombId = arg.comb_id;
       timeline.refreshUpdateCookieId = arg.update_cookie_id;
-      timeline.refreshNextPageId = arg.next_page_id;
+      timeline.refreshNextPageId = arg.next_page_id ?? null;
     }
   });
 }

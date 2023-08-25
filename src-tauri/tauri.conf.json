@@ -8,7 +8,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "ceobe-canteen-electron",
+    "productName": "CeobeCanteen",
     "version": "0.1.0"
   },
   "tauri": {

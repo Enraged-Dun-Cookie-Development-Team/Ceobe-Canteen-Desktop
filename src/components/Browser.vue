@@ -2,28 +2,37 @@
   <div class="browser w-100">
     <v-toolbar :title="query.source">
       <template #prepend>
-        <v-img :src="getImage(query.icon)" width="26" class="border-radius-50"></v-img>
+        <v-img
+          :src="getImage(query.icon)"
+          class="border-radius-50"
+          width="26"
+        ></v-img>
       </template>
-      <v-btn size="small" icon="fas fa-circle-xmark" title="关闭" @click="back"></v-btn>
+      <v-btn
+        icon="fas fa-circle-xmark"
+        size="small"
+        title="关闭"
+        @click="back"
+      ></v-btn>
     </v-toolbar>
     <webview
-      class="webview"
       :src="query.url"
-      style="margin: auto"
       :style="{ width: query.width ? query.width : '100%' }"
       :useragent="query.useragent ? query.useragent : null"
+      class="webview"
+      style="margin: auto"
     ></webview>
     <webview
       :src="query.url"
-      style="margin: auto"
       :style="{ width: query.width ? query.width : '100%' }"
       :useragent="query.useragent ? query.useragent : null"
+      style="margin: auto"
     ></webview>
   </div>
 </template>
 
-<script setup name="index">
-import {useRoute, useRouter} from "vue-router";
+<script lang="ts" name="index" setup>
+import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref, watch } from "vue";
 import { getImage } from "@/utils/imageUtil.ts";
 
@@ -31,18 +40,31 @@ const router = useRouter();
 const route = useRoute();
 const query = ref({});
 
-const webviewWindow = reactive({
-    webview: null,
-    init() {
-        webviewWindow.webview = document.querySelector("webview");
-        webviewWindow.webview.addEventListener("dom-ready", () => {
-            webviewWindow.insertCss();
-            // webviewWindow.insertJs();
-        });
-    },
-    insertCss() {
-    // b站
-        webviewWindow.webview.insertCSS(`
+interface WebView extends HTMLElement {
+  insertCSS: (string) => void;
+  executeJavaScript: (string) => any;
+}
+
+const webviewWindow = reactive<{
+  webview: null | WebView;
+  init: () => void;
+  insertCss: () => void;
+  insertJs: () => void;
+}>({
+  webview: null,
+  init() {
+    webviewWindow.webview = document.querySelector("webview");
+    if (webviewWindow.webview)
+      webviewWindow.webview.addEventListener("dom-ready", () => {
+        webviewWindow.insertCss();
+        // webviewWindow.insertJs();
+      });
+  },
+  insertCss() {
+    if (webviewWindow.webview) {
+      // b站
+      //@ts:ignore
+      webviewWindow.webview.insertCSS(`
         #bili-header-container,
         #internationalHeader,
         .van-popover,
@@ -55,8 +77,8 @@ const webviewWindow = reactive({
         }
         `);
 
-        // 微博
-        webviewWindow.webview.insertCSS(`
+      // 微博
+      webviewWindow.webview.insertCSS(`
     [class^="Frame_top_"],
     [class^="Frame_side_"],
     [class^="Bar_main_"],
@@ -67,35 +89,38 @@ const webviewWindow = reactive({
           display:none!important
         }
         `);
-    },
-    insertJs() {
-        webviewWindow.webview.executeJavaScript("").then((res) => {
-            console.log(res);
-        });
-    },
+    }
+  },
+  insertJs() {
+    if (webviewWindow.webview) {
+      webviewWindow.webview.executeJavaScript("").then((res) => {
+        console.log(res);
+      });
+    }
+  },
 });
 
 function back() {
-    router.push({
-        path: "/",
-    });
+  router.push({
+    path: "/",
+  });
 }
 
 watch(
-    () => route.query,
-    () => {
-        query.value = route.query;
-        webviewWindow.init();
-    }
+  () => route.query,
+  () => {
+    query.value = route.query;
+    webviewWindow.init();
+  },
 );
 
 onMounted(() => {
-    query.value = route.query;
-    webviewWindow.init();
+  query.value = route.query;
+  webviewWindow.init();
 });
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style lang="scss" rel="stylesheet/scss">
 .browser {
   .title {
     height: 30px;

@@ -1,5 +1,3 @@
-import { resolve, resolveResource } from "@tauri-apps/api/path";
-
 export function getImage(url: string, isLocal = true): string {
   // url =url;
   // const path = await resolveResource(url);

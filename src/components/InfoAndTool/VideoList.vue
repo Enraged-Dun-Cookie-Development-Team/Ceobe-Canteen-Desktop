@@ -31,11 +31,14 @@
 
 <script setup name="video" lang="ts">
 import { onMounted, reactive } from "vue";
-import { getVideoList } from "../../api/resourceFetcher/videoList";
+import { getVideoList, VideoItem } from "../../api/resourceFetcher/videoList";
 import { changeToCCT } from "../../utils/timeUtil";
 import operate from "../../api/operations/operate";
 
-const videoInfo = reactive({
+const videoInfo = reactive<{
+  list: VideoItem[];
+  getList: () => void;
+}>({
   list: [],
   getList() {
     getVideoList().then((res) => {

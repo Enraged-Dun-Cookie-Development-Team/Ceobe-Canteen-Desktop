@@ -1,5 +1,6 @@
 import requestClient, { Payload } from "../../utils/requestUtil";
-import { AxiosResponse } from "axios";
+import { Cookie } from "./cookieList";
+import { Response } from "@tauri-apps/api/http";
 
 export interface CookiePagination {
   cookies: Cookie[];
@@ -7,26 +8,6 @@ export interface CookiePagination {
    * 下一页饼id，null就是没有下一页
    */
   next_page_id?: null | string;
-}
-
-export interface Cookie {
-  /**
-   * 数据源名字
-   */
-  datasource: string;
-  /**
-   * 原始饼信息
-   */
-  default_cookie: DefaultCookie;
-  /**
-   * 数据源图标
-   */
-  icon: string;
-  /**
-   * 这个下面有些平台自己的字段，写的时候再对接吧
-   */
-  item: Item;
-  timestamp: Timestamp;
 }
 
 /**
@@ -92,7 +73,7 @@ export function getCookieSearchList({
   cookie_id?: string;
   datasource_comb_id: string;
   search_word: string;
-}): Promise<AxiosResponse<Payload<CookiePagination>>> {
+}): Promise<Response<Payload<CookiePagination>>> {
   let params = {
     datasource_comb_id: datasource_comb_id,
     search_word: search_word,

@@ -1,7 +1,7 @@
 <template>
   <div
-    data-tauri-drag-region
     class="app-top d-flex justify-space-between align-center w-100 pa-2"
+    data-tauri-drag-region
   >
     <div class="h-100 d-flex align-center">
       <v-img src="icon.png" width="40"></v-img>
@@ -17,21 +17,21 @@
       >
         <template #activator="{ props }">
           <v-btn
-            variant="text"
             icon="fas fa-magnifying-glass"
             v-bind="props"
+            variant="text"
           ></v-btn>
         </template>
         <v-card class="mx-auto" color="grey-lighten-3" min-width="400">
           <v-text-field
             v-model="search.searchWord"
-            density="compact"
-            variant="solo"
-            label="查找饼仓"
-            autofocus
             append-inner-icon="fa fa-magnifying-glass"
-            hide-details
+            autofocus
             clearable
+            density="compact"
+            hide-details
+            label="查找饼仓"
+            variant="solo"
             @click:append-inner="search.searching"
             @update:model-value="search.searchChange"
           ></v-text-field>
@@ -41,23 +41,23 @@
       <v-menu
         v-model="menuShow.show"
         :close-on-content-click="false"
+        :on-update:model-value="menuShow.changeDatasourceOpen"
         location="bottom"
         transition="slide-y-transition"
-        :on-update:model-value="menuShow.changeDatasourceOpen(menuShow.show)"
       >
         <template #activator="{ props }">
-          <v-btn variant="text" icon="fas fa-database" v-bind="props"></v-btn>
+          <v-btn icon="fas fa-database" v-bind="props" variant="text"></v-btn>
         </template>
         <v-list density="compact">
           <v-list-item
             v-for="(item, i) in menuShow.datasourceList"
             :key="i"
-            class="menuShow-item"
             :class="item.check ? '' : 'not'"
-            :value="item"
-            color="primary"
-            :title="item.nickname"
             :prepend-avatar="item.avatar"
+            :title="item.nickname"
+            :value="item"
+            class="menuShow-item"
+            color="primary"
             @click="menuShow.changeSelectSource(item)"
           >
           </v-list-item>
@@ -66,28 +66,28 @@
     </div>
 
     <div class="h-100 no-drag">
-      <v-btn variant="text" icon="fas fa-gear"></v-btn>
+      <v-btn icon="fas fa-gear" variant="text"></v-btn>
       <v-btn
-        variant="text"
         icon="fas fa-minus"
+        variant="text"
         @click="handleWindow.minus"
       ></v-btn>
       <v-btn
-        variant="text"
         :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
+        variant="text"
         @click="handleWindow.maximize"
       ></v-btn>
       <v-btn
-        variant="text"
-        icon="fas fa-circle-xmark"
         color="error"
+        icon="fas fa-circle-xmark"
+        variant="text"
         @click="handleWindow.close"
       ></v-btn>
     </div>
   </div>
 </template>
 
-<script setup name="index" lang="ts">
+<script lang="ts" name="index" setup>
 import { reactive, ref } from "vue";
 import storage from "../api/operations/localStorage";
 import { getConfigDatasourceList } from "../api/resourceFetcher/datasourceList";
@@ -95,6 +95,7 @@ import { getDatasourceComb } from "../api/resourceFetcher/datasourceCombine";
 import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import searchWordEvent from "../api/operations/searchWordEvent";
 import operate from "../api/operations/operate";
+
 const winMax = ref(false);
 const menuShow = reactive({
   notOpened: true, // 没有打开过
@@ -153,7 +154,7 @@ const menuShow = reactive({
       }
       storage.setItem("datasource-config", JSON.stringify(datasourceConfig));
       storage.setItem("datasource-comb", comb_id);
-      datasourceConfigOperate.updateDatasourceComb();
+      await datasourceConfigOperate.updateDatasourceComb();
     }
   },
 });
@@ -162,15 +163,17 @@ const search = reactive({
   wordShow: "",
   searchWord: null,
   searching() {
-    // 将搜索词发送给timeline进行处理
-    searchWordEvent.sendSearchWord(search.searchWord);
-    search.wordShow = search.searchWord;
+    if (search.searchWord) {
+      // 将搜索词发送给timeline进行处理
+      searchWordEvent.sendSearchWord(search.searchWord);
+      search.wordShow = search.searchWord;
+    }
   },
   searchChange() {
     // 如果为空 同步到timeline
     if (search.searchWord === "" || !search.searchWord) {
-      searchWordEvent.sendSearchWord(search.searchWord);
       search.wordShow = "";
+      searchWordEvent.sendSearchWord("");
     }
   },
 });
@@ -192,7 +195,7 @@ const handleWindow = reactive({
 });
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style lang="scss" rel="stylesheet/scss">
 .app-top {
   position: relative;
   height: 60px;

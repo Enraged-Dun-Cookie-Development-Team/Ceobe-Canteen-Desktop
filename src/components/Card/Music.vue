@@ -2,7 +2,12 @@
   <div class="music-window">
     <v-card theme="dark" width="400">
       <template #image>
-        <v-img :src="info.coverImage" width="130%" class="back-image" cover></v-img>
+        <v-img
+          :src="info.coverImage"
+          width="130%"
+          class="back-image"
+          cover
+        ></v-img>
       </template>
       <div class="d-flex flex-no-wrap justify-space-between">
         <div>
@@ -47,15 +52,18 @@
             :style="{ height: 150 + info.componentData.size * 30 + 'px' }"
             :src="`http://music.163.com/outchain/player?type=1&id=${id}&auto=0`"
           ></webview>
-          <div v-else :style="{ height: 150 + info.componentData.size * 30 + 'px' }"></div>
+          <div
+            v-else
+            :style="{ height: 150 + info.componentData.size * 30 + 'px' }"
+          ></div>
         </div>
       </v-expand-transition>
     </v-card>
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
 
 const props = defineProps({
   info: {
@@ -63,7 +71,7 @@ const props = defineProps({
     default: () => {},
   },
 });
-const id = props.info.jumpUrl.split('=')[1];
+const id = props.info.jumpUrl.split("=")[1];
 const showPlayer = ref(false);
 
 onMounted(() => {});

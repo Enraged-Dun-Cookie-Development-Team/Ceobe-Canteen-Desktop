@@ -13,12 +13,19 @@ pub fn run_sev(window: Window) {
     while let Ok(mut stream) = socket.accept() {
         while let Ok(packet) = Packet::read(&mut stream) {
             if packet.msg.as_str() == "CREATE_INSTANCE" {
-                window.show().expect("Cannot Show Windows");
-                window.set_focus().expect("cannot focus Window");
+                show_window(&window).expect("Cannot Reopen window");
                 break;
             }
         }
     }
+}
+
+fn show_window(window:&Window)->tauri::Result<()>{
+    window.show()?;
+    if window.is_minimized()? {
+        window.unminimize()?
+    }
+    Ok(())
 }
 
 pub fn try_start() -> io::Result<bool> {

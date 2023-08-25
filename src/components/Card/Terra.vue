@@ -1,11 +1,11 @@
 <template>
   <div class="terra-window">
-    <v-card class="mx-auto" width="400" @click="Terra.show = !Terra.show">
+    <v-card class="mx-auto" width="400" @click="terra.show = !terra.show">
       <v-img
         v-if="info.coverImage"
         referrerpolicy="no-referrer"
         class="align-end text-white"
-        :src="Terra.imgUrl"
+        :src="terra.imgUrl"
         cover
       ></v-img>
 
@@ -19,7 +19,7 @@
         <slot :info="info"></slot>
       </v-card-actions>
       <v-expand-transition>
-        <div v-show="Terra.show">
+        <div v-show="terra.show">
           <v-divider></v-divider>
           <v-card-subtitle class="white-space-normal mt-1">
             {{ info.componentData.introduction }}
@@ -29,7 +29,7 @@
               v-for="(item, index) in info.componentData.episodes"
               :key="index"
               class="mr-1 mb-1"
-              @click.stop="Terra.openUrl(item.cid)"
+              @click.stop="terra.openUrl(item.cid)"
             >
               {{ item.title }}
             </v-btn>
@@ -40,9 +40,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, reactive } from "vue";
-import ceobeRequest from "@/api/ceobeRequest.ts";
+import ceobeRequest from "../../api/operations/ceobeRequest";
 
 const props = defineProps({
   info: {
@@ -63,10 +63,10 @@ const terra = reactive({
       ceobeRequest
         .getHasRefererImageBase64(props.info.coverImage)
         .then((res) => {
-          Terra.imgUrl = "data:image/jpeg;base64," + res;
+          terra.imgUrl = "data:image/jpeg;base64," + res;
         });
     } else {
-      Terra.imgUrl = props.info.coverImage;
+      terra.imgUrl = props.info.coverImage;
     }
   },
   openImage() {},
@@ -86,7 +86,7 @@ const terra = reactive({
 
 onMounted(() => {
   if (props.info.coverImage) {
-    Terra.getImg(props.info.coverImage);
+    terra.getImg(props.info.coverImage);
   }
 });
 </script>

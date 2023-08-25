@@ -5,11 +5,16 @@ import {
   once,
   UnlistenFn,
 } from "@tauri-apps/api/event";
-import { DatasourceItem } from "../resourceFetcher/datasourceList";
+import { Cookie, CookieList } from "../resourceFetcher/cookieList";
+
+interface TimelineData extends CookieList {
+  comb_id: string;
+  update_cookie_id: string;
+}
 
 class NewestTimeline {
   async getTimeline(
-    callback: (event: string, payload: DatasourceItem) => void,
+    callback: (event: string, payload: TimelineData) => void,
   ): Promise<UnlistenFn> {
     return await listen<Timeline>(
       "newest-timeline",
@@ -19,7 +24,7 @@ class NewestTimeline {
     );
   }
 
-  async sendTimeline(data: Timeline) {
+  async sendTimeline(data: TimelineData) {
     console.log("sending");
     console.log(data);
     await emit("newest-timeline", data);
@@ -41,9 +46,9 @@ class NewestTimeline {
 const newestTimeline = new NewestTimeline();
 
 export interface Timeline {
-  timelineData: any[] | null; // 饼列表
-  refreshTimelineData: any[] | null; // 刷新临时存的饼列表
-  tempTimelineData: any[] | null; // 用于搜索状态，临时存的饼列表
+  timelineData: Cookie[] | null; // 饼列表
+  refreshTimelineData: Cookie[] | null; // 刷新临时存的饼列表
+  tempTimelineData: Cookie[] | null; // 用于搜索状态，临时存的饼列表
   nextPageId: string | null; // 下一页id
   refreshNextPageId: string | null; // 刷新临时存的下一页id
   tempNextPageId: string | null; // 用于搜索状态，临时存的下一页id
