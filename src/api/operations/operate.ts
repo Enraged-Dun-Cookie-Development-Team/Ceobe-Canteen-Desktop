@@ -9,7 +9,6 @@ import {
   currentMonitor,
   getAll,
   LogicalPosition,
-  PhysicalSize,
   WebviewWindow,
 } from "@tauri-apps/api/window";
 import { Cookie } from "../resourceFetcher/cookieList";

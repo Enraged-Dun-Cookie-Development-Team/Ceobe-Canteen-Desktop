@@ -136,10 +136,14 @@ import SettingPage from "./SettingPage.vue";
 
 const winMax = ref(false);
 
+interface ViewDataSourceItem extends DatasourceItem {
+  check: boolean;
+}
+
 const menuShow = reactive<{
   notOpened: boolean;
   show: boolean;
-  datasourceList: DatasourceItem[];
+  datasourceList: ViewDataSourceItem[];
   changeSelectSource: (DatasourceItem) => void;
   changeDatasourceOpen: (boolean) => void;
 }>({
@@ -161,8 +165,13 @@ const menuShow = reactive<{
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
           console.log("data", data);
-          console.log("datacource: ", datasourceConfig);
-          menuShow.datasourceList = data.data.data;
+          console.log("datasource: ", datasourceConfig);
+          menuShow.datasourceList = data.data.data.map(
+            (data: ViewDataSourceItem) => {
+              data.check = false;
+              return data;
+            },
+          );
           if (datasourceConfig) {
             let datasourceConfigUuidMap: Record<string, boolean> = {};
             for (let datasource of datasourceConfig) {
