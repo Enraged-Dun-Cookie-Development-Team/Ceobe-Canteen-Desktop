@@ -1,34 +1,31 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod hidden_window;
+mod preview_page;
 mod single_instance;
 
-use std::io;
-use std::io::ErrorKind;
-use std::sync::OnceLock;
+
+
+use std::sync::{OnceLock};
 use std::thread::spawn;
 use base64::Engine;
-use tauri::{generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, WindowEvent, command};
+use tauri::{generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, WindowEvent, command, Wry};
+
 use tauri::api::http::{Client, ClientBuilder, HttpRequestBuilder, ResponseType};
-use hidden_window::init_preview;
+use preview_page::read_detail;
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {
+    if let Ok(true)| Err(_) = try_start(){
+
     Builder::default().setup(|app| {
         // single instance
-        if let Ok(true)| Err(_) = try_start(){
-            let main_window = app.get_window("main").unwrap();
-            spawn(move||run_sev(main_window));
-        }else {
-            let err = io::Error::new(ErrorKind::AlreadyExists,"anther instance is running");
-            Err(err)?;
-        }
-
+        let main_window = app.get_window("main").expect("cannot found main window");
+        spawn(move||run_sev(main_window));
 
         let handle = app.handle();
         SystemTray::new().with_tooltip("小刻食堂持续蹲饼中").on_event(move |event| match event {
-            SystemTrayEvent::LeftClick { .. } => {
+            SystemTrayEvent::DoubleClick {..}|SystemTrayEvent::LeftClick { .. } => {
                 let window = handle.get_window("main").unwrap();
                 window.show().unwrap();
                 window.set_focus().unwrap();
@@ -55,8 +52,9 @@ fn main() {
 
         Ok(())
     })
-        .invoke_handler(tauri::generate_handler![request_refer_image,init_preview])
+        .invoke_handler(tauri::generate_handler![request_refer_image,read_detail])
         .run(generate_context!()).expect("error while running tauri application");
+    }
 }
 
 #[command]

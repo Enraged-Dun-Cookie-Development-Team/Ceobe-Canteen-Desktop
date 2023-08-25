@@ -1,19 +1,20 @@
 use byteorder::{ReadBytesExt, WriteBytesExt};
 use interprocess::local_socket::{LocalSocketListener, LocalSocketStream};
 use std::io;
-use std::io::{ErrorKind, Read, Write};
-use std::slice::SliceIndex;
-use tauri::{Config, PathResolver, Window};
+use std::io::{Read, Write};
 
-const LOCAL_SOCEKT_NAME: &str = "SINGLE_INSTANCE";
+use tauri::{Window};
+
+const LOCAL_SOCKET_NAME: &str = "SINGLE_INSTANCE";
 
 pub fn run_sev(window: Window) {
-    let socket = LocalSocketListener::bind(LOCAL_SOCEKT_NAME).expect("Init Local Socket Failure");
+    let socket = LocalSocketListener::bind(LOCAL_SOCKET_NAME).expect("Init Local Socket Failure");
 
     while let Ok(mut stream) = socket.accept() {
         while let Ok(packet) = Packet::read(&mut stream) {
             if packet.msg.as_str() == "CREATE_INSTANCE" {
                 window.show().expect("Cannot Show Windows");
+                window.set_focus().expect("cannot focus Window");
                 break;
             }
         }
@@ -21,14 +22,14 @@ pub fn run_sev(window: Window) {
 }
 
 pub fn try_start() -> io::Result<bool> {
-    Ok(match LocalSocketStream::connect(LOCAL_SOCEKT_NAME) {
+    Ok(match LocalSocketStream::connect(LOCAL_SOCKET_NAME) {
         Ok(mut conn) => {
             Packet {
                 msg: "CREATE_INSTANCE".into(),
             }.write(&mut conn)?;
             false
         }
-        Err(err) => {
+        Err(_) => {
             true
         }
     }

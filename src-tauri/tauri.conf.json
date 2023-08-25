@@ -41,6 +41,9 @@
         "asset": true,
         "all": true,
         "assetScope": []
+      },
+      "dialog": {
+        "message": true
       }
     },
     "bundle": {
@@ -67,7 +70,6 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": ["../src/assets"],
       "shortDescription": "",
       "targets": "all",
       "windows": {

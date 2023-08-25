@@ -1,9 +1,10 @@
 import { resolve, resolveResource } from "@tauri-apps/api/path";
 
-export function getImage(url: string, isLocal = true): URL {
-  url = ".." + url;
+export function getImage(url: string, isLocal = true): string {
+  // url =url;
   // const path = await resolveResource(url);
-  const ur = new URL(url, import.meta.url).href;
+  const ur = url;
+  // const ur = new URL(url).href;
   console.log(import.meta);
   console.log(ur);
   return ur;

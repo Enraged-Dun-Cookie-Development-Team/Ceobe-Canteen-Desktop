@@ -30,7 +30,7 @@ const INSERT :&str = r#"<style type="text/css">
 "#;
 
 #[command(async)]
-pub async fn init_preview(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
+pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
     let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
         window.eval(&format!("window.location.replace('{url}')"))?;
         window.show()?;
@@ -43,12 +43,9 @@ pub async fn init_preview(app: AppHandle, url: Url, title: String) -> tauri::Res
             .on_web_resource_request(handle_inject_css)
             .build()?;
         let win = w.clone();
-        w.on_window_event(move |ev| match ev {
-            WindowEvent::CloseRequested { api, .. } => {
-                api.prevent_close();
-                win.hide().ok();
-            }
-            _ => {}
+        w.on_window_event(move |ev| if let WindowEvent::CloseRequested { api, .. } = ev {
+            api.prevent_close();
+            win.hide().ok();
         });
         // wait window open
         w
@@ -57,6 +54,7 @@ pub async fn init_preview(app: AppHandle, url: Url, title: String) -> tauri::Res
     window.eval(include_str!("init_script.js"))?;
     window.set_focus()?;
     window.set_title(&title)?;
+    // window.set_icon();
     Ok(())
 }
 

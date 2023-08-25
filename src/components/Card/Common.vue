@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive } from "vue";
-import ceobeRequest from "../../api/operations/ceobeRequest";
+import ceobeRequest from "@/api/operations/ceobeRequest";
 
 const props = defineProps({
   info: {
