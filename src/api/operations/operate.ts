@@ -8,12 +8,14 @@ import {
   appWindow,
   currentMonitor,
   getAll,
+  LogicalPosition,
   PhysicalSize,
   WebviewWindow,
 } from "@tauri-apps/api/window";
+import { Cookie } from "../resourceFetcher/cookieList";
 
 class Operate {
-  async openNotificationWindow(cookie: any) {
+  async openNotificationWindow(cookie: Cookie) {
     console.log(`send Notification`);
 
     let monitor = await currentMonitor();
@@ -22,11 +24,14 @@ class Operate {
       (window: WebviewWindow) => window.label == "notification",
     );
     let winSize = await window.outerSize();
+    console.log(winSize, size);
     let w = size?.width ?? 1920;
     let h = size?.height ?? 1080;
+    console.log(w, h);
     await window.setPosition(
-      new PhysicalSize(w - winSize.width, h - winSize.height),
+      new LogicalPosition(w - winSize.width, h - winSize.height),
     );
+    console.log(await window.outerPosition());
     await window.emit("info", cookie);
     await window.show();
   }
