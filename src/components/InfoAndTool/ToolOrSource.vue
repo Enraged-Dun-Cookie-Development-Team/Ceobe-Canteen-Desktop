@@ -9,7 +9,7 @@
           @click.stop="openUrl(item.url)"
         >
           <template #prepend>
-            <v-img width="20" class="btn-img" :src="getImage(item.img, props.imgLocal)"></v-img>
+            <v-img width="20" class="btn-img" :src="getImage(item.img)"></v-img>
           </template>
           {{ item.name }}
         </v-btn>
@@ -32,10 +32,6 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  imgLocal: {
-    type: Boolean,
-    default: () => true,
-  }
 });
 
 function openUrl(url) {
