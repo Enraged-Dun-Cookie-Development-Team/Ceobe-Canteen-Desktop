@@ -1,6 +1,13 @@
 import axios from 'axios';
+import {axiosETAGCache } from 'axios-etag-cache';
 
-const baseUrl = 'http://server-dev.ceobecanteen.top/api/v1';
+const service = axiosETAGCache(axios);
+
+const BASE_URL = {
+  SERVER_URL: 'https://server.ceobecanteen.top/api/v1',
+  CDN_URL: 'https://cdn.ceobecanteen.top',
+  CDN_SERVER_URL: 'https://server-cdn.ceobecanteen.top/api/v1',
+}
 
 const showStatus = status => {
   let message = '';
@@ -44,34 +51,21 @@ const showStatus = status => {
   return `${message}，请检查网络或联系管理员！`;
 };
 
-const service = axios.create({
-  // 联调
-  headers: {
-    get: {
-      'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
-    },
-    post: {
-      'Content-Type': 'application/json;charset=utf-8',
-      'Cache-Control': 'no-cache'
-    }
-  },
-  // 是否跨站点访问控制请求
-  withCredentials: true,
-  timeout: 30000,
-  validateStatus() {
-    // 使用async-await，处理reject情况较为繁琐，所以全部返回resolve，在业务代码中处理异常
-    return true;
-  }
-});
-
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    console.log(config)
-    if ((config.baseURL = config.baseURL != undefined ? config.baseURL : baseUrl)) {
-      return config;
+    switch (config.urlChoice) {
+      case 'SERVER_URL':
+        config.baseURL = BASE_URL.SERVER_URL;
+        break;
+      case 'CDN_URL':
+        config.baseURL = BASE_URL.CDN_URL;
+        break;
+      case 'CDN_SERVER_URL':
+        config.baseURL = BASE_URL.CDN_SERVER_URL;
+        break;
     }
+    return config;
   },
   err => {
     console.log(err);

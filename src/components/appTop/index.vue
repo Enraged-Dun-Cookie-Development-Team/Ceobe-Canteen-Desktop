@@ -54,7 +54,8 @@
     </div>
 
     <div class="h-100 no-drag">
-      <v-btn variant="text" icon="fas fa-gear"></v-btn>
+      <v-btn variant="text" icon="fas fa-comments-dollar" @click="donate.show = true"></v-btn>
+      <v-btn variant="text" icon="fas fa-gear" @click="setting.show = true"></v-btn>
       <v-btn variant="text" icon="fas fa-minus" @click="handleWindow.minus"></v-btn>
       <v-btn
         variant="text"
@@ -64,14 +65,25 @@
       <v-btn variant="text" icon="fas fa-circle-xmark" color="error" @click="handleWindow.close"></v-btn>
     </div>
   </div>
+
+  <v-dialog v-model="donate.show" width="800" persistent transition="dialog-top-transition">
+    <donate-page  @close="donate.show = false"></donate-page>
+  </v-dialog>
+
+  <v-dialog v-model="setting.show" width="400" persistent  transition="dialog-top-transition">
+    <setting-page @close="setting.show = false"></setting-page>
+  </v-dialog>
 </template>
 
 <script setup name="index">
 import { reactive, ref } from 'vue';
 import { getImage } from '@/utils/imageUtil';
 import { getAllDatasources, getDatasourceComb } from '@/api/list';
+import donatePage from './donate'
+import settingPage from './setting'
 
 const winMax = ref(false);
+
 const menuShow = reactive({
   notOpened: true, // 没有打开过
   show: false,
@@ -164,6 +176,14 @@ const handleWindow = reactive({
     window.operate.close();
   },
 });
+
+const donate = reactive({
+  show:false
+})
+
+const setting = reactive({
+  show:false,
+})
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

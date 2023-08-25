@@ -21,14 +21,17 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@mdi/font": "5.9.55",
     "axios": "^1.3.5",
+    "axios-etag-cache": "^1.4.0",
     "core-js": "^3.8.3",
     "electron": "^25.3.0",
     "electron-builder": "^24.4.0",
     "electron-connect": "^0.6.3",
     "html-to-image": "^1.11.11",
     "i": "^0.3.7",
+    "joi": "^17.9.2",
     "node-sass": "^8.0.0",
     "prettier": "^3.0.0",
+    "rebuild": "^0.1.2",
     "roboto-fontface": "*",
     "sass-loader": "^13.2.2",
     "vue": "^3.2.13",
@@ -44,12 +47,12 @@
     "@vue/cli-service": "~5.0.0",
     "electron": "^23.2.3",
     "electron-devtools-installer": "^3.1.0",
-    "lint-staged": "^13.0.3",
-    "postcss": "^8.4.16",
-    "postcss-html": "^1.5.0",
     "eslint": "8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "9.4.0",
+    "lint-staged": "^13.0.3",
+    "postcss": "^8.4.16",
+    "postcss-html": "^1.5.0",
     "stylelint": "^14.6.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard-scss": "^4.0.0",
@@ -64,9 +67,6 @@
     "not dead",
     "not ie 11"
   ],
-  "gitHooks": {
-    "pre-commit": "lint-staged --concurrent false --quiet --verbose"
-  },
   "lint-staged": {
     "src/**/*.{js,vue}": [
       "vue-cli-service lint"

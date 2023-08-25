@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld('operate', {
   maximize: () => ipcRenderer.invoke('maximize'),
   close: () => ipcRenderer.invoke('close'),
   exit: () => ipcRenderer.invoke('exit'),
+  bootSetting:(isBoot) => ipcRenderer.invoke('bootSetting',isBoot),
+  getBootSetting:() => ipcRenderer.invoke('getBootSetting'),
 });
 
 contextBridge.exposeInMainWorld('notification', {
@@ -60,4 +62,8 @@ contextBridge.exposeInMainWorld('datasourceConfig', {
 contextBridge.exposeInMainWorld('searchWordEvent', {
   getSearchWord: (callback) => ipcRenderer.on('search-word', callback),
   sendSearchWord: (data) => ipcRenderer.send('search-word', data),
+});
+
+contextBridge.exposeInMainWorld('version', {
+  judgmentVersion:(v1,v2) => ipcRenderer.invoke('judgmentVersion',v1,v2),
 });

@@ -1,22 +1,12 @@
 import service from '@/utils/requestUtil';
 
 /**
- * 获取列表
- * @returns {*}
- */
-export function getCardList() {
-  return service({
-    url: `https://temp.ceobecanteen.top/canteen/cardList`,
-    method: 'GET',
-  });
-}
-
-/**
  * 获取公告
  * @returns {*}
  */
 export function getAnnouncementInfo() {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/operate/announcement/list`,
     method: 'GET',
   });
@@ -24,6 +14,7 @@ export function getAnnouncementInfo() {
 
 export function getResourceInfo() {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/operate/resource/get`,
     method: 'GET',
   });
@@ -35,6 +26,7 @@ export function getResourceInfo() {
  */
 export function getVideoList() {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/operate/video/list`,
     method: 'GET',
   });
@@ -46,6 +38,7 @@ export function getVideoList() {
  */
 export function getResourceList() {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/config/datasource/list`,
     method: 'GET',
   });
@@ -58,6 +51,7 @@ export function getResourceList() {
  */
 export function getDatasourceComb(uuids) {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/user/getDatasourceComb`,
     method: 'POST',
     data: {
@@ -73,8 +67,12 @@ export function getDatasourceComb(uuids) {
  */
 export function getCookieNewestInfo(comb_id) {
   return service({
-    url: `http://cdn-dev.ceobecanteen.top/datasource-comb/${comb_id}`,
+    urlChoice: 'CDN_URL',
+    url: `/datasource-comb/${comb_id}`,
     method: 'GET',
+    headers: {
+      'Cache-Control': 'no-cache',
+    }
   });
 }
 
@@ -87,13 +85,14 @@ export function getCookieNewestInfo(comb_id) {
  */
 export function getCookieList(comb_id, cookie_id, update_cookie_id) {
   return service({
-    url: `http://cdn-muelsyse-dev.ceobecanteen.top/api/v1/cdn/cookie/mainList/cookieList`,
+    urlChoice: 'CDN_SERVER_URL',
+    url: `/cdn/cookie/mainList/cookieList`,
     params: {
       datasource_comb_id: comb_id,
       cookie_id: cookie_id,
       update_cookie_id: update_cookie_id,
     },
-    method: 'GET',
+    method: 'GET'
   });
 }
 
@@ -103,6 +102,7 @@ export function getCookieList(comb_id, cookie_id, update_cookie_id) {
  */
 export function getAllDatasources() {
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/config/datasource/list`,
     method: 'GET',
   });
@@ -122,7 +122,26 @@ export function getCookieSearchList(cookie_id, datasource_comb_id, search_word) 
     params['cookie_id'] = cookie_id;
   }
   return service({
+    urlChoice: 'SERVER_URL',
     url: `/canteen/cookie/search/list`,
+    method: 'GET',
+    params: params,
+  });
+}
+
+/**
+ * 获取饼搜索列表
+ * @returns {*}
+ */
+export function getVersion(version) {
+  let params = {};
+
+  if (version) {
+    params['version'] = version;
+  }
+  return service({
+    urlChoice: 'SERVER_URL',
+    url: `/canteen/operate/version/desktop`,
     method: 'GET',
     params: params,
   });

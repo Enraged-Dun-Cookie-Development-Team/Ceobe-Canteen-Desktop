@@ -60,4 +60,56 @@ app.whenReady().then(() => {
       clipboard.writeText(data.data);
     }
   });
+
+  // 是否开机自启
+  ipcMain.handle('bootSetting', async (event, isBoot) => {
+    if(isBoot){
+      //设置开机启动
+      app.setLoginItemSettings({
+        openAtLogin: true,
+        openAsHidden: true,
+      });
+    }else{
+      app.setLoginItemSettings({
+        openAtLogin: false,
+        openAsHidden: false
+      });
+    }
+    //获取是否开机启动
+    const { openAtLogin } = app.getLoginItemSettings();
+    return openAtLogin;
+  });
+
+  ipcMain.handle('getBootSetting', async (event) => {
+    //获取是否开机启动
+    const { openAtLogin } = app.getLoginItemSettings();
+    return openAtLogin;
+  });
+
+  // 判断版本号大小
+  ipcMain.handle('judgmentVersion', async (event, v1, v2) => {
+    console.log(v1)
+    console.log(v2)
+    if (v1 == v2) {
+      return false;
+    }
+
+    const vs1 = v1.split('.').map((a) => parseInt(a));
+    const vs2 = v2.split('.').map((a) => parseInt(a));
+
+    const digit = Math.min(vs1.length, vs2.length);
+    for (let i = 0; i < digit; i++) {
+      if (vs1[i] > vs2[i]) {
+        return true;
+      } else if (vs1[i] < vs2[i]) {
+        return false;
+      }
+    }
+
+    if (digit == vs1.length) {
+      return false;
+    } else {
+      return true;
+    }
+  });
 });
