@@ -62,7 +62,7 @@ export interface RequestOptions {
 class RequestClient {
   constructor() {}
 
-  async request<T>(options: RequestOptions): Response<Payload<T>> {
+  async request<T>(options: RequestOptions): Response<T> {
     options.headers = {
       "Content-Type": "application/json;charset=utf-8",
     };
@@ -84,7 +84,7 @@ class RequestClient {
       console.log(`sending request`);
       console.log(options);
 
-      const response: Response<Payload<T>> = await invoke("send_request", {
+      const response: Response<T> = await invoke("send_request", {
         options: options,
       });
 

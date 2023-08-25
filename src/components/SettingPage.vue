@@ -50,7 +50,6 @@
 
 <script setup name="setting" lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import { VERSION } from "../constant";
 import updater from "../api/operations/updater";
 import operate from "../api/operations/operate";
 import { getVersion } from "../api/resourceFetcher/version";
@@ -77,14 +76,15 @@ const setting = reactive({
   showDownload: false,
   showAlreadyNewest: false,
   checkVersion() {
-    getVersion().then((res) => {
+    getVersion().then(async (res) => {
       console.log(res);
       if (res.data.data == null) {
         return;
       }
       console.log(res);
+
       updater
-        .judgmentVersion(res.data.data.version, VERSION)
+        .judgmentVersion(res.data.data.version)
         .then((result) => {
           if (result) {
             setting.showDownload = true;

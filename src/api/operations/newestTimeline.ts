@@ -7,7 +7,7 @@ import {
 } from "@tauri-apps/api/event";
 import { Cookie, CookieList } from "../resourceFetcher/cookieList";
 
-interface TimelineData extends CookieList {
+export interface TimelineData extends CookieList {
   comb_id: string;
   update_cookie_id: string;
 }

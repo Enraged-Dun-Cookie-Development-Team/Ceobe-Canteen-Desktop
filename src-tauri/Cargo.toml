@@ -17,7 +17,7 @@ tauri-build = { version = "1.4.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = [ "updater", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
+tauri = { version = "1.4.0", features = [ "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
 reqwest = "0.11"
 base64 = "0.21.2"
 regex = "1"

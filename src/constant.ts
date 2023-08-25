@@ -187,4 +187,4 @@ const dayInfo = [
   },
 ];
 
-export { toolInfo, sourceInfo, dayInfo, VERSION };
+export { toolInfo, sourceInfo, dayInfo };

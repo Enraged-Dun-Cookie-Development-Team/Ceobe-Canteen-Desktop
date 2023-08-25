@@ -2,11 +2,22 @@
   <div class="background"></div>
 </template>
 
-<script setup name="index" lang="ts">
-import { onBeforeMount } from "vue";
-import {backgroundInit} from "../utils/backgroundUtil.ts";
+<script lang="ts" name="index" setup>
+import { onBeforeMount, onUnmounted } from "vue";
+import { BackgroundRunner } from "../utils/backgroundUtil.ts";
+
+let background: null | BackgroundRunner = null;
 
 onBeforeMount(() => {
-    backgroundInit().then(() => {});
+  BackgroundRunner.init().then(async (br) => {
+    background = br;
+    await br.run();
+  });
+});
+
+onUnmounted(() => {
+  if (background) {
+    background.release();
+  }
 });
 </script>

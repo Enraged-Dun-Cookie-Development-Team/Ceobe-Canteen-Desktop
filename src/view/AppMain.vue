@@ -8,4 +8,4 @@
   </div>
 </template>
 
-<script setup name="AppMain"></script>
+<script setup name="AppMain" lang="ts"></script>
