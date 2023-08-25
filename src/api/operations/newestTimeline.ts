@@ -33,7 +33,7 @@ class NewestTimeline {
   async knowNeedTimeline(
     callback: (event: string) => void,
   ): Promise<UnlistenFn> {
-    return await once<void>("need-timeline", (event: EventCallback<void>) => {
+    return await listen<void>("need-timeline", (event: EventCallback<void>) => {
       callback(event.payload);
     });
   }

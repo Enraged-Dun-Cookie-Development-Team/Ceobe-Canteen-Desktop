@@ -90,7 +90,7 @@
         "fullscreen": false,
         "label": "main",
         "height": 600,
-        "resizable": false,
+        "resizable": true,
         "title": "ceobe-canteen-electron",
         "width": 1200
       },
