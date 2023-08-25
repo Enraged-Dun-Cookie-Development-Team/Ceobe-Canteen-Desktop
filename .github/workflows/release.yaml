@@ -125,7 +125,7 @@ jobs:
           Get-ChildItem -Path $release_dir -File -Recurse | ForEach-Object {
             $filePath = $_.FullName
             Write-Host $filePath
-            gh release upload --clobber app-v${{ env.PACKAGE_VERSION }} $filePath
+            gh release upload --clobber app-v${env:PACKAGE_VERSION} $filePath
           }
         shell: pwsh
 
