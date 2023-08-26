@@ -62,6 +62,14 @@ export interface RequestOptions {
 class RequestClient {
   constructor() {}
 
+  async requestPayload<T>(options:RequestOptions):Response<Payload<T>>{
+    let response:Response<Payload<T>> = await  this.request<Payload<T>>(options);
+    if (response.data.code != "00000"){
+      throw new Error(`${response.data.code}:${response.data.message} | ${response.data.msg}`)
+    }else {
+      return response
+    }
+  }
   async request<T>(options: RequestOptions): Response<T> {
     let base;
 

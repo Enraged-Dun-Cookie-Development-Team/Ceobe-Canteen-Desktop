@@ -43,7 +43,7 @@ export interface DatasourceItem {
 export function getConfigDatasourceList(): Promise<
   Response<Payload<DatasourceItem[]>>
 > {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: `/canteen/config/datasource/list`,
     method: "GET",
   });

@@ -16,7 +16,7 @@ export interface CombineId {
 export function getDatasourceComb(
   uuids: string[],
 ): Promise<Response<Payload<CombineId>>> {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: `/canteen/user/getDatasourceComb`,
     method: "POST",
     body: {

@@ -34,7 +34,7 @@ export interface VideoItem {
  * @returns {*}
  */
 export function getVideoList(): Promise<Response<Payload<VideoItem[]>>> {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: `/canteen/operate/video/list`,
     method: "GET",
   });

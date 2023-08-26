@@ -108,7 +108,7 @@ export function getCookieList(
     query.update_cookie_id = update_cookie_id;
   }
 
-  return requestClient.request<CookieList>({
+  return requestClient.requestPayload<CookieList>({
     requestTarget: "ServeCDN",
     url: `/cdn/cookie/mainList/cookieList`,
     query: query,

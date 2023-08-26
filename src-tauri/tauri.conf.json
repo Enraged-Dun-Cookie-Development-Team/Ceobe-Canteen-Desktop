@@ -18,6 +18,9 @@
     },
     "allowlist": {
       "all": false,
+      "notification": {
+        "all": true
+      },
       "http": {
         "all": true,
         "request": true,
