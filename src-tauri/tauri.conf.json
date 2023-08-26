@@ -83,6 +83,11 @@
           "installerIcon": "icons/icon.ico",
           "installMode": "both",
           "languages": ["SimpChinese"]
+        },
+        "wix": {
+          "language": "zh-CN",
+          "bannerPath":"assets/installer-banner.bmp",
+          "dialogImagePath": "assets/installer-dialog.bmp"
         }
       }
     },
