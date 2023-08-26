@@ -56,7 +56,15 @@ const common = reactive<{
           common.imgUrl = "data:image/jpeg;base64," + res;
         });
     } else {
-      common.imgUrl = props.info.default_cookie.images[0].origin_url;
+      let url = new URL(props.info.default_cookie.images[0].origin_url)
+      ceobeRequest
+        .getHasRefererImageBase64(
+          props.info.default_cookie.images[0].origin_url,
+          url.origin
+        )
+        .then((res) => {
+          common.imgUrl = "data:image/jpeg;base64," + res;
+        });
     }
     return common.imgUrl;
   },
