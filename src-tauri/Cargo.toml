@@ -5,7 +5,7 @@ description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻�
 authors = ["FrozenString<frozenstringstable@gmail.com>"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "ceobe-canteen-desktop"
 edition = "2021"
 rust-version = "1.60"
 

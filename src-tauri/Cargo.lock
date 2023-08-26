@@ -63,33 +63,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
 
 [[package]]
-name = "app"
-version = "0.1.0"
-dependencies = [
- "arboard",
- "auto-launch",
- "base64 0.21.2",
- "byteorder",
- "dirs 5.0.1",
- "http",
- "http-cache-reqwest",
- "image",
- "interprocess",
- "once_cell",
- "parking_lot",
- "pickledb",
- "regex",
- "reqwest",
- "reqwest-middleware",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "thiserror",
- "url",
-]
-
-[[package]]
 name = "arboard"
 version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -403,6 +376,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "ceobe-canteen-desktop"
+version = "0.1.5"
+dependencies = [
+ "arboard",
+ "auto-launch",
+ "base64 0.21.2",
+ "byteorder",
+ "dirs 5.0.1",
+ "http",
+ "http-cache-reqwest",
+ "image",
+ "interprocess",
+ "once_cell",
+ "parking_lot",
+ "pickledb",
+ "regex",
+ "reqwest",
+ "reqwest-middleware",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "thiserror",
+ "url",
 ]
 
 [[package]]
