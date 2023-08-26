@@ -38,6 +38,9 @@ impl LocalStorage {
     }
 
     pub fn get(&self, key: &str) -> Value {
-        self.db.read().get(key).unwrap_or(Value::Null)
+        #[cfg(not(debug_assertions))]
+        { self.db.read().get(key).unwrap_or(Value::Null) }
+        #[cfg(debug_assertions)]
+        Value::Null
     }
 }

@@ -12,6 +12,7 @@ import {
   WebviewWindow,
 } from "@tauri-apps/api/window";
 import { Cookie } from "../resourceFetcher/cookieList";
+import {invoke, shell} from "@tauri-apps/api";
 
 class Operate {
   async openNotificationWindow(cookie: Cookie) {
@@ -55,7 +56,9 @@ class Operate {
   async close() {
     await appWindow.hide();
   }
-  async exit() {}
+  async exit() {
+    await invoke("quit")
+  }
 
   async bootSetting(isBoot: boolean) {
     return await bootStartSetting(isBoot);
