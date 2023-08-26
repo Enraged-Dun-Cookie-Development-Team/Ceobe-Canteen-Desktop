@@ -74,7 +74,7 @@ pub async fn send_request(
     }
     let request = request.build()?;
 
-    debug!(state="PrepareDone",url = options.url);
+    debug!(state = "PrepareDone", url = options.url);
     let resp = client.send(request).await?;
 
     let response = response_to_data(

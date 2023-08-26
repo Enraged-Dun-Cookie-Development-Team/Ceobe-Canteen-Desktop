@@ -13,8 +13,12 @@ pub fn get_app_name(app: AppHandle) -> &'static str {
     APP_NAME.get_or_init({
         move || {
             let config = &app.config().package;
-            let name = config.product_name.as_deref().unwrap_or("CeobeCanteen").to_string();
-            info!(firstInit="APP_NAME",value = name);
+            let name = config
+                .product_name
+                .as_deref()
+                .unwrap_or("CeobeCanteen")
+                .to_string();
+            info!(firstInit = "APP_NAME", value = name);
             name
         }
     })
@@ -22,7 +26,7 @@ pub fn get_app_name(app: AppHandle) -> &'static str {
 
 pub static CURRENT_EXE: OnceCell<PathBuf> = OnceCell::new();
 
-#[instrument(skip_all,err)]
+#[instrument(skip_all, err)]
 pub fn get_current_exe() -> io::Result<&'static PathBuf> {
     let current_exe = CURRENT_EXE.get_or_try_init(|| {
         let exe = env::current_exe()?;

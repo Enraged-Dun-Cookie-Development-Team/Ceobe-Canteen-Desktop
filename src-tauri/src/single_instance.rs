@@ -9,7 +9,7 @@ use tracing::{error, info, instrument};
 const LOCAL_SOCKET_NAME: &str = "CEOBE_LISTENING";
 const TEST_CEOBE_IN: &str = "TEST_CEOBE_IN";
 const CEOBE_IN: &str = "CEOBE_IN";
-#[instrument(name = "SingletonService",skip_all)]
+#[instrument(name = "SingletonService", skip_all)]
 pub fn run_sev(window: Window) {
     let socket = match LocalSocketListener::bind(LOCAL_SOCKET_NAME) {
         Ok(socket) => socket,
@@ -44,7 +44,7 @@ fn show_window(window: &Window) -> tauri::Result<()> {
     }
     Ok(())
 }
-#[instrument(name = "SingletonClient",err)]
+#[instrument(name = "SingletonClient", err)]
 pub fn try_start() -> io::Result<bool> {
     Ok(match LocalSocketStream::connect(LOCAL_SOCKET_NAME) {
         Ok(mut conn) => {
@@ -63,8 +63,9 @@ pub fn try_start() -> io::Result<bool> {
             false
         }
         Err(_) => {
-            info!(step="NotListenCeobeFind");
-            true },
+            info!(step = "NotListenCeobeFind");
+            true
+        }
     })
 }
 

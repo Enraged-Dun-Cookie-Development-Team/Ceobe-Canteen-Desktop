@@ -4,8 +4,7 @@
 </template>
 
 <script lang="ts" setup>
-import {onBeforeMount, onMounted} from "vue";
-import {list} from "postcss";
+import {onMounted} from "vue";
 import {getCurrent} from "@tauri-apps/api/window";
 import updater from "./api/operations/updater";
 import {notification} from "@tauri-apps/api";

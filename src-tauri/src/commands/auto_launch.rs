@@ -30,16 +30,18 @@ fn fetch_auto_launch(app: AppHandle) -> Result<AutoLaunch, AutoLaunchError> {
     let app_name = get_app_name(app);
     let auto = AutoLaunchBuilder::new()
         .set_app_name(app_name)
-        .set_app_path(current_exe
-            .to_str()
-            .ok_or(AutoLaunchError::UnsupportedOsStringEncode)?)
+        .set_app_path(
+            current_exe
+                .to_str()
+                .ok_or(AutoLaunchError::UnsupportedOsStringEncode)?,
+        )
         .set_args(&["--hidden"])
         .build()?;
     Ok(auto)
 }
 
 #[command]
-#[instrument(skip(app),err,name="SetAutoLaunch")]
+#[instrument(skip(app), err, name = "SetAutoLaunch")]
 pub fn set_auto_launch(app: AppHandle, auto_launch: bool) -> Result<bool, AutoLaunchError> {
     let auto = fetch_auto_launch(app)?;
     if auto_launch {
@@ -47,17 +49,17 @@ pub fn set_auto_launch(app: AppHandle, auto_launch: bool) -> Result<bool, AutoLa
     } else {
         auto.disable()?
     }
-    debug!(action="SetAutoLaunch",autoLaunch = auto_launch);
+    debug!(action = "SetAutoLaunch", autoLaunch = auto_launch);
     let enable = auto.is_enabled()?;
 
     Ok(enable)
 }
 
 #[command]
-#[instrument(skip(app),err,name="GetAutoLaunch")]
+#[instrument(skip(app), err, name = "GetAutoLaunch")]
 pub fn auto_launch_setting(app: AppHandle) -> Result<bool, AutoLaunchError> {
     let auto = fetch_auto_launch(app)?;
     let is_enable = auto.is_enabled()?;
-    debug!(action="ReadAutoLaunch",autoLaunch = is_enable);
+    debug!(action = "ReadAutoLaunch", autoLaunch = is_enable);
     Ok(is_enable)
 }

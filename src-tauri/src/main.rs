@@ -9,16 +9,14 @@ mod state;
 mod storage;
 
 use std::thread::spawn;
-use tauri::{
-    generate_context, Builder, Manager, WindowEvent,
-};
+use tauri::{generate_context, Builder, Manager, WindowEvent};
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, get_item, quit, read_detail,
     request_refer_image, send_request, set_auto_launch, set_item,
 };
 use crate::setup::logger::init_logger;
-use crate::setup::system_tray::{create_system_tray_menu, new_system_tray};
+use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {

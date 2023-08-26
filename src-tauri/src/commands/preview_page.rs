@@ -5,7 +5,6 @@ use tauri::http::{Request, Response};
 use tauri::{command, AppHandle, Manager, WindowBuilder, WindowEvent, WindowUrl};
 use tracing::{info, instrument};
 
-
 const WINDOWS_NAME: &str = "Preview";
 
 const INSERT: &str = r#"<style type="text/css">
@@ -32,8 +31,8 @@ const INSERT: &str = r#"<style type="text/css">
 "#;
 
 #[command]
-#[instrument(skip_all,err,name="LeavePreview")]
-pub fn back_preview(app:AppHandle)->tauri::Result<()>{
+#[instrument(skip_all, err, name = "LeavePreview")]
+pub fn back_preview(app: AppHandle) -> tauri::Result<()> {
     if let Some(win) = app.get_window(WINDOWS_NAME) {
         win.hide()?;
     }
@@ -41,17 +40,17 @@ pub fn back_preview(app:AppHandle)->tauri::Result<()>{
 }
 
 #[command(async)]
-#[instrument(skip(app),err,name="PreviewPage")]
+#[instrument(skip(app), err, name = "PreviewPage")]
 pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
-    let main  = app.get_window("main").unwrap();
+    let main = app.get_window("main").unwrap();
     let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
-        info!(state="WindowExist",action="DirectUsing");
+        info!(state = "WindowExist", action = "DirectUsing");
         window.eval(&format!("window.location.replace('{url}')"))?;
         sleep(Duration::from_millis(500));
 
         window
     } else {
-        info!(state="WindowNotExist",action="CreateWindow");
+        info!(state = "WindowNotExist", action = "CreateWindow");
         let w = WindowBuilder::new(&app, WINDOWS_NAME, WindowUrl::External(url))
             .title("Preview")
             .decorations(false)
@@ -77,27 +76,29 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
         sleep(Duration::from_millis(500));
         #[cfg(windows)]
         {
-            const LEFT_W:i32 = 504i32;
-            const TOP_H:i32 = 124i32;
+            const LEFT_W: i32 = 504i32;
+            const TOP_H: i32 = 124i32;
             let size = main.inner_size()?;
             let width = size.width as i32 - LEFT_W;
             let height = size.height as i32 - TOP_H;
 
             use windows::{
                 Win32::UI::WindowsAndMessaging::MoveWindow,
-                Win32::UI::WindowsAndMessaging::SetParent
+                Win32::UI::WindowsAndMessaging::SetParent,
             };
-            let new_hwnd =w.hwnd()?;
+            let new_hwnd = w.hwnd()?;
             let main_hwnd = main.hwnd()?;
             unsafe {
                 SetParent(new_hwnd, main_hwnd);
                 MoveWindow(new_hwnd, LEFT_W, TOP_H, width, height, true);
             }
-            main.on_window_event(move|event|{
+            main.on_window_event(move |event| {
                 if let WindowEvent::Resized(size) = event {
                     let width = size.width as i32 - LEFT_W;
                     let height = size.height as i32 - TOP_H;
-                    unsafe { MoveWindow(new_hwnd, LEFT_W, TOP_H, width, height, true); }
+                    unsafe {
+                        MoveWindow(new_hwnd, LEFT_W, TOP_H, width, height, true);
+                    }
                 }
             })
         }
@@ -106,7 +107,7 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
     window.eval(include_str!("init_script.js"))?;
     window.set_title(&title)?;
 
-    info!(state="Ready",action="WindowReadyToShow");
+    info!(state = "Ready", action = "WindowReadyToShow");
     window.set_focus()?;
     window.show()?;
     Ok(())

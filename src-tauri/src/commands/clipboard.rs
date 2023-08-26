@@ -27,7 +27,7 @@ impl Serialize for CopyError {
 }
 
 #[command]
-#[instrument(skip_all,err,name="CopyImage")]
+#[instrument(skip_all, err, name = "CopyImage")]
 pub fn copy_image(image: String) -> Result<(), CopyError> {
     // data object base64 url -> base64
     let image = image.replace("data:image/jpeg;base64,", "");
@@ -35,13 +35,13 @@ pub fn copy_image(image: String) -> Result<(), CopyError> {
     let buffer = STANDARD.decode(image)?;
     // byte array -> image
     let image = load_from_memory(&buffer)?.to_rgba8();
-    
+
     info!(
-        action="DecodeImage",
+        action = "DecodeImage",
         image.width = image.width(),
-        image.height= image.height()
+        image.height = image.height()
     );
-    
+
     let image = ImageData {
         width: image.width() as _,
         height: image.height() as _,
@@ -50,6 +50,6 @@ pub fn copy_image(image: String) -> Result<(), CopyError> {
     let mut clipboard = Clipboard::new()?;
     clipboard.set_image(image)?;
     drop(clipboard);
-    info!(action="WriteImageToClipboard",result= "Done");
+    info!(action = "WriteImageToClipboard", result = "Done");
     Ok(())
 }

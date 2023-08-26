@@ -18,7 +18,7 @@ pub struct LocalStorage {
 static STORAGE: OnceCell<LocalStorage> = OnceCell::new();
 
 impl LocalStorage {
-    #[instrument(name="LocalStorage",skip_all)]
+    #[instrument(name = "LocalStorage", skip_all)]
     pub fn get_this(app: AppHandle) -> &'static LocalStorage {
         STORAGE.get_or_init(move || {
             let path = get_config_dir(app).join(DB_NAME);
@@ -31,7 +31,7 @@ impl LocalStorage {
             }
         })
     }
-    #[instrument(name="LocalStorage",skip_all)]
+    #[instrument(name = "LocalStorage", skip_all)]
     pub fn set(&self, key: &str, value: Value) -> Result<(), String> {
         debug!(action="SetData",key, value = ?value);
         self.db
@@ -39,11 +39,13 @@ impl LocalStorage {
             .set(key, &value)
             .map_err(|err| format!("localStorageError: {err}"))
     }
-    #[instrument(name="LocalStorage",skip_all)]
+    #[instrument(name = "LocalStorage", skip_all)]
     pub fn get(&self, key: &str) -> Value {
         let value = {
             #[cfg(not(debug_assertions))]
-            { self.db.read().get(key).unwrap_or(Value::Null) }
+            {
+                self.db.read().get(key).unwrap_or(Value::Null)
+            }
             #[cfg(debug_assertions)]
             Value::Null
         };
