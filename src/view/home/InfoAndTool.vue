@@ -35,14 +35,16 @@ import VideoList from "../../components/InfoAndTool/VideoList.vue";
 import Announcement from "../../components/InfoAndTool/Announcement.vue";
 import WeeklyQuest from "../../components/InfoAndTool/WeeklyQuest.vue";
 import operate from "../../api/operations/operate";
-import { getResourceList } from "../../api/resourceFetcher/datasourceList";
+import { DatasourceItem, getResourceList } from "../../api/resourceFetcher/datasourceList";
 
 const source = reactive({
   list: [],
   getSource() {
     getResourceList().then((res) => {
       let sourceList = res.data.data;
-      source.list = sourceList.map((datasource) => {
+      source.list = sourceList.filter((datasource: DatasourceItem) => {
+        return datasource.jump_url != null;
+      }).map((datasource: DatasourceItem) => {
         return {
           url: datasource.jump_url,
           name: datasource.nickname,
