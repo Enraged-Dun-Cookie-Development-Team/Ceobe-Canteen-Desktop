@@ -82,5 +82,7 @@ fn main() {
             .build(generate_context!())
             .expect("Create App Failure");
         app.run(|_, _| {});
+    }else {
+        println!("others start")
     }
 }
