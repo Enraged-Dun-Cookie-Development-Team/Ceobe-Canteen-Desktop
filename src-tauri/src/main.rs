@@ -16,7 +16,7 @@ use tauri::{
 
 use crate::commands::{
     auto_launch_setting, copy_image, get_item, read_detail, request_refer_image, send_request,
-    set_auto_launch, set_item,quit
+    set_auto_launch, set_item,quit,back_preview
 };
 use crate::single_instance::{run_sev, try_start};
 
@@ -75,9 +75,9 @@ fn main() {
                 auto_launch_setting,
                 get_item,
                 set_item,
-                send_request,quit
+                send_request,quit,back_preview
             ]);
-
+            
         let app = builder
             .build(generate_context!())
             .expect("Create App Failure");

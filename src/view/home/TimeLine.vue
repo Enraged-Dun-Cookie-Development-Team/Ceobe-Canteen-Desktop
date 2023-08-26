@@ -257,10 +257,10 @@ const card = reactive({
   copyImageId: null,
   openUrlInThis(data: { url: string; icon: string; source: string }) {
     previewUrl(data.url, data.source);
-    // router.push({
-    //   path: "/home/Browser",
-    //   query: data,
-    // });
+    router.push({
+      path: "/home/Browser",
+      query: data,
+    });
   },
   copyImage(id) {
     card.copyImageId = id;

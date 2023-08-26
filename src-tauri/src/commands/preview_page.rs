@@ -4,6 +4,8 @@ use std::time::Duration;
 use tauri::http::{Request, Response};
 use tauri::{command, AppHandle, Manager, WindowBuilder, WindowEvent, WindowUrl};
 
+
+
 const WINDOWS_NAME: &str = "Preview";
 
 const INSERT: &str = r#"<style type="text/css">
@@ -29,15 +31,27 @@ const INSERT: &str = r#"<style type="text/css">
 </style>
 "#;
 
+#[command]
+pub fn back_preview(app:AppHandle)->tauri::Result<()>{
+    if let Some(win) = app.get_window(WINDOWS_NAME) {
+        win.hide()?;
+    }
+    Ok(())
+}
+
 #[command(async)]
 pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
+    let main  = app.get_window("main").unwrap();
     let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
         window.eval(&format!("window.location.replace('{url}')"))?;
-        window.show()?;
+        sleep(Duration::from_millis(500));
+
         window
     } else {
         let w = WindowBuilder::new(&app, WINDOWS_NAME, WindowUrl::External(url))
             .title("Preview")
+            .decorations(false)
+            .visible(false)
             .center()
             .inner_size(816f64, 648f64)
             .on_web_resource_request(handle_inject_css)
@@ -50,12 +64,41 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
             }
         });
         // wait window open
+        sleep(Duration::from_millis(500));
+        #[cfg(windows)]
+        {
+            const LEFT_W:i32 = 504i32;
+            const TOP_H:i32 = 124i32;
+            let size = main.inner_size()?;
+            let width = size.width as i32 - LEFT_W;
+            let height = size.height as i32 - TOP_H;
+
+            use windows::{
+                Win32::UI::WindowsAndMessaging::MoveWindow,
+                Win32::UI::WindowsAndMessaging::SetParent
+            };
+            let new_hwnd =w.hwnd()?;
+            let main_hwnd = main.hwnd()?;
+            unsafe {
+                SetParent(new_hwnd, main_hwnd);
+                MoveWindow(new_hwnd, LEFT_W, TOP_H, width, height, true);
+            }
+            main.on_window_event(move|event|{
+                if let WindowEvent::Resized(size) = event {
+                    let width = size.width as i32 - LEFT_W;
+                    let height = size.height as i32 - TOP_H;
+                    unsafe { MoveWindow(new_hwnd, LEFT_W, TOP_H, width, height, true); }
+                }
+            })
+        }
         w
     };
-    sleep(Duration::from_millis(500));
     window.eval(include_str!("init_script.js"))?;
     window.set_focus()?;
+    window.show()?;
     window.set_title(&title)?;
+
+
     // window.set_icon();
     Ok(())
 }

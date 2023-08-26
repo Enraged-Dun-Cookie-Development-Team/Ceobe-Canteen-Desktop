@@ -35,7 +35,16 @@ http-cache-reqwest = "0.11.1"
 reqwest-middleware = "0.2.3"
 http = "0.2.9"
 url = "2.4.0"
-
+[target.'cfg(windows)'.dependencies.windows]
+version = "0.39"
+features = [
+    "Data_Xml_Dom",
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_Com",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+]
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

@@ -15,19 +15,19 @@
         @click="back"
       ></v-btn>
     </v-toolbar>
-    <iframe
-      :src="query.url"
-      :style="{ width: query.width ? query.width : '100%' }"
-      :useragent="query.useragent ? query.useragent : null"
-      class="webview"
-      style="margin: auto"
-    ></iframe>
-    <iframe
-      :src="query.url"
-      :style="{ width: query.width ? query.width : '100%' }"
-      :useragent="query.useragent ? query.useragent : null"
-      style="margin: auto"
-    ></iframe>
+<!--    <iframe-->
+<!--      :src="query.url"-->
+<!--      :style="{ width: query.width ? query.width : '100%' }"-->
+<!--      :useragent="query.useragent ? query.useragent : null"-->
+<!--      class="webview"-->
+<!--      style="margin: auto"-->
+<!--    ></iframe>-->
+<!--    <iframe-->
+<!--      :src="query.url"-->
+<!--      :style="{ width: query.width ? query.width : '100%' }"-->
+<!--      :useragent="query.useragent ? query.useragent : null"-->
+<!--      style="margin: auto"-->
+<!--    ></iframe>-->
   </div>
 </template>
 
@@ -35,6 +35,7 @@
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, reactive, ref, watch } from "vue";
 import { getImage } from "../utils/imageUtil";
+import {invoke} from "@tauri-apps/api";
 
 const router = useRouter();
 const route = useRoute();
@@ -101,6 +102,7 @@ const webviewWindow = reactive<{
 });
 
 function back() {
+  invoke("back_preview")
   router.push({
     path: "/",
   });
