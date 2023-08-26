@@ -40,7 +40,7 @@ pub fn back_preview(app: AppHandle) -> tauri::Result<()> {
 }
 
 #[command(async)]
-#[instrument(skip(app,url), err, name = "PreviewPage")]
+#[instrument(skip(app, url), err, name = "PreviewPage")]
 pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
     let main = app.get_window("main").unwrap();
     let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
