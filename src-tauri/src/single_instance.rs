@@ -42,6 +42,7 @@ fn show_window(window: &Window) -> tauri::Result<()> {
     if window.is_minimized()? {
         window.unminimize()?
     }
+    window.set_focus()?;
     Ok(())
 }
 #[instrument(name = "SingletonClient", err)]
