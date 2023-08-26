@@ -64,12 +64,14 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
         let tmp_main = main.clone();
         w.on_window_event(move |ev| {
             if let WindowEvent::Focused(false) = ev {
-                win.hide().ok();
-                let _ = tmp_main.emit("close-main", ());
+                if let Ok(true) = win.is_visible() {
+                    win.hide().ok();
+                    let _ = tmp_main.emit("close-main", ());
+                }
             }
             if let WindowEvent::CloseRequested { api, .. } = ev {
                 api.prevent_close();
-                win.hide().ok();
+                // win.hide().ok();
             }
         });
         // wait window open
