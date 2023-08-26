@@ -5,6 +5,7 @@ const CEOBE_SYSTEM_TRAY:&str = "CEOBE_SYSTEM_TRAY";
 pub fn new_system_tray(app:&mut App)->tauri::Result<SystemTrayHandle>{
     let handle =app.handle();
     SystemTray::new()
+        .with_id(CEOBE_SYSTEM_TRAY)
         .with_tooltip("小刻食堂持续蹲饼中")
         .on_event(move |event| match event {
             SystemTrayEvent::DoubleClick { .. } | SystemTrayEvent::LeftClick { .. } => {

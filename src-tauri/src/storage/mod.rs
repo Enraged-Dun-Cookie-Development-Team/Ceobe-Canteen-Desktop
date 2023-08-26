@@ -9,7 +9,6 @@ use once_cell::sync::OnceCell;
 
 use tauri::AppHandle;
 use tracing::{debug, info, instrument};
-use tracing::field::debug;
 
 const DB_NAME: &str = "localstorage.db";
 pub struct LocalStorage {

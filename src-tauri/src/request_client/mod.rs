@@ -5,7 +5,7 @@ use reqwest::{Client, IntoUrl, Request, Response};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware, RequestBuilder};
 use std::sync::OnceLock;
 use tauri::AppHandle;
-use tracing::{debug, info, instrument};
+use tracing::{debug, info, instrument,Level};
 
 pub struct RequestClient {
     pub inner: ClientWithMiddleware,
