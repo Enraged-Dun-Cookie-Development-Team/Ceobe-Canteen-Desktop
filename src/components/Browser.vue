@@ -33,9 +33,10 @@
 
 <script lang="ts" name="index" setup>
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { getImage } from "../utils/imageUtil";
 import {invoke} from "@tauri-apps/api";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
 const router = useRouter();
 const route = useRoute();
@@ -116,10 +117,19 @@ watch(
   },
 );
 
+let unlisten: UnlistenFn;
 onMounted(() => {
   query.value = route.query;
   webviewWindow.init();
+  listen("close-main", () => {
+    back();
+  }).then((unListen: UnlistenFn) => {
+    unlisten = unListen
+  });
 });
+onUnmounted(() => {
+  unlisten();
+})
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

@@ -52,12 +52,18 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
             .title("Preview")
             .decorations(false)
             .visible(false)
+            .resizable(false)
             .center()
             .inner_size(816f64, 648f64)
             .on_web_resource_request(handle_inject_css)
             .build()?;
         let win = w.clone();
+        let tmp_main = main.clone();
         w.on_window_event(move |ev| {
+            if let WindowEvent::Focused(false) = ev {
+                win.hide().ok();
+                let _ = tmp_main.emit("close-main", ());
+            }
             if let WindowEvent::CloseRequested { api, .. } = ev {
                 api.prevent_close();
                 win.hide().ok();
