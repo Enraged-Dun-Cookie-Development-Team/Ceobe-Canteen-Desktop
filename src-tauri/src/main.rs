@@ -16,7 +16,7 @@ use tauri::{
 
 use crate::commands::{
     auto_launch_setting, copy_image, get_item, read_detail, request_refer_image, send_request,
-    set_auto_launch, set_item,
+    set_auto_launch, set_item,quit
 };
 use crate::single_instance::{run_sev, try_start};
 
@@ -75,7 +75,7 @@ fn main() {
                 auto_launch_setting,
                 get_item,
                 set_item,
-                send_request
+                send_request,quit
             ]);
 
         let app = builder
