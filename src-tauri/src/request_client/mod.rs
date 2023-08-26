@@ -1,13 +1,16 @@
-use crate::state::get_cache_dir;
+use crate::{request_client::cache_manage::CeobeCacheManager, state::get_cache_dir};
+use futures::future::ok;
+use http::Method;
 use http_cache_reqwest::{CACacheManager, Cache, CacheMode, HttpCache, HttpCacheOptions};
-use reqwest::Client;
-use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
+use reqwest::{Client, IntoUrl, Request, Response};
+use reqwest_middleware::{ClientBuilder, ClientWithMiddleware, RequestBuilder};
 use std::sync::OnceLock;
 use tauri::AppHandle;
 
 pub struct RequestClient {
     pub inner: ClientWithMiddleware,
 }
+mod cache_manage;
 
 const HTTP_CACHE: &str = "http_cache";
 static HTTP_CLIENT: OnceLock<RequestClient> = OnceLock::new();
@@ -20,13 +23,21 @@ impl RequestClient {
             let client = ClientBuilder::new(Client::new())
                 .with(Cache(HttpCache {
                     mode: CacheMode::Default,
-                    manager: CACacheManager {
-                        path: cache_location,
-                    },
+                    manager: CeobeCacheManager::new(cache_location),
                     options: HttpCacheOptions::default(),
                 }))
                 .build();
             Self { inner: client }
         })
+    }
+
+    pub fn request(&self, method: Method, url: impl IntoUrl) -> RequestBuilder {
+        self.inner.request(method, url)
+    }
+
+    pub async fn send(&self, request: Request) -> reqwest_middleware::Result<Response> {
+        println!("Send Request {}", request.url());
+        let resp = self.inner.execute(request).await?;
+        Ok(resp)
     }
 }

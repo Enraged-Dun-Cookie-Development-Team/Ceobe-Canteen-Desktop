@@ -55,7 +55,7 @@ pub async fn send_request(
     let client = RequestClient::get_this(app);
     let method = Method::from_str(&options.method)?;
     let url = Url::from_str(&options.url)?;
-    let mut request = client.inner.request(method, url.clone());
+    let mut request = client.request(method, url.clone());
 
     if let Some(map) = options.headers {
         request = request.headers(map.0)
@@ -71,7 +71,7 @@ pub async fn send_request(
     }
     let request = request.build()?;
 
-    let resp = client.inner.execute(request).await?;
+    let resp = client.send(request).await?;
 
     let response = response_to_data(
         url,
