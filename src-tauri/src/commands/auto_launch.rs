@@ -1,5 +1,5 @@
 use crate::state::{get_app_name, get_current_exe};
-use auto_launch::AutoLaunch;
+use auto_launch::{AutoLaunch, AutoLaunchBuilder};
 use serde::{Serialize, Serializer};
 use std::io;
 use tauri::{command, AppHandle};
@@ -27,13 +27,13 @@ fn fetch_auto_launch(app: AppHandle) -> Result<AutoLaunch, AutoLaunchError> {
     let current_exe = get_current_exe()?;
 
     let app_name = get_app_name(app);
-    let auto = AutoLaunch::new(
-        app_name,
-        current_exe
+    let auto = AutoLaunchBuilder::new()
+        .set_app_name(app_name)
+        .set_app_path(current_exe
             .to_str()
-            .ok_or(AutoLaunchError::UnsupportedOsStringEncode)?,
-        &["--hidden"],
-    );
+            .ok_or(AutoLaunchError::UnsupportedOsStringEncode)?)
+        .set_args(&["--hidden"])
+        .build()?;
     Ok(auto)
 }
 
