@@ -1,8 +1,8 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "ceobe-canteen-desktop"
+version = "0.1.5"
+description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻一样喜欢吃东西的浏览器内核 "
+authors = ["FrozenString<frozenstringstable@gmail.com>"]
 license = ""
 repository = ""
 default-run = "app"
