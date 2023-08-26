@@ -320,7 +320,7 @@ const scroll = reactive({
         getCookieList(
           timeline.combId.toString(),
           timeline.nextPageId,
-          timeline.updateCookieId.toString(),
+          timeline.updateCookieId??undefined,
         )
           .then((resp) => {
             let cookies_info = resp.data.data;

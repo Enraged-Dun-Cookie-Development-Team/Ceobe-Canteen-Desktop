@@ -9,7 +9,13 @@ export default defineConfig(async () => {
   return {
     assetsInclude: ["./src/asset/image/**/*"],
     plugins: [
-      vue(),
+      vue({
+        template:{
+          compilerOptions:{
+            isCustomElement: (tag:string) => tag==="ceobe-webview"
+          }
+        }
+      }),
       vuetify({ autoImport: true }),
       // eslintPlugin({
       // include:['src/**/*.ts','src/**/*.vue']
