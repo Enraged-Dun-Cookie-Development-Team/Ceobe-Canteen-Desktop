@@ -487,6 +487,7 @@ dependencies = [
  "reqwest-middleware",
  "serde",
  "serde_json",
+ "task-local-extensions",
  "tauri",
  "tauri-build",
  "thiserror",

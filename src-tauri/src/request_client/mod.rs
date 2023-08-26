@@ -1,4 +1,9 @@
-use crate::{request_client::cache_manage::CeobeCacheManager, state::get_cache_dir};
+use crate::{
+    request_client::{
+        cache_manage::CeobeCacheManager, logging_request_middleware::CeobeLoggingRequest,
+    },
+    state::get_cache_dir,
+};
 use http::Method;
 use http_cache_reqwest::{Cache, CacheMode, HttpCache, HttpCacheOptions};
 use reqwest::{Client, IntoUrl, Request, Response};
@@ -11,7 +16,7 @@ pub struct RequestClient {
     pub inner: ClientWithMiddleware,
 }
 mod cache_manage;
-
+mod logging_request_middleware;
 const HTTP_CACHE: &str = "http_cache";
 static HTTP_CLIENT: OnceLock<RequestClient> = OnceLock::new();
 
@@ -27,6 +32,7 @@ impl RequestClient {
                     manager: CeobeCacheManager::new(cache_location),
                     options: HttpCacheOptions::default(),
                 }))
+                .with(CeobeLoggingRequest)
                 .build();
             Self { inner: client }
         })
