@@ -3,6 +3,7 @@ use auto_launch::{AutoLaunch, AutoLaunchBuilder};
 use serde::{Serialize, Serializer};
 use std::io;
 use tauri::{command, AppHandle};
+use tracing::{debug, instrument};
 
 #[derive(Debug, thiserror::Error)]
 pub enum AutoLaunchError {
@@ -38,6 +39,7 @@ fn fetch_auto_launch(app: AppHandle) -> Result<AutoLaunch, AutoLaunchError> {
 }
 
 #[command]
+#[instrument(skip(app),err,name="SetAutoLaunch")]
 pub fn set_auto_launch(app: AppHandle, auto_launch: bool) -> Result<bool, AutoLaunchError> {
     let auto = fetch_auto_launch(app)?;
     if auto_launch {
@@ -45,14 +47,17 @@ pub fn set_auto_launch(app: AppHandle, auto_launch: bool) -> Result<bool, AutoLa
     } else {
         auto.disable()?
     }
-
+    debug!(action="SetAutoLaunch",autoLaunch = auto_launch);
     let enable = auto.is_enabled()?;
 
     Ok(enable)
 }
 
 #[command]
+#[instrument(skip(app),err,name="GetAutoLaunch")]
 pub fn auto_launch_setting(app: AppHandle) -> Result<bool, AutoLaunchError> {
     let auto = fetch_auto_launch(app)?;
-    Ok(auto.is_enabled()?)
+    let is_enable = auto.is_enabled()?;
+    debug!(action="ReadAutoLaunch",autoLaunch = is_enable);
+    Ok(is_enable)
 }

@@ -10,17 +10,19 @@ mod storage;
 
 use std::thread::spawn;
 use tauri::{
-    generate_context, Builder, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
-    SystemTrayMenu, WindowEvent,
+    generate_context, Builder, Manager, WindowEvent,
 };
 
 use crate::commands::{
-    auto_launch_setting, copy_image, get_item, read_detail, request_refer_image, send_request,
-    set_auto_launch, set_item,quit,back_preview
+    auto_launch_setting, back_preview, copy_image, get_item, quit, read_detail,
+    request_refer_image, send_request, set_auto_launch, set_item,
 };
+use crate::setup::logger::init_logger;
+use crate::setup::system_tray::{create_system_tray_menu, new_system_tray};
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {
+    init_logger();
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .setup(|app| {
@@ -28,29 +30,7 @@ fn main() {
                 let main_window = app.get_window("main").expect("cannot found main window");
                 spawn(move || run_sev(main_window));
 
-                let handle = app.handle();
-                SystemTray::new()
-                    .with_tooltip("小刻食堂持续蹲饼中")
-                    .on_event(move |event| match event {
-                        SystemTrayEvent::DoubleClick { .. } | SystemTrayEvent::LeftClick { .. } => {
-                            let window = handle.get_window("main").unwrap();
-                            window.show().unwrap();
-                            window.set_focus().unwrap();
-                        }
-                        SystemTrayEvent::MenuItemClick { tray_id, id, .. } => {
-                            println!("{tray_id}:{id}");
-                            if id == "quit" {
-                                handle.exit(0)
-                            }
-                        }
-                        _ => {}
-                    })
-                    .with_menu(
-                        SystemTrayMenu::new()
-                            .add_item(CustomMenuItem::new("check-update", "检查更新"))
-                            .add_item(CustomMenuItem::new("quit", "退出小刻食堂")),
-                    )
-                    .build(app)?;
+                new_system_tray(app)?;
                 let handle = app.handle();
                 let window = handle.get_window("main").unwrap();
 
@@ -75,14 +55,16 @@ fn main() {
                 auto_launch_setting,
                 get_item,
                 set_item,
-                send_request,quit,back_preview
+                send_request,
+                quit,
+                back_preview
             ]);
-            
+
         let app = builder
             .build(generate_context!())
             .expect("Create App Failure");
         app.run(|_, _| {});
-    }else {
+    } else {
         println!("others start")
     }
 }

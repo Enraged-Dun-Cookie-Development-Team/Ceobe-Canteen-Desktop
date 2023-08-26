@@ -3,7 +3,7 @@ use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
 use tauri::{command, AppHandle, Manager, WindowBuilder, WindowEvent, WindowUrl};
-
+use tracing::{info, instrument};
 
 
 const WINDOWS_NAME: &str = "Preview";
@@ -32,6 +32,7 @@ const INSERT: &str = r#"<style type="text/css">
 "#;
 
 #[command]
+#[instrument(skip_all,err,name="LeavePreview")]
 pub fn back_preview(app:AppHandle)->tauri::Result<()>{
     if let Some(win) = app.get_window(WINDOWS_NAME) {
         win.hide()?;
@@ -40,14 +41,17 @@ pub fn back_preview(app:AppHandle)->tauri::Result<()>{
 }
 
 #[command(async)]
+#[instrument(skip(app),err,name="PreviewPage")]
 pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
     let main  = app.get_window("main").unwrap();
     let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
+        info!(state="WindowExist",action="DirectUsing");
         window.eval(&format!("window.location.replace('{url}')"))?;
         sleep(Duration::from_millis(500));
 
         window
     } else {
+        info!(state="WindowNotExist",action="CreateWindow");
         let w = WindowBuilder::new(&app, WINDOWS_NAME, WindowUrl::External(url))
             .title("Preview")
             .decorations(false)
@@ -100,12 +104,11 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
         w
     };
     window.eval(include_str!("init_script.js"))?;
-    window.set_focus()?;
-    window.show()?;
     window.set_title(&title)?;
 
-
-    // window.set_icon();
+    info!(state="Ready",action="WindowReadyToShow");
+    window.set_focus()?;
+    window.show()?;
     Ok(())
 }
 

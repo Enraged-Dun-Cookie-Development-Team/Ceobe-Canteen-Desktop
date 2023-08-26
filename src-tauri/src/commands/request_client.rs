@@ -11,6 +11,8 @@ use std::time::Duration;
 use tauri::api::http::ResponseType;
 use tauri::{command, AppHandle};
 use thiserror::Error;
+use tracing::{debug, instrument};
+
 #[derive(Clone, Debug, Deserialize)]
 pub struct RequestOptions {
     method: String,
@@ -48,6 +50,7 @@ impl Serialize for RequestError {
 }
 
 #[command(async)]
+#[instrument(err,skip(app,options),name="SendRequest",fields(url=options.url,method=options.method))]
 pub async fn send_request(
     options: RequestOptions,
     app: AppHandle,
@@ -71,6 +74,7 @@ pub async fn send_request(
     }
     let request = request.build()?;
 
+    debug!(state="PrepareDone",url = options.url);
     let resp = client.send(request).await?;
 
     let response = response_to_data(

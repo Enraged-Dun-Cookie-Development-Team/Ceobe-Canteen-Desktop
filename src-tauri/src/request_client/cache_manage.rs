@@ -1,9 +1,13 @@
+use core::future::Future;
+use core::pin::Pin;
 use futures::{FutureExt, TryFutureExt};
 use http_cache::Result;
 use http_cache_reqwest::{CACacheManager, CacheManager, HttpResponse};
 use http_cache_semantics::CachePolicy;
 use std::path::PathBuf;
-
+use tracing::Level;
+use tracing::{debug, span};
+use tracing::Instrument;
 pub(super) struct CeobeCacheManager {
     inner: CACacheManager,
 }
@@ -20,10 +24,10 @@ impl CacheManager for CeobeCacheManager {
     fn get<'life0, 'life1, 'async_trait>(
         &'life0 self,
         cache_key: &'life1 str,
-    ) -> ::core::pin::Pin<
+    ) -> Pin<
         Box<
-            dyn ::core::future::Future<Output = Result<Option<(HttpResponse, CachePolicy)>>>
-                + ::core::marker::Send
+            dyn Future<Output = Result<Option<(HttpResponse, CachePolicy)>>>
+                + Send
                 + 'async_trait,
         >,
     >
@@ -32,12 +36,14 @@ impl CacheManager for CeobeCacheManager {
         'life1: 'async_trait,
         Self: 'async_trait,
     {
+        let span = span!(Level::DEBUG,"CacheManger");
         self.inner
             .get(cache_key)
             .map_ok(move |ret| {
-                println!("{}: `{cache_key}`", if ret.is_some(){"HIT"} else{"MISS"});
+                debug!(action="tryHitCache",isHit = ret.is_some(), cacheKey = cache_key);
                 ret
             })
+            .instrument(span)
             .boxed()
     }
 
@@ -46,10 +52,10 @@ impl CacheManager for CeobeCacheManager {
         cache_key: String,
         res: HttpResponse,
         policy: CachePolicy,
-    ) -> ::core::pin::Pin<
+    ) -> Pin<
         Box<
-            dyn ::core::future::Future<Output = Result<HttpResponse>>
-                + ::core::marker::Send
+            dyn Future<Output = Result<HttpResponse>>
+                + Send
                 + 'async_trait,
         >,
     >
@@ -57,27 +63,32 @@ impl CacheManager for CeobeCacheManager {
         'life0: 'async_trait,
         Self: 'async_trait,
     {
-        println!(
-            "caching: {}: payload vaildation: {}, code:{}",
-            cache_key,
-            res.must_revalidate(),
-            res.status
+        let span = span!(Level::DEBUG,"CacheManger");
+        let _entry = span.enter();
+        debug!(
+            action="Caching",
+            cacheKey = cache_key,
+            respond.status=res.status,
         );
+        drop(_entry);
         self.inner.put(cache_key, res, policy)
     }
 
     fn delete<'life0, 'life1, 'async_trait>(
         &'life0 self,
         cache_key: &'life1 str,
-    ) -> ::core::pin::Pin<
-        Box<dyn ::core::future::Future<Output = Result<()>> + ::core::marker::Send + 'async_trait>,
+    ) -> Pin<
+        Box<dyn Future<Output = Result<()>> + ::core::marker::Send + 'async_trait>,
     >
     where
         'life0: 'async_trait,
         'life1: 'async_trait,
         Self: 'async_trait,
     {
-        println!("Delete Cache Key `{}`", cache_key);
+        let span = span!(Level::DEBUG,"CacheManger");
+        let _entry = span.enter();
+        debug!(action="DeleteCache",cacheKey=cache_key);
+        drop(_entry);
         self.inner.delete(cache_key)
     }
 }
