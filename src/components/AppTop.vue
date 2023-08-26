@@ -24,6 +24,8 @@
         </template>
         <v-card class="mx-auto" color="grey-lighten-3" min-width="400">
           <v-text-field
+              color="grey-lighten-1"
+              class="pa-2"
             v-model="search.searchWord"
             append-inner-icon="fa fa-magnifying-glass"
             autofocus
@@ -31,7 +33,7 @@
             density="compact"
             hide-details
             label="查找饼仓"
-            variant="solo"
+            variant="outlined"
             @click:append-inner="search.searching"
             @update:model-value="search.searchChange"
           ></v-text-field>
@@ -94,7 +96,7 @@
       ></v-btn>
       <v-btn
         color="error"
-        icon="fas fa-circle-xmark"
+        icon="fas fa-circle-xmark "
         variant="text"
         @click="handleWindow.close"
       ></v-btn>

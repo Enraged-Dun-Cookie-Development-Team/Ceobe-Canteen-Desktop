@@ -15,19 +15,19 @@
         @click="back"
       ></v-btn>
     </v-toolbar>
-    <webview
+    <iframe
       :src="query.url"
       :style="{ width: query.width ? query.width : '100%' }"
       :useragent="query.useragent ? query.useragent : null"
       class="webview"
       style="margin: auto"
-    ></webview>
-    <webview
+    ></iframe>
+    <iframe
       :src="query.url"
       :style="{ width: query.width ? query.width : '100%' }"
       :useragent="query.useragent ? query.useragent : null"
       style="margin: auto"
-    ></webview>
+    ></iframe>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ const webviewWindow = reactive<{
 }>({
   webview: null,
   init() {
-    webviewWindow.webview = document.querySelector("webview");
+    webviewWindow.webview = document.querySelector("iframe");
     if (webviewWindow.webview)
       webviewWindow.webview.addEventListener("dom-ready", () => {
         webviewWindow.insertCss();

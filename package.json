@@ -8,7 +8,7 @@
     "ts-migrate": "ts-migrate",
     "tauri": "tauri",
     "tauri:build": "tauri build",
-    "tauri:build-debug": "tauri build -- --debug",
+    "tauri:build-debug": "tauri build --debug",
     "tauri:dev": "tauri dev",
     "serve": "vite preview",
     "build": "vite build",
