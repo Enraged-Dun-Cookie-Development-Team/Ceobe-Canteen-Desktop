@@ -3,16 +3,24 @@ use interprocess::local_socket::{LocalSocketListener, LocalSocketStream};
 use std::io;
 use std::io::{Read, Write};
 
-use tauri::Window;
+use tauri::{Manager, Window};
 
 const LOCAL_SOCKET_NAME: &str = "SINGLE_INSTANCE";
 
 pub fn run_sev(window: Window) {
-    let socket = LocalSocketListener::bind(LOCAL_SOCKET_NAME).expect("Init Local Socket Failure");
+    let socket =match LocalSocketListener::bind(LOCAL_SOCKET_NAME){
+        Ok(socket) => {socket}
+        Err(err) => {
+            eprintln!("Error: {err}");
+            window.app_handle().exit(1);
+            return;
+        }
+    };
 
     while let Ok(mut stream) = socket.accept() {
         while let Ok(packet) = Packet::read(&mut stream) {
             if packet.msg.as_str() == "CREATE_INSTANCE" {
+                println!("other start");
                 show_window(&window).expect("Cannot Reopen window");
                 break;
             }
