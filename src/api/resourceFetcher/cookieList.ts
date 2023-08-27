@@ -25,7 +25,7 @@ export interface Cookie {
   /**
    * 这个下面有些平台自己的字段，写的时候再对接吧
    */
-  item: Record<string, any>;
+  item?: Record<string, any>;
   /**
    * 数据源信息
    */
@@ -51,7 +51,7 @@ export interface Image {
   /**
    * 压缩图，为null就是没有原图对应压缩图
    */
-  compress_url: null | string;
+  compress_url?: null | string;
   /**
    * 原图
    */

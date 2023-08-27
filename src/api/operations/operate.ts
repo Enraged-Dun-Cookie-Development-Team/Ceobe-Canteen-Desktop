@@ -8,7 +8,7 @@ import {
   appWindow,
   currentMonitor,
   getAll,
-  LogicalPosition,
+  LogicalPosition, PhysicalPosition,
   WebviewWindow,
 } from "@tauri-apps/api/window";
 import { Cookie } from "../resourceFetcher/cookieList";
@@ -29,10 +29,11 @@ class Operate {
     let h = size?.height ?? 1080;
     console.log(w, h);
     await window.setPosition(
-      new LogicalPosition(w - winSize.width, h - winSize.height),
+      new PhysicalPosition(w - winSize.width, h - winSize.height),
     );
     console.log(await window.outerPosition());
-    await window.emit("info", cookie);
+    console.log("send cookie " , cookie)
+    await window.emit("new_cookie_info", cookie);
     await window.show();
   }
 
