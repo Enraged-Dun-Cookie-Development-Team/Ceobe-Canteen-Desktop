@@ -118,12 +118,20 @@
     transition="dialog-top-transition"
     width="400"
   >
-    <setting-page @close="setting.show = false"></setting-page>
+    <setting-page @close="setting.close" @checkUpdate="version.getNewestVersion" :versionState="setting.versionState"></setting-page>
+  </v-dialog>
+  <v-dialog
+    v-model="version.show"
+    persistent
+    transition="dialog-top-transition"
+    width="600"
+  >
+    <version-page @close="version.show = false" :versionInfo="version.version_info" :force="version.force"></version-page>
   </v-dialog>
 </template>
 
 <script lang="ts" name="index" setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import storage from "../api/operations/localStorage";
 import {
   DatasourceItem,
@@ -135,6 +143,10 @@ import searchWordEvent from "../api/operations/searchWordEvent";
 import operate from "../api/operations/operate";
 import DonatePage from "./DonatePage.vue";
 import SettingPage from "./SettingPage.vue";
+import VersionPage from "./VersionPage.vue";
+import { getVersion } from "../api/resourceFetcher/version";
+import updater from "../api/operations/updater";
+import { notification } from "@tauri-apps/api";
 
 const winMax = ref(false);
 
@@ -256,7 +268,52 @@ const donate = reactive({
 
 const setting = reactive({
   show: false,
+    // updater setting
+  versionState: "Unknown",
+  close() {
+    setting.show = false;
+    setting.versionState = "Unknown";
+  },
 });
+
+const version = reactive({
+  show: false,
+  version_info: {},
+  force: false,
+  async getNewestVersion() {
+    if (setting.show) {
+      setting.versionState = "Newest";
+    }
+    getVersion().then((resq) => {
+      version.version_info = resq.data.data;
+      updater
+        .judgmentVersion(version.version_info.last_force_version).then((resq) => {
+          version.force = resq;
+        })
+      updater
+        .judgmentVersion(version.version_info.version).then((resq) => {
+          version.show = resq;
+          if (setting.show) {
+            setting.versionState = "UpdateAvailable";
+          }
+        })
+    }).catch(async (error)=>{
+      console.log("Failure loading New Version")
+      if (!await notification.isPermissionGranted()){
+        await notification.requestPermission()
+      }
+      notification.sendNotification({
+        title:"小刻出错了！",
+        icon:"/asserts/icon.png",
+        body:error.toString()
+      })
+    });
+  }
+});
+
+onMounted(() => {
+  version.getNewestVersion();
+})
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

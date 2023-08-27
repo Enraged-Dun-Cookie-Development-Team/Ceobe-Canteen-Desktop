@@ -49,7 +49,7 @@
 </template>
 
 <script setup name="setting" lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, defineEmits, defineProps, onMounted, PropType, reactive, ref } from "vue";
 import updater from "../api/operations/updater";
 import operate from "../api/operations/operate";
 import { getVersion } from "../api/resourceFetcher/version";
@@ -57,10 +57,21 @@ import {app, notification} from "@tauri-apps/api";
 
 const emits = defineEmits({
   close: null,
+  checkUpdate: null,
 });
-
-const showDownload = computed(() => setting.versionState == "UpdateAvailable" )
-const showAlreadyNewest = computed(()=>setting.versionState =="Newest")
+enum versionStateType {
+  Newest = "Newest",
+  UpdateAvailable = "UpdateAvailable",
+  Unknown = "Unknown",
+}
+const props = defineProps({
+  versionState: {
+    type: String as PropType<versionStateType>,
+    default: () => "Unknown"
+  },
+});
+const showDownload = computed(() => props.versionState == "UpdateAvailable" )
+const showAlreadyNewest = computed(()=>props.versionState =="Newest")
 
 const setting = reactive<{
   // auto boot setting
@@ -69,11 +80,7 @@ const setting = reactive<{
   setAutoBoot: () => void,
   // quit 
   close: () => void,
-  // updater setting
-  versionState: "Newest" | "UpdateAvailable" | "Unknown"
-  currentVersion:string,
   checkUpdate: () => void
-  getAppVersion:()=>void
 }>({
   autoBoot: false,
   setAutoBoot() {
@@ -88,60 +95,13 @@ const setting = reactive<{
     emits("close");
   },
 
-  versionState: "Unknown",
-    currentVersion: "<UNKNOWN>",
   checkUpdate(): void {
-    getVersion().then((res) => {
-      console.log("Desktop Version",res);
-      if(res.data.data==null) {
-        return;
-      }
-      console.log(res);
-
-      updater
-        .judgmentVersion(res.data.data.version)
-        .then((result) => {
-          if(result) {
-            setting.versionState="UpdateAvailable";
-            operate.openUrlInBrowser("https://www.ceobecanteen.top/#/");
-            setTimeout(() => {
-              setting.versionState="Unknown";
-            }, 3000);
-          } else {
-            setting.versionState="Newest";
-            setTimeout(() => {
-              setting.versionState="Unknown";
-            }, 3000);
-          }
-        })
-        .catch(() => {
-          setting.versionState="Newest";
-          setTimeout(() => {
-            setting.versionState="Unknown";
-          }, 3000);
-        });
-    }).catch(async (error)=>{
-      console.log("Failure loading New Version")
-      if (!await notification.isPermissionGranted()){
-        await notification.requestPermission()
-      }
-      notification.sendNotification({
-        title:"小刻出错了！",
-        icon:"/asserts/icon.png",
-        body:error.toString()
-      })
-    });
+    emits("checkUpdate");
   },
-  getAppVersion: () => {
-    app.getVersion()
-      .then((v: string) => setting.currentVersion=v);
-  },
-
 });
 
 onMounted(async () => {
   setting.initAutoBoot();
-  setting.getAppVersion();
 });
 </script>
 
