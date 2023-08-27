@@ -5,6 +5,8 @@ mod preview_page;
 mod quit;
 mod request_client;
 mod request_refer_image;
+mod update_available;
+
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
 pub use clipboard::copy_image;
 pub use local_storage::{get_item, set_item};

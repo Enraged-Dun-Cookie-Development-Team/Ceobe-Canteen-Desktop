@@ -7,7 +7,7 @@ mod setup;
 mod single_instance;
 mod state;
 mod storage;
-
+mod listeners;
 use std::thread::spawn;
 use tauri::{generate_context, Builder, Manager, WindowEvent};
 
