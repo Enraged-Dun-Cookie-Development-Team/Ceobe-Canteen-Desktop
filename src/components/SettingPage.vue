@@ -5,9 +5,9 @@
         <v-toolbar-title>设置</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
-          variant="text"
-          icon="fa-solid fa-xmark"
-          @click="setting.close"
+            icon="fa-solid fa-xmark"
+            variant="text"
+            @click="setting.close"
         ></v-btn>
       </v-toolbar>
       <v-card-item>
@@ -18,9 +18,9 @@
           </div>
           <div>
             <v-switch
-              v-model="setting.autoBoot"
-              color="#ffba4b"
-              @change="setting.setAutoBoot"
+                v-model="setting.autoBoot"
+                color="#ffba4b"
+                @change="setting.setAutoBoot"
             ></v-switch>
           </div>
         </div>
@@ -33,8 +33,14 @@
           </div>
           <div>
             <v-btn color="#ffba4b" @click="setting.checkUpdate"
-              >检查更新</v-btn
+            >检查更新
+            </v-btn
             >
+<!--test send notification        -->
+            <v-btn
+                @click="sen_d">
+              弹窗
+            </v-btn>
           </div>
         </div>
       </v-card-item>
@@ -48,12 +54,13 @@
   </div>
 </template>
 
-<script setup name="setting" lang="ts">
-import { computed, defineEmits, defineProps, onMounted, PropType, reactive, ref } from "vue";
+<script lang="ts" name="setting" setup>
+import {computed, onMounted, reactive, ref} from "vue";
 import updater from "../api/operations/updater";
 import operate from "../api/operations/operate";
-import { getVersion } from "../api/resourceFetcher/version";
+import {getVersion} from "../api/resourceFetcher/version";
 import {app, notification} from "@tauri-apps/api";
+import {P} from "@tauri-apps/api/event-41a9edf5";
 
 const emits = defineEmits({
   close: null,
@@ -70,13 +77,27 @@ const props = defineProps({
     default: () => "Unknown"
   },
 });
-const showDownload = computed(() => props.versionState == "UpdateAvailable" )
-const showAlreadyNewest = computed(()=>props.versionState =="Newest")
+// test send notification
+const sen_d = () => {
+  operate.openNotificationWindow({
+    datasource: 'kkwd',
+    default_cookie: {
+      images: [{compress_url:null,origin_url: 'https://i0.hdslb.com/bfs/new_dyn/2956e376fb056cf79cc95bcf585dbbc0161775300.jpg'}],
+      text: '欸嘿嘿，桃金娘的脚小小的~香香的~.'
+    },
+    icon: '/assets/icon/anime.png',
+    source: {data: '123', type: 'nn'},
+    timestamp: {fetcher: 114514, platform: 114514, platform_precision: 'minute'}
+  })
+}
+
+const showDownload = computed(() => props.versionState == "UpdateAvailable")
+const showAlreadyNewest = computed(() => props.versionState == "Newest")
 
 const setting = reactive<{
   // auto boot setting
   autoBoot: boolean,
-  initAutoBoot:()=>void,
+  initAutoBoot: () => void,
   setAutoBoot: () => void,
   // quit 
   close: () => void,
@@ -84,11 +105,12 @@ const setting = reactive<{
 }>({
   autoBoot: false,
   setAutoBoot() {
-    operate.bootSetting(setting.autoBoot).then(() => { });
+    operate.bootSetting(setting.autoBoot).then(() => {
+    });
   },
   initAutoBoot() {
     operate.getBootSetting().then((res) => {
-      setting.autoBoot=res;
+      setting.autoBoot = res;
     });
   },
   close() {
@@ -105,4 +127,4 @@ onMounted(async () => {
 });
 </script>
 
-<style rel="stylesheet/scss" lang="scss"></style>
+<style lang="scss" rel="stylesheet/scss"></style>

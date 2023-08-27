@@ -83,7 +83,7 @@
         "nsis": {
           "headerImage": "assets/installer-header.bmp",
           "sidebarImage": "assets/installer-side.bmp",
-          "installerIcon": "icons/icon.ico",
+          "installerIcon": "assets/installer-icon.ico",
           "installMode": "both",
           "languages": ["SimpChinese"]
         },

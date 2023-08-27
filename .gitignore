@@ -2,4 +2,3 @@
 .idea
 /dist_electron/
 /dist/
-/package-lock.json

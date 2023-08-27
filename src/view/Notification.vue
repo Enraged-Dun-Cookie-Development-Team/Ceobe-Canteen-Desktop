@@ -29,50 +29,66 @@
   </div>
 </template>
 
-<script setup name="index" lang="ts">
-import { reactive } from "vue";
-import { getImage } from "../utils/imageUtil";
+<script lang="ts" name="index" setup>
+import {onMounted, onUnmounted, reactive, ref} from "vue";
+import {getImage} from "../utils/imageUtil";
 import ceobeRequest from "../api/operations/ceobeRequest";
 import notification from "../api/operations/notification";
+import {Cookie} from "../api/resourceFetcher/cookieList";
+import {UnlistenFn} from "@tauri-apps/api/event";
 
-const info = reactive({
+const info = ref({
   imgUrl: getImage("/assets/image/logo/icon.png"),
   dataSource: "",
   cookieTime: "",
   cookieText: "",
 });
 
-const updatePageData = (newData) => {
-  info.dataSource = newData.datasource;
-  info.cookieTime = new Date(newData.timestamp.platform).toLocaleString();
-  info.cookieText = newData.default_cookie.text;
+const updatePageData = (newData: Cookie) => {
+  info.value.dataSource = newData.datasource;
+  if (newData.timestamp.platform_precision !== "none") {
+    info.value.cookieTime = new Date(newData.timestamp.platform!).toLocaleString();
+  }
+  info.value.cookieText = newData.default_cookie.text;
 
   let images = newData.default_cookie.images;
   if (images) {
     if (newData.datasource.includes("微博")) {
       ceobeRequest
-        .getHasRefererImageBase64(images[0].origin_url)
-        .then((res) => {
-          info.imgUrl = "data:image/jpeg;base64," + res;
-        });
+          .getHasRefererImageBase64(images[0].origin_url)
+          .then((res) => {
+            info.value.imgUrl = "data:image/jpeg;base64," + res;
+          });
     } else {
-      info.imgUrl = images[0].origin_url;
+      info.value.imgUrl = images[0].origin_url;
     }
   } else {
     console.log("no image");
   }
 };
+let unliten: UnlistenFn;
+onMounted(() => {
 
-notification.getInfo((_, data) => {
-  updatePageData(data);
-});
+  notification.getInfo((_, data) => {
+    console.log("get Info: " ,data)
+    updatePageData(data);
+  }).then((closer) => {
+    unliten = closer
+  });
+})
+
+onUnmounted(() => {
+if (unliten){
+  unliten()
+}
+})
 
 function closeThis() {
   notification.closeWindow();
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style lang="scss" rel="stylesheet/scss">
 html {
   overflow: hidden;
 }
@@ -81,13 +97,16 @@ html {
   .v-card {
     width: 100vw;
     height: 100vh;
+
     img {
       object-position: top;
     }
+
     .text {
       overflow: auto;
       height: 75px;
       white-space: break-spaces;
+
       &::-webkit-scrollbar {
         display: none; /* Chrome Safari */
       }
