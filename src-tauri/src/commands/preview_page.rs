@@ -2,9 +2,10 @@ use reqwest::Url;
 use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
-use tauri::{command, AppHandle, Manager, WindowBuilder, WindowEvent, WindowUrl, Window, PhysicalSize, LogicalSize, LogicalPosition};
+use tauri::{
+    command, AppHandle, Manager, PhysicalSize, Window, WindowBuilder, WindowEvent, WindowUrl,
+};
 use tracing::{info, instrument};
-
 
 const WINDOWS_NAME: &str = "Preview";
 
@@ -77,7 +78,7 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
         });
         // wait window open
         sleep(Duration::from_millis(500));
-        move_window_to_fit(main,w.clone())?;
+        move_window_to_fit(main, w.clone())?;
         w
     };
     window.eval(include_str!("init_script.js"))?;
@@ -112,43 +113,52 @@ fn handle_inject_css(_: &Request, resp: &mut Response) {
     }
 }
 
-fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<()>{
+fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Result<()> {
     const LEFT_W: i32 = 500i32;
     const TOP_H: i32 = 124i32;
 
     let main_monitor = main_window.current_monitor()?;
     let scale = if let Some(monitor) = main_monitor {
         monitor.scale_factor()
-    }else {
+    } else {
         1.0
     };
 
     info!(monitor.scale = scale);
 
     let main_window_size = main_window.inner_size()?;
-    fn child_window_location(size:PhysicalSize<u32>,scale :f64)->(i32,i32){
-        let width = size.width as i32 - (LEFT_W as f64 *scale) as i32;
-        let height = size.height as i32 - (TOP_H as f64 *scale) as i32;
-        (width,height)
+    fn child_window_location(size: PhysicalSize<u32>, scale: f64) -> (i32, i32) {
+        let width = size.width as i32 - (LEFT_W as f64 * scale) as i32;
+        let height = size.height as i32 - (TOP_H as f64 * scale) as i32;
+        (width, height)
     }
-        let (w,h) = child_window_location(main_window_size,scale);
+    let (w, h) = child_window_location(main_window_size, scale);
     #[cfg(windows)]
     {
         let new_hwnd = preview_window.hwnd()?;
         let main_hwnd = main_window.hwnd()?;
         unsafe {
             use windows::Win32::UI::WindowsAndMessaging::{MoveWindow, SetParent};
-            SetParent(new_hwnd,main_hwnd);
-            MoveWindow(new_hwnd,(LEFT_W as f64 *scale) as i32,(TOP_H as f64 *scale) as i32,w,h,true);
+            SetParent(new_hwnd, main_hwnd);
+            MoveWindow(
+                new_hwnd,
+                (LEFT_W as f64 * scale) as i32,
+                (TOP_H as f64 * scale) as i32,
+                w,
+                h,
+                true,
+            );
         }
     }
     #[cfg(not(windows))]
     {
-        preview_window.set_size(PhysicalSize::new(w,h))?;
+        use tauri::{PhysicalPosition, PhysicalSize};
+        preview_window.set_size(PhysicalSize::new(w, h))?;
         let main_location = main_window.inner_position()?.to_logical::<u32>(scale);
-        preview_window.set_position(PhysicalPosition::new(main_location.x +LEFT_W as u32,
-                                                         main_location.y + TOP_H as u32))?;
-
+        preview_window.set_position(PhysicalPosition::new(
+            main_location.x + LEFT_W as u32,
+            main_location.y + TOP_H as u32,
+        ))?;
     }
     main_window.on_window_event({
         #[cfg(windows)]
@@ -160,34 +170,40 @@ fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<(
                 let (w, h) = child_window_location(*size, scale);
                 #[cfg(windows)]
                 {
-                    use windows::Win32::UI::WindowsAndMessaging::{MoveWindow};
+                    use windows::Win32::UI::WindowsAndMessaging::MoveWindow;
                     unsafe {
                         MoveWindow(
-                        window,
-                        (LEFT_W as f64 *scale) as i32,
-                        (TOP_H as f64 *scale) as i32,
-                        w,h,true);
+                            window,
+                            (LEFT_W as f64 * scale) as i32,
+                            (TOP_H as f64 * scale) as i32,
+                            w,
+                            h,
+                            true,
+                        );
                     }
                 }
                 #[cfg(not(windows))]
                 {
-                    window.set_size(PhysicalSize::new(w,h)).expect("Cannot resize window");
+                    use tauri::PhysicalSize;
+                    window
+                        .set_size(PhysicalSize::new(w, h))
+                        .expect("Cannot resize window");
                 }
-            }else if let WindowEvent::Moved(pos) = event {
+            } else if let WindowEvent::Moved(_pos) = event {
                 #[cfg(not(windows))]
                 {
-                    let main_location = pos;
-                    preview_window.set_position(PhysicalPosition::new(
-                        main_location.x + (LEFT_W as f64 *scale) as u32,
-                        main_location.y + (LEFT_W as f64 *scale) as u32))
+                    let main_location = _pos;
+                    use tauri::PhysicalPosition;
+                    preview_window
+                        .set_position(PhysicalPosition::new(
+                            main_location.x + (LEFT_W as f64 * scale) as u32,
+                            main_location.y + (LEFT_W as f64 * scale) as u32,
+                        ))
                         .expect("cannot Move With Main");
                 }
             }
-
         }
     });
 
-
     Ok(())
-
 }

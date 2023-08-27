@@ -1,4 +1,7 @@
-use tauri::{App, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayHandle, SystemTrayMenu, SystemTraySubmenu};
+use tauri::{
+    App, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayHandle, SystemTrayMenu,
+    SystemTraySubmenu,
+};
 
 const CEOBE_SYSTEM_TRAY: &str = "CEOBE_SYSTEM_TRAY";
 

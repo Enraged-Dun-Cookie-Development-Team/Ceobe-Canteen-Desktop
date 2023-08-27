@@ -2,12 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod commands;
+mod listeners;
 mod request_client;
 mod setup;
 mod single_instance;
 mod state;
 mod storage;
-mod listeners;
 use std::thread::spawn;
 use tauri::{generate_context, Builder, Manager, WindowEvent};
 
