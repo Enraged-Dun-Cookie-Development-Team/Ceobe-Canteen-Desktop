@@ -42,12 +42,12 @@ impl LocalStorage {
     #[instrument(name = "LocalStorage", skip_all)]
     pub fn get(&self, key: &str) -> Value {
         let value = {
-            #[cfg(not(debug_assertions))]
+            // #[cfg(not(debug_assertions))]
             {
                 self.db.read().get(key).unwrap_or(Value::Null)
             }
-            #[cfg(debug_assertions)]
-            Value::Null
+            // #[cfg(debug_assertions)]
+            // Value::Null
         };
         debug!(action="GetData",key, value = ?value);
         value
