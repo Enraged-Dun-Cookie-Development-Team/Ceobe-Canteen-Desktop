@@ -113,7 +113,7 @@ fn handle_inject_css(_: &Request, resp: &mut Response) {
 }
 
 fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<()>{
-    const LEFT_W: i32 = 504i32;
+    const LEFT_W: i32 = 500i32;
     const TOP_H: i32 = 124i32;
 
     let main_monitor = main_window.current_monitor()?;
@@ -123,11 +123,12 @@ fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<(
         1.0
     };
 
+    info!(monitor.scale = scale);
+
     let main_window_size = main_window.inner_size()?;
     fn child_window_location(size:PhysicalSize<u32>,scale :f64)->(i32,i32){
-        let size = size.to_logical::<u32>(scale);
-        let width = size.width as i32 - LEFT_W;
-        let height = size.height as i32 - TOP_H;
+        let width = size.width as i32 - (LEFT_W as f64 *scale) as i32;
+        let height = size.height as i32 - (TOP_H as f64 *scale) as i32;
         (width,height)
     }
         let (w,h) = child_window_location(main_window_size,scale);
@@ -138,14 +139,14 @@ fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<(
         unsafe {
             use windows::Win32::UI::WindowsAndMessaging::{MoveWindow, SetParent};
             SetParent(new_hwnd,main_hwnd);
-            MoveWindow(new_hwnd,LEFT_W,TOP_H,w,h,true);
+            MoveWindow(new_hwnd,(LEFT_W as f64 *scale) as i32,(TOP_H as f64 *scale) as i32,w,h,true);
         }
     }
     #[cfg(not(windows))]
     {
-        preview_window.set_size(LogicalSize::new(w,h))?;
+        preview_window.set_size(PhysicalSize::new(w,h))?;
         let main_location = main_window.inner_position()?.to_logical::<u32>(scale);
-        preview_window.set_position(LogicalPosition::new(main_location.x +LEFT_W as u32,
+        preview_window.set_position(PhysicalPosition::new(main_location.x +LEFT_W as u32,
                                                          main_location.y + TOP_H as u32))?;
 
     }
@@ -160,19 +161,25 @@ fn move_window_to_fit(main_window:Window,preview_window:Window)->tauri::Result<(
                 #[cfg(windows)]
                 {
                     use windows::Win32::UI::WindowsAndMessaging::{MoveWindow};
-                    unsafe {MoveWindow(window,LEFT_W,TOP_H,w,h,true);}
+                    unsafe {
+                        MoveWindow(
+                        window,
+                        (LEFT_W as f64 *scale) as i32,
+                        (TOP_H as f64 *scale) as i32,
+                        w,h,true);
+                    }
                 }
                 #[cfg(not(windows))]
                 {
-                    window.set_size(LogicalSize::new(w,h)).expect("Cannot resize window");
+                    window.set_size(PhysicalSize::new(w,h)).expect("Cannot resize window");
                 }
             }else if let WindowEvent::Moved(pos) = event {
                 #[cfg(not(windows))]
                 {
-                    let main_location = pos.to_logical::<u32>(scale);
-                    preview_window.set_position(LogicalPosition::new(
-                        main_location.x + LEFT_W as u32,
-                        main_location.y + TOP_H as u32))
+                    let main_location = pos;
+                    preview_window.set_position(PhysicalPosition::new(
+                        main_location.x + (LEFT_W as f64 *scale) as u32,
+                        main_location.y + (LEFT_W as f64 *scale) as u32))
                         .expect("cannot Move With Main");
                 }
             }
