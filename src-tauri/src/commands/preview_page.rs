@@ -3,7 +3,7 @@ use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
 use tauri::{
-    command, AppHandle, Manager, PhysicalSize, Window, WindowBuilder, WindowEvent, WindowUrl,
+    command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl,
 };
 use tracing::{info, instrument};
 
@@ -127,7 +127,7 @@ fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Res
     info!(monitor.scale = scale);
 
     let main_window_size = main_window.inner_size()?;
-    fn child_window_location(size: PhysicalSize<u32>, scale: f64) -> (i32, i32) {
+    fn child_window_location(size: tauri::PhysicalSize<u32>, scale: f64) -> (i32, i32) {
         let width = size.width as i32 - (LEFT_W as f64 * scale) as i32;
         let height = size.height as i32 - (TOP_H as f64 * scale) as i32;
         (width, height)
@@ -196,8 +196,8 @@ fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Res
                     use tauri::PhysicalPosition;
                     preview_window
                         .set_position(PhysicalPosition::new(
-                            main_location.x + (LEFT_W as f64 * scale) as u32,
-                            main_location.y + (LEFT_W as f64 * scale) as u32,
+                            main_location.x + ((LEFT_W as f64 * scale) as i32),
+                            main_location.y + ((LEFT_W as f64 * scale) as i32),
                         ))
                         .expect("cannot Move With Main");
                 }
