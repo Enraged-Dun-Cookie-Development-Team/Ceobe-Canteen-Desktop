@@ -68,10 +68,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script:
-            let cfg = require("tauri.conf.json")
+            let cfg = require("src-tauri/tauri.conf.json")
             cfg.package.productName = "ceobe-canteen"
             let fs = require("fs")
-            await fs.writeFile("tarui.conf.json",JSON.stringify(cfg,null,4),
+            await fs.writeFile("src-tauri/tarui.conf.json",JSON.stringify(cfg,null,4),
             'utf-8')
 
       - name: install frontend dependencies
