@@ -79,7 +79,7 @@ jobs:
 
       - name: install frontend dependencies
         run: npm install
-      - uses: Closure-Engineering-Team/tauri-action@v0
+      - uses: Closure-Engineering-Team/tauri-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
