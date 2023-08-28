@@ -62,6 +62,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: change deb package name
+        if: matrix.platform == 'ubuntu-20.04'
+        uses: actions/github-script@v6
+        with:
+          script:
+            let cfg = require("tauri.conf.json")
+            cfg.package.productName = "ceobe-canteen"
+            let fs = require("fs")
+            await fs.writeFile("tarui.conf.json",JSON.stringify(cfg,null,4),
+            'utf-8')
+
       - name: install frontend dependencies
         run: npm install
       - uses: tauri-apps/tauri-action@v0
