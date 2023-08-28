@@ -29,9 +29,9 @@ const ProjectPath = {
     PLATFORM: platform,
     RELEASE_PATH: path.resolve(__dirname, "../release"),
     EXTENSION: extension,
-    EXE_RELEASE_NAME: `CeobeCanteenDesktop-${version}-${platform}.${extension}`,
+    EXE_RELEASE_NAME: `小刻食堂-${version}-${platform}.${extension}`,
     PORTABLE: hasPortable,
-    PORTABLE_RELEASE_NAME: `CeobeCanteenDesktop-${version}-${platform}-portable.zip`
+    PORTABLE_RELEASE_NAME: `小刻食堂-${version}-${platform}-portable.zip`
 }
 
 module.exports = { ProjectPath }
