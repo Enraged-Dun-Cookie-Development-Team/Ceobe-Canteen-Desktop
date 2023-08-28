@@ -47,7 +47,7 @@ export interface DesktopVersion {
 export function getVersion(
   version?: string,
 ): Promise<Response<Payload<DesktopVersion>>> {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: "/canteen/operate/version/desktop",
     method: "GET",
     query: {

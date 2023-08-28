@@ -1,9 +1,10 @@
 import { app } from "@tauri-apps/api";
+import {getVersion} from "../resourceFetcher/version";
 
 class Updater {
   async judgmentVersion(newer: string) {
-    let v1 = await app.getVersion();
-    let v2 = newer;
+    let v1 = newer;
+    let v2 = await app.getVersion();
     console.log(v1);
     console.log(v2);
     if (v1 == v2) {
@@ -23,6 +24,15 @@ class Updater {
     }
 
     return digit != vs1.length;
+  }
+
+  async checkUpdate():Promise<boolean>{
+    let newer = await getVersion()
+    if (newer.data.data){
+      return await this.judgmentVersion(newer.data.data.version)
+    }else {
+      return false
+    }
   }
 }
 

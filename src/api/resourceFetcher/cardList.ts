@@ -16,7 +16,7 @@ export interface CardListItem {
 export function getCardList(): Promise<
   Response<Payload<Map<string, CardListItem>>>
 > {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: `https://temp.ceobecanteen.top/canteen/cardList`,
     method: "GET",
   });

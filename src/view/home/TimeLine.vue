@@ -58,12 +58,12 @@
         </template>
         <component
           :is="component.getComponentName()"
-          :id="cookie.item.id"
+          :id="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
           :info="cookie"
           @open-url="card.openUrlInThis"
         >
           <template
-            v-if="card.isCopyImage && cookie.item.id == card.copyImageId"
+            v-if="card.isCopyImage && `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}` == card.copyImageId"
             #default="info"
           >
             <div class="h-100 w-100 d-flex flex-column">
@@ -117,7 +117,7 @@
               icon="fas fa-share-nodes"
               size="small"
               title="生成卡片"
-              @click.stop="card.copyImage(info.info.item.id)"
+              @click.stop="card.copyImage(cookie.source.type+':'+cookie.source.data+':'+cookie.item.id)"
             ></v-btn>
             <v-btn
               icon="fas fa-link"
@@ -257,10 +257,10 @@ const card = reactive({
   copyImageId: null,
   openUrlInThis(data: { url: string; icon: string; source: string }) {
     previewUrl(data.url, data.source);
-    // router.push({
-    //   path: "/home/Browser",
-    //   query: data,
-    // });
+    router.push({
+      path: "/home/Browser",
+      query: data,
+    });
   },
   copyImage(id) {
     card.copyImageId = id;

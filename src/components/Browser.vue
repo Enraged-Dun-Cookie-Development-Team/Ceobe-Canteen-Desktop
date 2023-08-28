@@ -15,26 +15,28 @@
         @click="back"
       ></v-btn>
     </v-toolbar>
-    <iframe
-      :src="query.url"
-      :style="{ width: query.width ? query.width : '100%' }"
-      :useragent="query.useragent ? query.useragent : null"
-      class="webview"
-      style="margin: auto"
-    ></iframe>
-    <iframe
-      :src="query.url"
-      :style="{ width: query.width ? query.width : '100%' }"
-      :useragent="query.useragent ? query.useragent : null"
-      style="margin: auto"
-    ></iframe>
+<!--    <iframe-->
+<!--      :src="query.url"-->
+<!--      :style="{ width: query.width ? query.width : '100%' }"-->
+<!--      :useragent="query.useragent ? query.useragent : null"-->
+<!--      class="webview"-->
+<!--      style="margin: auto"-->
+<!--    ></iframe>-->
+<!--    <iframe-->
+<!--      :src="query.url"-->
+<!--      :style="{ width: query.width ? query.width : '100%' }"-->
+<!--      :useragent="query.useragent ? query.useragent : null"-->
+<!--      style="margin: auto"-->
+<!--    ></iframe>-->
   </div>
 </template>
 
 <script lang="ts" name="index" setup>
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, reactive, ref, watch } from "vue";
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { getImage } from "../utils/imageUtil";
+import {invoke} from "@tauri-apps/api";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
 const router = useRouter();
 const route = useRoute();
@@ -101,6 +103,7 @@ const webviewWindow = reactive<{
 });
 
 function back() {
+  invoke("back_preview")
   router.push({
     path: "/",
   });
@@ -114,10 +117,19 @@ watch(
   },
 );
 
+let unlisten: UnlistenFn;
 onMounted(() => {
   query.value = route.query;
   webviewWindow.init();
+  listen("close-main", () => {
+    back();
+  }).then((unListen: UnlistenFn) => {
+    unlisten = unListen
+  });
 });
+onUnmounted(() => {
+  unlisten();
+})
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

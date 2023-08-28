@@ -31,7 +31,7 @@ export interface Announcement {
 export function getAnnouncementInfo(): Promise<
   Response<Payload<Announcement[]>>
 > {
-  return requestClient.request({
+  return requestClient.requestPayload({
     url: `/canteen/operate/announcement/list`,
     method: "GET",
   });

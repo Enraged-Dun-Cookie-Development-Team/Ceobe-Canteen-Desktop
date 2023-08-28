@@ -5,6 +5,7 @@ use image::{load_from_memory, EncodableLayout};
 use serde::{Serialize, Serializer};
 use std::borrow::Cow;
 use tauri::command;
+use tracing::{info, instrument};
 
 #[derive(Debug, thiserror::Error)]
 pub enum CopyError {
@@ -26,6 +27,7 @@ impl Serialize for CopyError {
 }
 
 #[command]
+#[instrument(skip_all, err, name = "CopyImage")]
 pub fn copy_image(image: String) -> Result<(), CopyError> {
     // data object base64 url -> base64
     let image = image.replace("data:image/jpeg;base64,", "");
@@ -33,12 +35,11 @@ pub fn copy_image(image: String) -> Result<(), CopyError> {
     let buffer = STANDARD.decode(image)?;
     // byte array -> image
     let image = load_from_memory(&buffer)?.to_rgba8();
-    println!(
-        "{}x{} = {} : {}",
-        image.width(),
-        image.height(),
-        image.width() * image.height() * 4,
-        image.as_bytes().len()
+
+    info!(
+        action = "DecodeImage",
+        image.width = image.width(),
+        image.height = image.height()
     );
 
     let image = ImageData {
@@ -49,6 +50,6 @@ pub fn copy_image(image: String) -> Result<(), CopyError> {
     let mut clipboard = Clipboard::new()?;
     clipboard.set_image(image)?;
     drop(clipboard);
-
+    info!(action = "WriteImageToClipboard", result = "Done");
     Ok(())
 }
