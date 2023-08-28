@@ -72,7 +72,7 @@ jobs:
             cfg.package.productName = "ceobe-canteen";
             let fs = require("fs");
             await fs.promises.writeFile(
-              "./src-tauri/tarui.conf.json",
+              "./src-tauri/tauri.conf.json",
               JSON.stringify(cfg,null,4),
               {encoding:"utf8"}
             );
