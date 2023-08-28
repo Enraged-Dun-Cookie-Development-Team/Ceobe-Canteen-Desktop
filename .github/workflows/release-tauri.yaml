@@ -79,10 +79,11 @@ jobs:
 
       - name: install frontend dependencies
         run: npm install
-      - uses: tauri-apps/tauri-action@v0
+      - uses: Closure-Engineering-Team/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          customAssetName: 'ceobe-canteen'
           releaseId: ${{ needs.create-release.outputs.release_id }}
 
   publish-release:
