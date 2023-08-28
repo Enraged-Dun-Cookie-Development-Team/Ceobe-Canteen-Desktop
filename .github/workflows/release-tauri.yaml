@@ -71,8 +71,11 @@ jobs:
             let cfg = require("./src-tauri/tauri.conf.json");
             cfg.package.productName = "ceobe-canteen";
             let fs = require("fs");
-            await fs.writeFile("./src-tauri/tarui.conf.json",JSON.stringify(cfg,null,4),
-            'utf-8');
+            await fs.promises.writeFile(
+              "./src-tauri/tarui.conf.json",
+              JSON.stringify(cfg,null,4),
+              {encoding:"utf8"}
+            );
 
       - name: install frontend dependencies
         run: npm install
