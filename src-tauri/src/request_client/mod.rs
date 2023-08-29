@@ -10,7 +10,7 @@ use reqwest::{Client, IntoUrl, Request, Response};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware, RequestBuilder};
 use std::sync::OnceLock;
 use tauri::AppHandle;
-use tracing::{debug, info, instrument, Level};
+use tracing::{info, instrument, Level};
 
 pub struct RequestClient {
     pub inner: ClientWithMiddleware,
@@ -44,8 +44,18 @@ impl RequestClient {
     }
     #[instrument(name="RequestClient",skip_all,err,ret(level = Level::TRACE))]
     pub async fn send(&self, request: Request) -> reqwest_middleware::Result<Response> {
-        debug!(action="SendRequest",URL= %request.url(), method = %request.method());
+        info!(
+            action = "SendRequest",
+            Url = %request.url(),
+            method = %request.method()
+        );
         let resp = self.inner.execute(request).await?;
+        info!(
+            action = "RequestRespond",
+            Url = %resp.url(),
+            resp.status = %resp.status(),
+            resp.version = ?resp.version()
+        );
         Ok(resp)
     }
 }
