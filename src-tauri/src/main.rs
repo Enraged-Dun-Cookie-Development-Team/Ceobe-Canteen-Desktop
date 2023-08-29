@@ -27,13 +27,17 @@ fn main() {
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .setup(|app| {
+                let window = app.get_window("main").expect("cannot found main window");
+
                 // single instance
-                let main_window = app.get_window("main").expect("cannot found main window");
-                spawn(move || run_sev(main_window));
+                #[cfg(not(target_os ="macos"))]
+                spawn({
+                    let main_window = window.clone();
+                    move || run_sev(main_window) }
+                );
 
                 new_system_tray(app)?;
-                let handle = app.handle();
-                let window = handle.get_window("main").unwrap();
+
 
                 window.clone().on_window_event(move |event| {
                     if let WindowEvent::CloseRequested { api, .. } = event {
