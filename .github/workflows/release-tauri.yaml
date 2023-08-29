@@ -109,11 +109,11 @@ jobs:
               const ext = extensions.find(s => basename.includes(s)) || path.extname(assetPath);
               const filename = basename.replace(`_${tauriVersion}`, '').replace(productName, `${process.env.CUSTOM_RELEASE_ASSET_NAME}_${productVersion}`).replace(ext, '');
               let extraInfo = '';
+              if (assetPath.includes(`${path.sep}debug${path.sep}`)) extraInfo += '-debug';
               if (ext === '.app.tar.gz.sig' || ext === '.app.tar.gz') {
                 const arch = assetPath.includes('universal-apple-darwin') ? 'universal' : (assetPath.includes('aarch64-apple-darwin') ? 'aarch64' : (process.arch === 'arm64' ? 'aarch64' : 'x64'));
                 extraInfo += `_${arch}`;
               }
-              if (assetPath.includes(`${path.sep}debug${path.sep}`)) extraInfo += '-debug';
               return { assetName: `${filename}${extraInfo}${ext}`, newAssetPath: assetPath };
             }
             for (assetPath of artifactPaths) {
