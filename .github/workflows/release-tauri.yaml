@@ -34,7 +34,7 @@ jobs:
           script: |
             const fs = require('fs')
             const { data } = await github.rest.repos.createRelease({
-              tag_name: `tauri-v${process.env.PACKAGE_VERSION}`,
+              tag_name: `tauri-v${process.env.PACKAGE_VERSION}-build.${{ github.run_number }}.${{ github.run_attempt }}`,
               target_commitish: '${{ github.sha }}',
               name: `CeobeCanteenDesktop v${process.env.PACKAGE_VERSION}`,
               body: `小刻食堂桌面端 v${process.env.PACKAGE_VERSION} 发布了`,
