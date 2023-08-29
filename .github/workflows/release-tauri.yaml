@@ -72,7 +72,7 @@ jobs:
             let cfg = require('./src-tauri/tauri.conf.json');
             cfg.package.version = require('./package.json').version;
             // change deb package name for ubuntu
-            if ('${{ matrix.platform }}'.startsWith('ubuntu')) cfg.package.productName = cfg.package.productName.replace(/([A-Z])/g, '_$1').toLowerCase();
+            if ('${{ matrix.platform }}'.startsWith('ubuntu')) cfg.package.productName = cfg.package.productName.replace(/([A-Z])/g, '-$1').toLowerCase();
             // change package version for windows
             if ('${{ matrix.platform }}'.startsWith('windows')) {
               const versionMatch = cfg.package.version.match('^[0-255].[0-255].[0-65535]');
