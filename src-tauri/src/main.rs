@@ -9,7 +9,8 @@ mod single_instance;
 mod state;
 mod storage;
 use std::thread::spawn;
-use tauri::{generate_context, Builder, Manager, WindowEvent};
+use tauri::{generate_context, Builder, Manager, WindowEvent, Context};
+use tauri::api::path::app_log_dir;
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, get_item, quit, read_detail,
@@ -20,7 +21,9 @@ use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {
-    init_logger();
+    let context :Context<_> = generate_context!();
+    let log_dir = app_log_dir(context.config()).expect("Log Dir Not available");
+    init_logger(log_dir).expect("Init Log File failure");
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .setup(|app| {

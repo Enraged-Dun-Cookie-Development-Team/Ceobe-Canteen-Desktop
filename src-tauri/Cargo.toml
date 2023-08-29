@@ -1,6 +1,6 @@
 [package]
 name = "ceobe-canteen-desktop"
-version = "0.1.5-beta.1"
+version = "0.1.6"
 description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻一样喜欢吃东西的浏览器内核 "
 authors = ["FrozenString<frozenstringstable@gmail.com>"]
 license = ""
@@ -16,7 +16,7 @@ tauri-build = { version = "1.4.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray", "devtools"] }
+tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
 reqwest = "0.11"
 base64 = "0.21.2"
 regex = "1"
@@ -42,8 +42,10 @@ tracing-subscriber = { version = "0.3.17", features = [
     "time",
     "smallvec",
     "parking_lot",
+
 ] }
 task-local-extensions = "0.1.4"
+chrono = "0.4.26"
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.39"
 features = [
