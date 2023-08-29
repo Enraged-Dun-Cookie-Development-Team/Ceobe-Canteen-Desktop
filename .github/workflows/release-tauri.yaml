@@ -7,7 +7,8 @@ on:
 
 env:
   CUSTOM_RELEASE_ASSET_NAME: 'CeobeCanteen'
-  DEB_PACKAGE_NAME: 'ceobe-canteen'
+  UBUNTU_PRODUCT_NAME: 'ceobe-canteen'
+  MACOS_PRODUCT_NAME: ''
 
 jobs:
   create-release:
@@ -71,10 +72,14 @@ jobs:
           script: |
             let cfg = require('./src-tauri/tauri.conf.json');
             cfg.package.version = require('./package.json').version;
-            // change deb package name for ubuntu
-            if ('${{ matrix.platform }}'.startsWith('ubuntu')) cfg.package.productName = process.env.DEB_PACKAGE_NAME;
-            // change package version for windows
-            if ('${{ matrix.platform }}'.startsWith('windows')) {
+            if ('${{ matrix.platform }}'.startsWith('ubuntu')) {
+              // change product name for ubuntu
+              if (process.env.UBUNTU_PRODUCT_NAME) cfg.package.productName = process.env.UBUNTU_PRODUCT_NAME;
+            } else if ('${{ matrix.platform }}'.startsWith('macos')) {
+              // change product name for macos
+              if (process.env.MACOS_PRODUCT_NAME) cfg.package.productName = process.env.MACOS_PRODUCT_NAME;
+            } else if ('${{ matrix.platform }}'.startsWith('windows')) {
+              // change package version for windows
               const versionMatch = cfg.package.version.match('^[0-255].[0-255].[0-65535]');
               if (!versionMatch || !versionMatch[0]) {
                 throw new Error('package.json中的版本号无法提取成Windows所需版本号');
