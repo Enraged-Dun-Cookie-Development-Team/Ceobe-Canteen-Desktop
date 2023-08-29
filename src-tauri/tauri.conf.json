@@ -8,8 +8,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "小刻食堂",
-    "version": "0.1.6"
+    "productName": "CeobeCanteen",
+    "version": "0.1.7"
   },
   "tauri": {
 
