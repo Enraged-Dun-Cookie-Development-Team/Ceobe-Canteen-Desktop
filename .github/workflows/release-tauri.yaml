@@ -5,6 +5,9 @@ on:
     branches:
       - release_tauri
 
+env:
+  CUSTOM_RELEASE_ASSET_NAME: 'CeobeCanteen'
+
 jobs:
   create-release:
     permissions:
@@ -62,30 +65,67 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
-
-      - name: change deb package name
-        if: matrix.platform == 'ubuntu-20.04'
+      - name: update tauri build config
         uses: actions/github-script@v6
         with:
-          script:
-            let cfg = require("./src-tauri/tauri.conf.json");
-            cfg.package.productName = "ceobe-canteen";
-            let fs = require("fs");
-            await fs.promises.writeFile(
-              "./src-tauri/tauri.conf.json",
-              JSON.stringify(cfg,null,4),
-              {encoding:"utf8"}
-            );
-
+          script: |
+            let cfg = require('./src-tauri/tauri.conf.json');
+            cfg.package.version = require('./package.json').version;
+            // change deb package name for ubuntu
+            if ('${{ matrix.platform }}'.startsWith('ubuntu')) cfg.package.productName = 'ceobe-canteen';
+            // change package version for windows
+            if ('${{ matrix.platform }}'.startsWith('windows')) {
+              const versionMatch = cfg.package.version.match('^[0-255].[0-255].[0-65535]');
+              if (!versionMatch || !versionMatch[0]) {
+                throw new Error('package.json中的版本号无法提取成Windows所需版本号');
+              }
+              cfg.package.version = versionMatch[0];
+            }
+            require('fs').writeFileSync('./src-tauri/tauri.conf.json', JSON.stringify(cfg));
       - name: install frontend dependencies
-        run: npm install
-      - uses: Enraged-Dun-Cookie-Development-Team/ceobe-tauri-action@d56b5ec9b83ecad7ab8e623bd0e3bb114e68a1f5
+        run: npm ci
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri-action-build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload release
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_PATHS: ${{ steps.tauri-action-build.outputs.artifactPaths }}
         with:
-          customAssetName: 'ceobe-canteen'
-          releaseId: ${{ needs.create-release.outputs.release_id }}
-
+          script: |
+            const fs = require('fs'), path = require('path');
+            const { productName, version: tauriVersion } = require('./src-tauri/tauri.conf.json').package;
+            const productVersion = require('./package.json.json').version;
+            const artifactPaths = JSON.parse(process.env.ARTIFACT_PATHS);
+            async function transformAssetName(assetPath) {
+              if (assetPath.endsWith('.app')) {
+                if (!fs.existsSync(`${assetPath}.tar.gz`)) require('child_process').execSync(`tar czf ${assetPath}.tar.gz -C "${path.dirname(assetPath)}" "${path.basename(assetPath)}"`, {stdio: 'inherit'});
+                assetPath += '.tar.gz';
+              }
+              const basename = path.basename(assetPath);
+              const extensions = ['.app.tar.gz.sig','.app.tar.gz','.dmg','.AppImage.tar.gz.sig','.AppImage.tar.gz','.AppImage','.deb','.msi.zip.sig','.msi.zip','.msi','.nsis.zip.sig','.nsis.zip','.exe'];
+              const ext = extensions.find(s => basename.includes(s)) || path.extname(assetPath);
+              const filename = basename.replace(`_${tauriVersion}`, '').replace(productName, `${process.env.CUSTOM_RELEASE_ASSET_NAME}_${productVersion}`).replace(ext, '');
+              let extraInfo = '';
+              if (ext === '.app.tar.gz.sig' || ext === '.app.tar.gz') {
+                const arch = assetPath.includes('universal-apple-darwin') ? 'universal' : (assetPath.includes('aarch64-apple-darwin') ? 'aarch64' : (process.arch === 'arm64' ? 'aarch64' : 'x64'));
+                extraInfo += `_${arch}`;
+              }
+              if (assetPath.includes(`${path.sep}debug${path.sep}`)) extraInfo += '-debug';
+              return { assetName: `${filename}${extraInfo}${ext}`, newAssetPath: assetPath };
+            }
+            for (assetPath of artifactPaths) {
+              const { assetName, newAssetPath } = await transformAssetName(assetPath);
+              console.log('uploading ' + newAssetPath + ' as ' + assetName);
+              await github.rest.repos.uploadReleaseAsset({
+                name: assetName,
+                data: fs.readFileSync(newAssetPath),
+                release_id: '${{ needs.create-release.outputs.release_id }}',
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+            }
   publish-release:
     permissions:
       contents: write
