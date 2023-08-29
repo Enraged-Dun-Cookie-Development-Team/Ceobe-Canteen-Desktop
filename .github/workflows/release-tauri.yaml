@@ -97,7 +97,7 @@ jobs:
           script: |
             const fs = require('fs'), path = require('path');
             const { productName, version: tauriVersion } = require('./src-tauri/tauri.conf.json').package;
-            const productVersion = require('./package.json.json').version;
+            const productVersion = require('./package.json').version;
             const artifactPaths = JSON.parse(process.env.ARTIFACT_PATHS);
             async function transformAssetName(assetPath) {
               if (assetPath.endsWith('.app')) {
