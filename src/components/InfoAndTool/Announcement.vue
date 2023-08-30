@@ -23,6 +23,7 @@
 import { onMounted, reactive } from "vue";
 import ceobeRequest from "../../api/operations/ceobeRequest";
 import { changeToCCT } from "../../utils/timeUtil";
+import {DateTime} from "luxon";
 
 const announcementInfo = reactive({
   data: [],
@@ -32,8 +33,8 @@ const announcementInfo = reactive({
       if (res.status == 200) {
         announcementInfo.data = res.data.data.filter(
           (x) =>
-            new Date(x.start_time) <= changeToCCT(new Date()) &&
-            new Date(x.over_time) >= changeToCCT(new Date()),
+            DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
+            DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
         );
       }
     });
