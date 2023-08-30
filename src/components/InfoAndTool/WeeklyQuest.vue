@@ -113,8 +113,7 @@ const quest = reactive({
     quest.openResources = false;
   },
   calcActivityDiff(endDate) {
-    let startDate = changeToCCT(new Date());
-    const diff = calcDiff(endDate, startDate);
+    const diff = calcDiff(DateTime.fromSQL(endDate, {zone: "Asia/Shanghai"}));
     if (diff) {
       return "剩" + diff;
     } else {
