@@ -12,7 +12,7 @@
 [![latest](https://img.shields.io/badge/Ceobe_Canteen-release-blue?style=for-the-badge
 )](https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron/releases)
 [![Static Badge](https://img.shields.io/badge/QQ%E7%BE%A4-362860473-fdba4b?style=for-the-badge&logo=tencentqq)
-](点击链接加入群聊【蹲饼组】：http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=bPMN910WLbN3FHQXzmAJEPyupOm_8bHX&authKey=Sr%2BCN9EXrGg7i2KnUIMdU9rSfaZBfQzm69wMyI004janRrg9MqV9PW7PRjb35SP2&noverify=0&group_code=362860473)
+](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=bPMN910WLbN3FHQXzmAJEPyupOm_8bHX&authKey=Sr%2BCN9EXrGg7i2KnUIMdU9rSfaZBfQzm69wMyI004janRrg9MqV9PW7PRjb35SP2&noverify=0&group_code=362860473)
 
 </div>
 
