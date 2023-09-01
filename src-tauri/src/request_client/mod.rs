@@ -10,7 +10,7 @@ use reqwest::{Client, IntoUrl, Request, Response};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware, RequestBuilder};
 use std::sync::OnceLock;
 use std::time::Duration;
-use reqwest_retry::policies::ExponentialBackoffBuilder;
+use reqwest_retry::policies::{ExponentialBackoff};
 use reqwest_retry::RetryTransientMiddleware;
 use tauri::AppHandle;
 use tracing::{info, instrument, Level};
@@ -28,7 +28,10 @@ impl RequestClient {
     pub fn get_this(app: AppHandle) -> &'static Self {
         HTTP_CLIENT.get_or_init(|| {
             let cache_location = get_cache_dir(app).join(HTTP_CACHE);
-            let retry_policy = ExponentialBackoffBuilder::default().build_with_total_retry_duration(Duration::from_secs(3600));
+            let retry_policy = ExponentialBackoff::builder()
+                .backoff_exponent(2)
+                .retry_bounds(Duration::from_millis(500),Duration::from_secs(16))
+                .build_with_total_retry_duration(Duration::from_secs(120));
             info!(firstInit="RequestClient",cacheLocal = ?cache_location);
             let client = ClientBuilder::new(Client::new())
                 .with(Cache(HttpCache {
