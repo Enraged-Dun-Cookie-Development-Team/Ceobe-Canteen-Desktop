@@ -1,42 +1,49 @@
 use byteorder::{ReadBytesExt, WriteBytesExt};
-use interprocess::local_socket::{LocalSocketListener, LocalSocketStream};
+use interprocess::local_socket::LocalSocketStream;
 use std::io;
 use std::io::{Read, Write};
 
-use tauri::{Manager, Window};
-use tracing::{error, info, instrument};
+use tauri::Window;
+use tracing::{info, instrument};
 
+#[allow(dead_code)]
 const LOCAL_SOCKET_NAME: &str = "CEOBE_LISTENING";
 const TEST_CEOBE_IN: &str = "TEST_CEOBE_IN";
 const CEOBE_IN: &str = "CEOBE_IN";
 #[instrument(name = "SingletonService", skip_all)]
+#[allow(unused_variables)]
 pub fn run_sev(window: Window) {
-    let socket = match LocalSocketListener::bind(LOCAL_SOCKET_NAME) {
-        Ok(socket) => socket,
-        Err(err) => {
-            error!(step="CreateLocalSocket", error = %err);
-            window.app_handle().exit(1);
-            info!(step = "CeobeExit", action = "QuitSelf");
-            return;
-        }
-    };
-    info!(step = "WaitingForCeobe");
-    'listen: while let Ok(mut stream) = socket.accept() {
-        while let Ok(packet) = Packet::read(&mut stream) {
-            if packet.msg.as_str() == CEOBE_IN {
-                info!(step = "IncomeCeobe", action = "ShowSelf");
-                show_window(&window).expect("Cannot Reopen window");
-                break;
-            } else if packet.msg.as_str() == TEST_CEOBE_IN {
-                info!(step = "IncomeTestCeobe", action = "Close");
-                window.app_handle().exit(1);
-                break 'listen;
+    #[cfg(not(target_os = "macos"))]
+    {
+        let socket = match interprocess::local_socket::LocalSocketListener::bind(LOCAL_SOCKET_NAME)
+        {
+            Ok(socket) => socket,
+            Err(err) => {
+                tracing::error!(step="CreateLocalSocket", error = %err);
+                tauri::Manager::app_handle(&window).exit(1);
+                info!(step = "CeobeExit", action = "QuitSelf");
+                return;
+            }
+        };
+        info!(step = "WaitingForCeobe");
+        'listen: while let Ok(mut stream) = socket.accept() {
+            while let Ok(packet) = Packet::read(&mut stream) {
+                if packet.msg.as_str() == CEOBE_IN {
+                    info!(step = "IncomeCeobe", action = "ShowSelf");
+                    show_window(&window).expect("Cannot Reopen window");
+                    break;
+                } else if packet.msg.as_str() == TEST_CEOBE_IN {
+                    info!(step = "IncomeTestCeobe", action = "Close");
+                    tauri::Manager::app_handle(&window).exit(1);
+                    break 'listen;
+                }
             }
         }
+        drop(socket);
     }
-    drop(socket);
 }
 
+#[allow(dead_code)]
 fn show_window(window: &Window) -> tauri::Result<()> {
     window.show()?;
     if window.is_minimized()? {
@@ -75,7 +82,8 @@ struct Packet {
 }
 
 impl Packet {
-    fn read<R: Read>(r: &mut R) -> std::io::Result<Self> {
+    #[allow(dead_code)]
+    fn read<R: Read>(r: &mut R) -> io::Result<Self> {
         let data = r.read_u8()?;
         let mut vec = vec![0u8; data as usize];
         r.read_exact(&mut vec)?;

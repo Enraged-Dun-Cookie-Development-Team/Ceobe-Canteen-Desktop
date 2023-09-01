@@ -9,8 +9,8 @@ mod single_instance;
 mod state;
 mod storage;
 use std::thread::spawn;
-use tauri::{generate_context, Builder, Manager, WindowEvent, Context};
 use tauri::api::path::app_log_dir;
+use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, get_item, quit, read_detail,
@@ -21,7 +21,7 @@ use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {
-    let context :Context<_> = generate_context!();
+    let context: Context<_> = generate_context!();
     let log_dir = app_log_dir(context.config()).expect("Log Dir Not available");
     init_logger(log_dir).expect("Init Log File failure");
     if let Ok(true) | Err(_) = try_start() {
@@ -30,14 +30,12 @@ fn main() {
                 let window = app.get_window("main").expect("cannot found main window");
 
                 // single instance
-                #[cfg(not(target_os ="macos"))]
                 spawn({
                     let main_window = window.clone();
-                    move || run_sev(main_window) }
-                );
+                    move || run_sev(main_window)
+                });
 
                 new_system_tray(app)?;
-
 
                 window.clone().on_window_event(move |event| {
                     if let WindowEvent::CloseRequested { api, .. } = event {
