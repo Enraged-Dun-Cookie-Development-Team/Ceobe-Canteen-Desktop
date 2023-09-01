@@ -30,7 +30,6 @@ fn main() {
                 let window = app.get_window("main").expect("cannot found main window");
 
                 // single instance
-                #[cfg(not(target_os ="macos"))]
                 spawn({
                     let main_window = window.clone();
                     move || run_sev(main_window) }
