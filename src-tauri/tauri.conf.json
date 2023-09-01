@@ -1,0 +1,132 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run dev",
+    "devPath": "http://localhost:8080",
+    "distDir": "../dist",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "CeobeCanteen",
+    "version": "0.1.8"
+  },
+  "tauri": {
+
+    "systemTray": {
+      "iconPath": "icons/32x32.png"
+    },
+    "allowlist": {
+      "all": false,
+      "notification": {
+        "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["http://*.ceobecanteen.top/*", "http://*", "https://*"]
+      },
+      "fs": {
+        "readFile": true
+      },
+      "shell": {
+        "open": true
+      },
+      "clipboard": {
+        "all": true
+      },
+      "window": {
+        "all": true
+      },
+      "path": {
+        "all": true
+      },
+      "protocol": {
+        "asset": true,
+        "all": true,
+        "assetScope": []
+      },
+      "dialog": {
+        "message": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "SocialNetworking",
+      "copyright": "CeobeCanteen",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.ceobe-canteen.desktop",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": "",
+        "nsis": {
+          "headerImage": "assets/installer-header.bmp",
+          "sidebarImage": "assets/installer-side.bmp",
+          "installerIcon": "assets/installer-icon.ico",
+          "installMode": "both",
+          "languages": ["SimpChinese"]
+        },
+        "wix": {
+          "language": "zh-CN",
+          "bannerPath":"assets/installer-banner.bmp",
+          "dialogImagePath": "assets/installer-dialog.bmp"
+        }
+      }
+    },
+    "security": {
+      "csp": "default-src * data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src * data: blob: ; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline'; frame-ancestors * data: blob:;"
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "decorations": false,
+        "fullscreen": false,
+        "label": "main",
+        "height": 600,
+        "resizable": true,
+        "title": "ceobe-canteen-electron",
+        "width": 1200
+      },
+      {
+        "label": "background",
+        "visible": false,
+        "title": "background",
+        "url": "/#/background"
+      },
+      {
+        "label": "notification",
+        "title": "notification",
+        "width": 400,
+        "height": 355,
+        "resizable": false,
+        "alwaysOnTop": true,
+        "visible": false,
+        "decorations": false,
+        "url": "/#/notification"
+      }
+    ]
+  }
+}

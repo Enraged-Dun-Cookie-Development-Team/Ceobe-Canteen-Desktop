@@ -1,0 +1,154 @@
+name: 'publish tauri'
+
+on:
+  push:
+    branches:
+      - release_tauri
+
+env:
+  CUSTOM_RELEASE_ASSET_NAME: 'CeobeCanteen'
+  UBUNTU_PRODUCT_NAME: 'ceobe-canteen'
+  MACOS_PRODUCT_NAME: ''
+
+jobs:
+  create-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    outputs:
+      release_id: ${{ steps.create-release.outputs.result }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: get version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: create release
+        id: create-release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs')
+            const { data } = await github.rest.repos.createRelease({
+              tag_name: `tauri-v${process.env.PACKAGE_VERSION}-build.${{ github.run_number }}.${{ github.run_attempt }}`,
+              target_commitish: '${{ github.sha }}',
+              name: `CeobeCanteenDesktop v${process.env.PACKAGE_VERSION}`,
+              body: `小刻食堂桌面端 v${process.env.PACKAGE_VERSION} 发布了`,
+              prerelease: false,
+              draft: true, owner: context.repo.owner, repo: context.repo.repo,
+            })
+            return data.id
+
+  build-tauri:
+    needs: create-release
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: true
+      matrix:
+        platform: [macos-latest, ubuntu-20.04, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: update tauri build config
+        uses: actions/github-script@v6
+        with:
+          script: |
+            let cfg = require('./src-tauri/tauri.conf.json');
+            cfg.package.version = require('./package.json').version;
+            if ('${{ matrix.platform }}'.startsWith('ubuntu')) {
+              // change product name for ubuntu
+              if (process.env.UBUNTU_PRODUCT_NAME) cfg.package.productName = process.env.UBUNTU_PRODUCT_NAME;
+            } else if ('${{ matrix.platform }}'.startsWith('macos')) {
+              // change product name for macos
+              if (process.env.MACOS_PRODUCT_NAME) cfg.package.productName = process.env.MACOS_PRODUCT_NAME;
+            } else if ('${{ matrix.platform }}'.startsWith('windows')) {
+              // change package version for windows
+              const versionMatch = cfg.package.version.match('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}(0|6[0-5][0-5][0-3][0-5]|[1-5][0-9][0-9][0-9][0-9]|[1-9][0-9]{0,3})');
+              if (!versionMatch || !versionMatch[0]) {
+                throw new Error('package.json中的版本号无法提取成Windows所需版本号');
+              }
+              cfg.package.version = versionMatch[0];
+            }
+            require('fs').writeFileSync('./src-tauri/tauri.conf.json', JSON.stringify(cfg));
+      - name: install frontend dependencies
+        run: npm ci
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri-action-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload release
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_PATHS: ${{ steps.tauri-action-build.outputs.artifactPaths }}
+        with:
+          script: |
+            const fs = require('fs'), path = require('path');
+            const { productName, version: tauriVersion } = require('./src-tauri/tauri.conf.json').package;
+            const productVersion = require('./package.json').version;
+            const artifactPaths = JSON.parse(process.env.ARTIFACT_PATHS);
+            async function transformAssetName(assetPath) {
+              if (assetPath.endsWith('.app')) {
+                if (!fs.existsSync(`${assetPath}.tar.gz`)) require('child_process').execSync(`tar czf ${assetPath}.tar.gz -C "${path.dirname(assetPath)}" "${path.basename(assetPath)}"`, {stdio: 'inherit'});
+                assetPath += '.tar.gz';
+              }
+              const basename = path.basename(assetPath);
+              const extensions = ['.app.tar.gz.sig','.app.tar.gz','.dmg','.AppImage.tar.gz.sig','.AppImage.tar.gz','.AppImage','.deb','.msi.zip.sig','.msi.zip','.msi','.nsis.zip.sig','.nsis.zip','.exe'];
+              const ext = extensions.find(s => basename.includes(s)) || path.extname(assetPath);
+              const filename = basename.replace(`_${tauriVersion}`, '').replace(productName, `${process.env.CUSTOM_RELEASE_ASSET_NAME}_${productVersion}`).replace(ext, '');
+              let extraInfo = '';
+              if (assetPath.includes(`${path.sep}debug${path.sep}`)) extraInfo += '-debug';
+              if (ext === '.app.tar.gz.sig' || ext === '.app.tar.gz') {
+                const arch = assetPath.includes('universal-apple-darwin') ? 'universal' : (assetPath.includes('aarch64-apple-darwin') ? 'aarch64' : (process.arch === 'arm64' ? 'aarch64' : 'x64'));
+                extraInfo += `_${arch}`;
+              }
+              return { assetName: `${filename}${extraInfo}${ext}`, newAssetPath: assetPath };
+            }
+            for (assetPath of artifactPaths) {
+              const { assetName, newAssetPath } = await transformAssetName(assetPath);
+              console.log('uploading ' + newAssetPath + ' as ' + assetName);
+              await github.rest.repos.uploadReleaseAsset({
+                name: assetName,
+                data: fs.readFileSync(newAssetPath),
+                release_id: '${{ needs.create-release.outputs.release_id }}',
+                owner: context.repo.owner, repo: context.repo.repo,
+              });
+            }
+  publish-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    needs: [create-release, build-tauri]
+
+    steps:
+      - name: publish release
+        id: publish-release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.release_id,
+              draft: false,
+              prerelease: false
+            })
