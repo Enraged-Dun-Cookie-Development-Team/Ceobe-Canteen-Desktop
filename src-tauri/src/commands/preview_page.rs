@@ -2,7 +2,9 @@ use reqwest::Url;
 use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
-use tauri::{command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl, LogicalPosition};
+use tauri::{
+    command, AppHandle, LogicalPosition, Manager, Window, WindowBuilder, WindowEvent, WindowUrl,
+};
 use tracing::{info, instrument};
 
 const WINDOWS_NAME: &str = "Preview";
