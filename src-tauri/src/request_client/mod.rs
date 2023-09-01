@@ -36,8 +36,8 @@ impl RequestClient {
                     manager: CeobeCacheManager::new(cache_location),
                     options: HttpCacheOptions::default(),
                 }))
-                .with(CeobeLoggingRequest)
                 .with(RetryTransientMiddleware::new_with_policy(retry_policy))
+                .with(CeobeLoggingRequest)
                 .build();
             Self { inner: client }
         })
