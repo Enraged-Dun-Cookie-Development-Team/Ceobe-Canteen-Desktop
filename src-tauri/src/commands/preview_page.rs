@@ -2,9 +2,7 @@ use reqwest::Url;
 use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
-use tauri::{
-    command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl,
-};
+use tauri::{command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl, LogicalPosition};
 use tracing::{info, instrument};
 
 const WINDOWS_NAME: &str = "Preview";
@@ -152,10 +150,9 @@ fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Res
     }
     #[cfg(not(windows))]
     {
-        use tauri::{PhysicalPosition, PhysicalSize};
-        preview_window.set_size(PhysicalSize::new(w, h))?;
+        preview_window.set_size(tauri::PhysicalSize::new(w, h))?;
         let main_location = main_window.inner_position()?.to_logical::<u32>(scale);
-        preview_window.set_position(PhysicalPosition::new(
+        preview_window.set_position(tauri::LogicalPosition::new(
             main_location.x + LEFT_W as u32,
             main_location.y + TOP_H as u32,
         ))?;
@@ -184,9 +181,8 @@ fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Res
                 }
                 #[cfg(not(windows))]
                 {
-                    use tauri::PhysicalSize;
                     window
-                        .set_size(PhysicalSize::new(w, h))
+                        .set_size(tauri::PhysicalSize::new(w, h))
                         .expect("Cannot resize window");
                 }
             } else if let WindowEvent::Moved(_pos) = event {
