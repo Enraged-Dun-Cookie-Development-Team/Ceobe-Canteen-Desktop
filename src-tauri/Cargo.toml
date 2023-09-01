@@ -1,10 +1,10 @@
 [package]
 name = "ceobe-canteen-desktop"
-version = "0.1.7"
+version = "0.1.8"
 description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻一样喜欢吃东西的浏览器内核 "
 authors = ["FrozenString<frozenstringstable@gmail.com>"]
-license = ""
-repository = ""
+license = "AGPL-3"
+repository = "https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron"
 default-run = "ceobe-canteen-desktop"
 edition = "2021"
 
@@ -16,7 +16,7 @@ tauri-build = { version = "1.4.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
+tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray", "devtools"] }
 reqwest = "0.11"
 base64 = "0.21.2"
 regex = "1"
@@ -38,19 +38,16 @@ http-cache-semantics = "1.0.1"
 http-cache = { version = "0.14.0", default-features = false }
 futures = "0.3.28"
 tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.17", features = [
-    "time",
+tracing-subscriber = { version = "0.3.17", features = ["time",
     "smallvec",
     "parking_lot",
-
 ] }
 task-local-extensions = "0.1.4"
 chrono = "0.4.26"
 reqwest-retry = "0.2.3"
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.39"
-features = [
-    "Data_Xml_Dom",
+features = ["Data_Xml_Dom",
     "Win32_Foundation",
     "Win32_Security",
     "Win32_System_Com",

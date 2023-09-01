@@ -34,6 +34,7 @@ import { onMounted, reactive } from "vue";
 import { getVideoList, VideoItem } from "../../api/resourceFetcher/videoList";
 import { changeToCCT } from "../../utils/timeUtil";
 import operate from "../../api/operations/operate";
+import {DateTime} from "luxon";
 
 const videoInfo = reactive<{
   list: VideoItem[];
@@ -45,8 +46,8 @@ const videoInfo = reactive<{
       // 快捷连接
       videoInfo.list = res.data.data.filter(
         (x) =>
-          new Date(x.start_time) <= changeToCCT(new Date()) &&
-          new Date(x.over_time) >= changeToCCT(new Date()),
+          DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
+          DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
       );
     });
   },

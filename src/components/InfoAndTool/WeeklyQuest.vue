@@ -58,6 +58,7 @@ import { dayInfo } from "../../constant";
 import ceobeRequest from "../../api/operations/ceobeRequest";
 import { calcDiff, changeToCCT, numberToWeek } from "../../utils/timeUtil";
 import { getImage } from "../../utils/imageUtil";
+import {DateTime} from "luxon";
 
 const quest = reactive({
   dayInfo: dayInfo,
@@ -76,8 +77,8 @@ const quest = reactive({
     // 倒计时
     quest.countdown = quest.resourceInfo.countdown.filter(
       (x) =>
-        new Date(x.start_time) <= changeToCCT(new Date()) &&
-        new Date(x.over_time) >= changeToCCT(new Date()),
+        DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
+        DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
     );
   },
   // 今天有没有该资源可以刷
@@ -112,8 +113,7 @@ const quest = reactive({
     quest.openResources = false;
   },
   calcActivityDiff(endDate) {
-    let startDate = changeToCCT(new Date());
-    const diff = calcDiff(endDate, startDate);
+    const diff = calcDiff(DateTime.fromSQL(endDate, {zone: "Asia/Shanghai"}));
     if (diff) {
       return "剩" + diff;
     } else {

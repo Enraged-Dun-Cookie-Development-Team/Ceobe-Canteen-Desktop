@@ -1,3 +1,4 @@
+import { DateTime } from "luxon"
 function transformDate(dateValue: number | string | Date): Date {
   if (typeof dateValue !== "object" || dateValue.constructor !== Date) {
     dateValue = new Date(dateValue);
@@ -46,13 +47,11 @@ export function format(date: number | string | Date, formatText: string) {
  * 计算并格式化两个Date的差值，如果startDate >= endDate会返回空值
  */
 export function calcDiff(
-  endDate: string | number | Date,
-  startDate = new Date(),
+  endTimestamp:  number,
+  startTimestamp = DateTime.local().valueOf(),
 ) {
-  const startTime = transformDate(startDate).getTime();
-  const endTime = transformDate(endDate).getTime();
 
-  if (startTime >= endTime) {
+  if (startTimestamp >= endTimestamp) {
     return "";
   }
 
@@ -62,7 +61,7 @@ export function calcDiff(
     [60 * 1000, "分钟"],
   ]);
   let text = "";
-  let time = Math.abs(endTime - startTime);
+  let time = Math.abs(endTimestamp - startTimestamp);
   for (const unit of timeUnits) {
     if (time >= unit[0]) {
       const num = Math.floor(time / unit[0]);
