@@ -142,12 +142,13 @@ import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
 import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
 import searchWordEvent from "../../api/operations/searchWordEvent";
-import { getCookieSearchList } from "../../api/resourceFetcher/searchCookie";
+import { getCookieSearchList } from "@/api/resourceFetcher/searchCookie";
 import operate from "../../api/operations/operate";
-import { getImage } from "../../utils/imageUtil";
-import { getCookieList } from "../../api/resourceFetcher/cookieList";
+import { getImage } from "@/utils/imageUtil";
+import { getCookieList } from "@/api/resourceFetcher/cookieList";
 import Common from "../../components/Card/Common.vue";
-import { previewUrl } from "../../utils/previewUtil";
+import { previewUrl } from "@/utils/previewUtil";
+import logger from "@/api/operations/logger";
 
 const router = useRouter();
 
@@ -169,6 +170,7 @@ const timeline = reactive<Timeline>({
 
 async function getData() {
   await newestTimeline.getTimeline((_, arg) => {
+    logger.debug("TimeLine.vue",{cookie:arg})
     console.log(arg);
     if (arg == null) {
       return;

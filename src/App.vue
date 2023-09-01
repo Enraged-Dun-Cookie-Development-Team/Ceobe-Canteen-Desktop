@@ -10,6 +10,8 @@ import updater from "./api/operations/updater";
 import {notification} from "@tauri-apps/api";
 
 onMounted(()=>{
+
+
   if (getCurrent().label == "main"){
     console.log("checking update")
     updater.checkUpdate()
