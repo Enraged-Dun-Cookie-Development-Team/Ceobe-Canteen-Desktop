@@ -1,29 +1,11 @@
-# ceobe-canteen-electron
+# CeobeCanteenTauri
 
-## Project setup
+<div align="center">
 
-```
-npm install
-```
+![LOGO](src-tauri/icons/128x128.png)
 
-### Compiles and hot-reloads for development
+帮小刻找好多好吃的饼
 
-```
-npm run serve
-```
+</div>
 
-### Compiles and minifies for production
 
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
