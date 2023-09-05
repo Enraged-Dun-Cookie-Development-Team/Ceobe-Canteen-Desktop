@@ -1,9 +1,11 @@
 name: 'publish tauri'
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - release_tauri
+      - release
 
 env:
   CUSTOM_RELEASE_ASSET_NAME: 'CeobeCanteen'
@@ -78,6 +80,20 @@ jobs:
             } else if ('${{ matrix.platform }}'.startsWith('macos')) {
               // change product name for macos
               if (process.env.MACOS_PRODUCT_NAME) cfg.package.productName = process.env.MACOS_PRODUCT_NAME;
+              // only work for release
+              if ('${{ github.ref_name }}' === 'release') {
+                // add sign for macos
+                const sign = '${{ secrets.MACOS_SIGN_IDENTITY }}';
+                if (sign.length > 16) {
+                  if (!cfg.bundle) cfg.bundle = {};
+                  if (!cfg.bundle.macOS) cfg.bundle.macOS = {};
+                  cfg.bundle.macOS.signingIdentity = sign;
+                } else {
+                  console.log("::warning file=release-tauri.yaml,line=91,endLine=91,title=本次构建将不会对MacOS目标进行签名::未提供有效signingIdentity");
+                }
+              } else {
+                console.log("::notice file=release-tauri.yaml,line=94,endLine=94,title=本次构建将不会对MacOS目标进行签名::当前构建源不是release分支");
+              }
             } else if ('${{ matrix.platform }}'.startsWith('windows')) {
               // change package version for windows
               const versionMatch = cfg.package.version.match('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}(0|6[0-5][0-5][0-3][0-5]|[1-5][0-9][0-9][0-9][0-9]|[1-9][0-9]{0,3})');
