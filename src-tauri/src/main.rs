@@ -14,7 +14,7 @@ use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, get_item, quit, read_detail,
-    request_refer_image, send_request, set_auto_launch, set_item,
+    request_refer_image, send_request, set_auto_launch, set_item, front_logger
 };
 use crate::setup::logger::init_logger;
 use crate::setup::system_tray::new_system_tray;
@@ -60,7 +60,8 @@ fn main() {
                 set_item,
                 send_request,
                 quit,
-                back_preview
+                back_preview,
+                front_logger,
             ]);
 
         let app = builder

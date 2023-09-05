@@ -4,7 +4,7 @@
       <v-img
         height="190"
         :src="info.imgUrl"
-        cover
+        :cover="info.setImg"
         class="text-white"
         @click="closeThis"
       >
@@ -38,6 +38,7 @@ import {Cookie} from "../api/resourceFetcher/cookieList";
 import {UnlistenFn} from "@tauri-apps/api/event";
 
 const info = ref({
+  setImg:false,
   imgUrl: getImage("/assets/image/logo/icon.png"),
   dataSource: "",
   cookieTime: "",
@@ -45,6 +46,7 @@ const info = ref({
 });
 
 const updatePageData = (newData: Cookie) => {
+
   info.value.dataSource = newData.datasource;
   if (newData.timestamp.platform_precision !== "none") {
     info.value.cookieTime = new Date(newData.timestamp.platform!).toLocaleString();
@@ -53,6 +55,7 @@ const updatePageData = (newData: Cookie) => {
 
   let images = newData.default_cookie.images;
   if (images) {
+    info.value.setImg=true;
     if (newData.datasource.includes("微博")) {
       ceobeRequest
           .getHasRefererImageBase64(images[0].origin_url)
@@ -61,9 +64,13 @@ const updatePageData = (newData: Cookie) => {
           });
     } else {
       info.value.imgUrl = images[0].origin_url;
+
     }
   } else {
     console.log("no image");
+    info.value.imgUrl=getImage("/assets/image/logo/icon.png")
+    info.value.setImg=false;
+
   }
 };
 let unliten: UnlistenFn;
