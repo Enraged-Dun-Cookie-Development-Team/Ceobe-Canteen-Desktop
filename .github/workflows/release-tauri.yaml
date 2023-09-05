@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - release_tauri
       - release
 
 env:
