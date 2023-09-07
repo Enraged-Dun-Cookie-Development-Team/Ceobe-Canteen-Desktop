@@ -66,12 +66,14 @@ const updatePageData = (newData: Cookie) => {
     info.value.imgUrl=getImage("/assets/image/logo/icon.png")
     info.value.setImg=false;
   }
+
   operate.messageBeep()
+
 };
 let unliten: UnlistenFn;
 onMounted(() => {
-
   notification.getInfo((_, data) => {
+    operate.hideNotifyIcon()
     console.log("get Info: " ,data)
     updatePageData(data);
   }).then((closer) => {

@@ -77,6 +77,10 @@ class Operate {
   async messageBeep(){
     await invoke("message_beep")
   }
+
+  async hideNotifyIcon(){
+    await invoke("hide_notification")
+  }
 }
 
 const operate = new Operate();

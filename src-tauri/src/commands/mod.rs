@@ -8,6 +8,7 @@ mod request_refer_image;
 mod update_available;
 mod front_logger;
 mod monitor_info;
+mod hide_notification;
 
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
 pub use clipboard::copy_image;
@@ -17,4 +18,5 @@ pub use quit::quit;
 pub use request_client::send_request;
 pub use request_refer_image::request_refer_image;
 pub use front_logger::front_logger;
-pub use monitor_info::{get_monitor_info,message_beep};
+pub use monitor_info::{get_monitor_info, message_beep};
+pub use hide_notification::hide_notification;
