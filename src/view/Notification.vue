@@ -1,5 +1,5 @@
 <template>
-  <div class="notification">
+  <div class="notification ">
     <v-card>
       <v-img
         height="190"
@@ -19,23 +19,18 @@
       </v-card-title>
       <v-card-subtitle>{{ info.cookieTime }}</v-card-subtitle>
       <v-card-text class="pt-1 pb-0 text">{{ info.cookieText }}</v-card-text>
-      <v-card-actions class="pt-0">
-        <v-spacer></v-spacer>
-        <v-btn size="x-small" icon="fas fa-copy"></v-btn>
-        <v-btn size="x-small" icon="fas fa-share-nodes"></v-btn>
-        <v-btn size="x-small" icon="fas fa-link"></v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>
 
-<script lang="ts" name="index" setup>
-import {onMounted, onUnmounted, reactive, ref} from "vue";
-import {getImage} from "../utils/imageUtil";
+<script lang="ts" setup>
+import {onMounted, onUnmounted, ref} from "vue";
+import {getImage} from "@/utils/imageUtil";
 import ceobeRequest from "../api/operations/ceobeRequest";
 import notification from "../api/operations/notification";
-import {Cookie} from "../api/resourceFetcher/cookieList";
+import {Cookie} from "@/api/resourceFetcher/cookieList";
 import {UnlistenFn} from "@tauri-apps/api/event";
+import operate from "@/api/operations/operate";
 
 const info = ref({
   setImg:false,
@@ -70,8 +65,8 @@ const updatePageData = (newData: Cookie) => {
     console.log("no image");
     info.value.imgUrl=getImage("/assets/image/logo/icon.png")
     info.value.setImg=false;
-
   }
+  operate.messageBeep()
 };
 let unliten: UnlistenFn;
 onMounted(() => {

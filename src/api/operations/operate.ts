@@ -6,20 +6,23 @@ import {
 } from "../function";
 import {
   appWindow,
-  currentMonitor,
   getAll,
-  LogicalPosition, PhysicalPosition,
+  PhysicalPosition, PhysicalSize,
   WebviewWindow,
 } from "@tauri-apps/api/window";
 import { Cookie } from "../resourceFetcher/cookieList";
-import {invoke, shell} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api";
 
 class Operate {
   async openNotificationWindow(cookie: Cookie) {
     console.log(`send Notification`);
 
-    let monitor = await currentMonitor();
-    let size = monitor?.size;
+    let monitorInfo = await invoke<{
+      work_space:PhysicalSize,
+      left_top :PhysicalPosition
+    }>("get_monitor_info");
+
+    let size = monitorInfo.work_space;
     let window: WebviewWindow = getAll().find(
       (window: WebviewWindow) => window.label == "notification",
     );
@@ -29,7 +32,9 @@ class Operate {
     let h = size?.height ?? 1080;
     console.log(w, h);
     await window.setPosition(
-      new PhysicalPosition(w - winSize.width, h - winSize.height),
+      new PhysicalPosition(
+          w - winSize.width + monitorInfo.left_top.x,
+          h - winSize.height + monitorInfo.left_top.y),
     );
     console.log(await window.outerPosition());
     console.log("send cookie " , cookie)
@@ -67,6 +72,10 @@ class Operate {
 
   async getBootSetting() {
     return await getBootStartSetting();
+  }
+
+  async messageBeep(){
+    await invoke("message_beep")
   }
 }
 

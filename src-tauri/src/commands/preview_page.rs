@@ -3,7 +3,7 @@ use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
 use tauri::{
-    command, AppHandle, LogicalPosition, Manager, Window, WindowBuilder, WindowEvent, WindowUrl,
+    command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl,
 };
 use tracing::{info, instrument};
 
@@ -36,6 +36,7 @@ const INSERT: &str = r#"<style type="text/css">
 #[instrument(skip_all, err, name = "LeavePreview")]
 pub fn back_preview(app: AppHandle) -> tauri::Result<()> {
     if let Some(win) = app.get_window(WINDOWS_NAME) {
+        win.eval("window.location.replace('about:black')")?;
         win.hide()?;
     }
     Ok(())
