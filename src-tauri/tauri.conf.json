@@ -12,7 +12,6 @@
     "version": "0.1.8"
   },
   "tauri": {
-
     "systemTray": {
       "iconPath": "icons/32x32.png"
     },
@@ -24,7 +23,11 @@
       "http": {
         "all": true,
         "request": true,
-        "scope": ["http://*.ceobecanteen.top/*", "http://*", "https://*"]
+        "scope": [
+          "http://*.ceobecanteen.top/*",
+          "http://*",
+          "https://*"
+        ]
       },
       "fs": {
         "readFile": true
@@ -76,7 +79,11 @@
       },
       "shortDescription": "",
       "targets": [
-        "deb","dmg","app","appimage","nsis"
+        "deb",
+        "dmg",
+        "app",
+        "appimage",
+        "nsis"
       ],
       "windows": {
         "certificateThumbprint": null,
@@ -87,11 +94,13 @@
           "sidebarImage": "assets/installer-side.bmp",
           "installerIcon": "assets/installer-icon.ico",
           "installMode": "both",
-          "languages": ["SimpChinese"]
+          "languages": [
+            "SimpChinese"
+          ]
         },
         "wix": {
           "language": "zh-CN",
-          "bannerPath":"assets/installer-banner.bmp",
+          "bannerPath": "assets/installer-banner.bmp",
           "dialogImagePath": "assets/installer-dialog.bmp"
         }
       }
