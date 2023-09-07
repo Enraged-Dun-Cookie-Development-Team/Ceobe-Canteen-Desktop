@@ -8,7 +8,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "CeobeCanteen",
+    "productName": "小刻食堂",
     "version": "0.1.8"
   },
   "tauri": {
@@ -75,7 +75,9 @@
         "signingIdentity": null
       },
       "shortDescription": "",
-      "targets": "all",
+      "targets": [
+        "deb","dmg","app","appimage","nsis"
+      ],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -107,7 +109,7 @@
         "label": "main",
         "height": 600,
         "resizable": true,
-        "title": "ceobe-canteen-electron",
+        "title": "小刻食堂",
         "width": 1200
       },
       {
