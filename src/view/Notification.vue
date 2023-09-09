@@ -31,6 +31,7 @@ import notification from "../api/operations/notification";
 import {Cookie} from "@/api/resourceFetcher/cookieList";
 import {UnlistenFn} from "@tauri-apps/api/event";
 import operate from "@/api/operations/operate";
+import {appWindow} from "@tauri-apps/api/window";
 
 const info = ref({
   setImg:false,
@@ -67,7 +68,6 @@ const updatePageData = (newData: Cookie) => {
     info.value.setImg=false;
   }
 
-  operate.messageBeep()
 
 };
 let unliten: UnlistenFn;
@@ -76,6 +76,8 @@ onMounted(() => {
     operate.hideNotifyIcon()
     console.log("get Info: " ,data)
     updatePageData(data);
+    appWindow.show()
+    operate.messageBeep()
   }).then((closer) => {
     unliten = closer
   });

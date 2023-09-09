@@ -39,7 +39,6 @@ class Operate {
     console.log(await window.outerPosition());
     console.log("send cookie " , cookie)
     await window.emit("new_cookie_info", cookie);
-    await window.show();
   }
 
   async copy(param: { data: string; type: string }) {
