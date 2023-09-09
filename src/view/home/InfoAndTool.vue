@@ -29,13 +29,13 @@
 
 <script setup name="infoAndTool" lang="ts">
 import { onMounted, reactive } from "vue";
-import { sourceInfo, toolInfo } from "../../constant";
+import { sourceInfo, toolInfo } from "@/constant";
 import ToolOrSource from "../../components/InfoAndTool/ToolOrSource.vue";
 import VideoList from "../../components/InfoAndTool/VideoList.vue";
 import Announcement from "../../components/InfoAndTool/Announcement.vue";
 import WeeklyQuest from "../../components/InfoAndTool/WeeklyQuest.vue";
 import operate from "../../api/operations/operate";
-import { DatasourceItem, getResourceList } from "../../api/resourceFetcher/datasourceList";
+import { DatasourceItem, getResourceList } from "@/api/resourceFetcher/datasourceList";
 
 const source = reactive({
   list: [],
