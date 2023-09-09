@@ -1,16 +1,16 @@
 <template>
-  <div class="notification">
+  <div class="notification ">
     <v-card>
       <v-img
-        height="190"
-        :src="info.imgUrl"
-        :cover="info.setImg"
-        class="text-white"
-        @click="closeThis"
+          :cover="info.setImg"
+          :src="info.imgUrl"
+          class="text-white"
+          height="190"
+          @click="closeThis"
       >
         <v-toolbar color="rgba(0, 0, 0, 0)" theme="dark">
           <template #append>
-            <v-btn size="small" icon="fas fa-circle-xmark"></v-btn>
+            <v-btn icon="fas fa-circle-xmark" size="small"></v-btn>
           </template>
         </v-toolbar>
       </v-img>
@@ -19,26 +19,22 @@
       </v-card-title>
       <v-card-subtitle>{{ info.cookieTime }}</v-card-subtitle>
       <v-card-text class="pt-1 pb-0 text">{{ info.cookieText }}</v-card-text>
-      <v-card-actions class="pt-0">
-        <v-spacer></v-spacer>
-        <v-btn size="x-small" icon="fas fa-copy"></v-btn>
-        <v-btn size="x-small" icon="fas fa-share-nodes"></v-btn>
-        <v-btn size="x-small" icon="fas fa-link"></v-btn>
-      </v-card-actions>
     </v-card>
   </div>
 </template>
 
-<script lang="ts" name="index" setup>
-import {onMounted, onUnmounted, reactive, ref} from "vue";
-import {getImage} from "../utils/imageUtil";
+<script lang="ts" setup>
+import {onMounted, onUnmounted, ref} from "vue";
+import {getImage} from "@/utils/imageUtil";
 import ceobeRequest from "../api/operations/ceobeRequest";
 import notification from "../api/operations/notification";
-import {Cookie} from "../api/resourceFetcher/cookieList";
+import {Cookie} from "@/api/resourceFetcher/cookieList";
 import {UnlistenFn} from "@tauri-apps/api/event";
+import operate from "@/api/operations/operate";
+import {appWindow} from "@tauri-apps/api/window";
 
 const info = ref({
-  setImg:false,
+  setImg: false,
   imgUrl: getImage("/assets/image/logo/icon.png"),
   dataSource: "",
   cookieTime: "",
@@ -55,7 +51,7 @@ const updatePageData = (newData: Cookie) => {
 
   let images = newData.default_cookie.images;
   if (images) {
-    info.value.setImg=true;
+    info.value.setImg = true;
     if (newData.datasource.includes("微博")) {
       ceobeRequest
           .getHasRefererImageBase64(images[0].origin_url)
@@ -68,26 +64,32 @@ const updatePageData = (newData: Cookie) => {
     }
   } else {
     console.log("no image");
-    info.value.imgUrl=getImage("/assets/image/logo/icon.png")
-    info.value.setImg=false;
-
+    info.value.imgUrl = getImage("/assets/image/logo/icon.png")
+    info.value.setImg = false;
   }
+
+
 };
 let unliten: UnlistenFn;
 onMounted(() => {
-
-  notification.getInfo((_, data) => {
-    console.log("get Info: " ,data)
+  notification.getInfo(async (_, data) => {
+    await operate.hideNotifyIcon()
+    console.log("get Info: ", data)
     updatePageData(data);
+    await appWindow.show()
+    if (await notification.needBeep()) {
+
+      await operate.messageBeep()
+    }
   }).then((closer) => {
     unliten = closer
   });
 })
 
 onUnmounted(() => {
-if (unliten){
-  unliten()
-}
+  if (unliten) {
+    unliten()
+  }
 })
 
 function closeThis() {
