@@ -3,7 +3,7 @@
     <v-card>
       <v-toolbar color="#e6a23c">
 
-        <v-toolbar-title >设置</v-toolbar-title>
+        <v-toolbar-title>设置</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
             icon="fa-solid fa-xmark"
@@ -44,11 +44,12 @@
       </SettingItem>
       <SettingItem>
         <template v-slot:fill-action>
-          <v-select v-model="setting.notify_mode" :items="allNotifyMode"
-                    label="通知设置"
+          <v-select v-model="setting.notify_mode" :hint='setting.notify_mode.tip'
+                    :items="allNotifyMode"
                     item-title="value"
-                    item-value="idx"
-                    variant="outlined"
+                    persistent-hint
+                    return-object
+                    label="通知设置"
                     @update:model-value="setting.setNotifyMode()"
           >
           </v-select>
@@ -76,9 +77,6 @@ const emits = defineEmits({
   close: null,
   checkUpdate: null,
 });
-const currentVersion = computed(() => {
-  return `当前版本 ${setting.currentVersion}`
-})
 
 enum versionStateType {
   Newest = "Newest",
@@ -118,25 +116,27 @@ const setting = reactive<{
   close: () => void,
   checkUpdate: () => void
   // notification
-  notify_mode: string,
-  initNotifyMode:()=>void
-  setNotifyMode:()=>void
+  notify_mode: { idx: string, tip: string, value: string },
+  initNotifyMode: () => void
+  setNotifyMode: () => void
   //version
-  currentVersion:string,
-  getAppVersion:()=>void
+  currentVersion: string,
+  getAppVersion: () => void
 }>({
-  currentVersion:"",
-  getAppVersion:()=>{
-    app.getVersion().then((version)=>{setting.currentVersion = version})
+  currentVersion: "",
+  getAppVersion: () => {
+    app.getVersion().then((version) => {
+      setting.currentVersion = version
+    })
   },
-  notify_mode: NotifyMode.PopUpAndBeep.idx,
-  initNotifyMode:()=>{
+  notify_mode: NotifyMode.PopUpAndBeep,
+  initNotifyMode: () => {
     notification.getNotificationMode()
-        .then((v)=> setting.notify_mode=v.idx)
-  } ,
-  setNotifyMode:()=>{
+        .then((v) => setting.notify_mode = v)
+  },
+  setNotifyMode: () => {
 
-    notification.setNotificationMode(setting.notify_mode)
+    notification.setNotificationMode(setting.notify_mode.idx)
   },
   autoBoot: false,
   setAutoBoot() {

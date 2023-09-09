@@ -28,7 +28,7 @@ class NotificationOperate {
         await storage.setItem("setting.notify", modeIdx);
     }
 
-    async getNotificationMode(): Promise<{ idx: number, value: string }> {
+    async getNotificationMode(): Promise<{ idx: number, value: string ,tip:string}> {
         const idx = await storage.getItem<number>("setting.notify") ?? NotifyMode.PopUpAndBeep.idx
         return allNotifyMode.find((mode)=>mode.idx==idx)!!
     }
@@ -45,13 +45,13 @@ class NotificationOperate {
 
 export const NotifyMode = Object.freeze({
     PopUpOnly: {
-        idx: 0, value: "仅弹窗"
+        idx: 0, value: "仅弹窗",tip:"当发现新饼后只会出现右下角弹窗"
     }, BeepOnly: {
-        idx: 1, value: "仅提示音"
+        idx: 1, value: "仅提示音",tip:"当发现新饼后只会发出提示音"
     }, PopUpAndBeep: {
-        idx: 2, value: "弹窗且提示音"
+        idx: 2, value: "弹窗且提示音",tip:"当发现新饼后不但出现右下角弹窗，同时发出提示音"
     }, None: {
-        idx: 3, value: "无"
+        idx: 3, value: "无",tip:"当发现新饼后无任何行为"
     },
 })
 export const allNotifyMode = [NotifyMode.PopUpAndBeep, NotifyMode.BeepOnly, NotifyMode.PopUpOnly, NotifyMode.None]
