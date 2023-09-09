@@ -1,6 +1,5 @@
 use tauri::{command, Window};
 
-
 #[command]
 pub fn hide_notification(window: Window) -> tauri::Result<()> {
     #[cfg(windows)]

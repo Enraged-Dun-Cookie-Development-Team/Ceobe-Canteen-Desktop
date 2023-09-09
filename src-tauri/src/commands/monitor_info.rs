@@ -25,17 +25,8 @@ pub fn get_monitor_info(window: Window) -> tauri::Result<MonitorInfo> {
     #[cfg(windows)]
     {
         use std::mem::size_of;
-        use windows::{
-            Win32::{
-                Graphics::{
-                    Gdi::{
-                        GetMonitorInfoW,
-                        MonitorFromWindow,
-                        MONITORINFO,
-                        MONITOR_DEFAULTTOPRIMARY
-                    }
-                }
-            }
+        use windows::Win32::Graphics::Gdi::{
+            GetMonitorInfoW, MonitorFromWindow, MONITORINFO, MONITOR_DEFAULTTOPRIMARY,
         };
 
         let hwnd = window.hwnd()?;
@@ -64,11 +55,8 @@ pub fn get_monitor_info(window: Window) -> tauri::Result<MonitorInfo> {
 pub fn message_beep() {
     #[cfg(windows)]
     {
-        use windows::{
-            Win32::{
-                System::Diagnostics::Debug::MessageBeep,
-                UI::WindowsAndMessaging::MB_ICONSTOP
-            }
+        use windows::Win32::{
+            System::Diagnostics::Debug::MessageBeep, UI::WindowsAndMessaging::MB_ICONSTOP,
         };
         unsafe {
             MessageBeep(MB_ICONSTOP.0);
