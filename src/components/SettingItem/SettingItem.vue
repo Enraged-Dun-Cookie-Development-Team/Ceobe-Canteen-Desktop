@@ -12,7 +12,7 @@ const color = ref("#ffba4b")
 
 <template>
   <v-card-item>
-    <div class="d-flex justify-space-between align-center w-100 pa-3">
+    <div class="d-flex justify-space-between align-center w-100 pb-2 pr-3 pt-2">
       <slot name="fill-action" :color=color>
         <div>
           <v-card-title>
@@ -36,6 +36,7 @@ const color = ref("#ffba4b")
       </slot>
     </div>
   </v-card-item>
+  <v-divider/>
 </template>
 
 <style lang="scss" scoped>

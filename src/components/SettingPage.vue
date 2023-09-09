@@ -2,7 +2,8 @@
   <div class="setting">
     <v-card>
       <v-toolbar color="#e6a23c">
-        <v-toolbar-title>设置</v-toolbar-title>
+
+        <v-toolbar-title >设置</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn
             icon="fa-solid fa-xmark"
@@ -69,6 +70,7 @@ import {computed, onMounted, PropType, reactive, ref} from "vue";
 import operate from "../api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
 import notification, {allNotifyMode, NotifyMode} from "@/api/operations/notification";
+import {app} from "@tauri-apps/api";
 
 const emits = defineEmits({
   close: null,
@@ -119,7 +121,14 @@ const setting = reactive<{
   notify_mode: string,
   initNotifyMode:()=>void
   setNotifyMode:()=>void
+  //version
+  currentVersion:string,
+  getAppVersion:()=>void
 }>({
+  currentVersion:"",
+  getAppVersion:()=>{
+    app.getVersion().then((version)=>{setting.currentVersion = version})
+  },
   notify_mode: NotifyMode.PopUpAndBeep.idx,
   initNotifyMode:()=>{
     notification.getNotificationMode()
@@ -151,6 +160,7 @@ const setting = reactive<{
 onMounted(async () => {
   setting.initAutoBoot();
   setting.initNotifyMode();
+  setting.getAppVersion();
 });
 </script>
 
