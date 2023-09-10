@@ -4,8 +4,7 @@
       <v-btn
         :class="
           scroll.scrollShow &&
-          timeline.refreshTimelineData &&
-          timeline.refreshTimelineData?.length !== 0
+          timeline.refreshTimelineData
             ? 'refresh-btn-show'
             : ''
         "
@@ -198,8 +197,7 @@ async function getData() {
 
 function refreshTimeline() {
   if (
-    !timeline.refreshTimelineData ||
-    timeline.refreshTimelineData.length == 0
+    !timeline.refreshTimelineData
   ) {
     return;
   }
@@ -296,6 +294,12 @@ const scroll = reactive({
       return;
     }
     scroll.scrollShow = e.target.scrollTop > 600;
+
+    // 如果有数据，向上滚动小于600过程自动刷新
+    if (!scroll.scrollShow &&
+        timeline.refreshTimelineData != null) {
+          refreshTimeline();
+    }
 
     // 因为有些情况会导致高度不能正好相等，给个差值小于5来扩大判断范围
     if (
