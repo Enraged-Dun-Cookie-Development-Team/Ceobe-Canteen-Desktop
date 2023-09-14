@@ -1,6 +1,6 @@
 [package]
 name = "ceobe-canteen-desktop"
-version = "0.1.8"
+version = "1.0.0"
 description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻一样喜欢吃东西的浏览器内核 "
 authors = ["FrozenString<frozenstringstable@gmail.com>"]
 license="AGPL-3"
@@ -60,3 +60,8 @@ features = ["Data_Xml_Dom",
 # If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
 # DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+opt-level="s"
+strip = true
+lto = true
