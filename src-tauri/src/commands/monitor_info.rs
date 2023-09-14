@@ -12,7 +12,6 @@ pub struct MonitorInfo {
 pub fn get_monitor_info(window: Window) -> tauri::Result<MonitorInfo> {
     #[cfg(not(windows))]
     {
-        let window = _window;
         let monitor = window
             .primary_monitor()?
             .expect("Cannot found Primary Monitor");
