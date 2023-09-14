@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![LOGO](src-tauri/icons/128x128.png)](https://www.ceobecanteen.top/#about-us)
+[![LOGO](src-tauri/icons/128x128.png)](https://ceobecanteen.top/)
 
 帮小刻找好多好吃的饼
 
