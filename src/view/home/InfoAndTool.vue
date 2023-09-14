@@ -20,7 +20,7 @@
         class="pl-0"
         variant="plain"
         density="compact"
-        @click="openUrlInBrowser('https://www.ceobecanteen.top/#/')"
+        @click="openUrlInBrowser('https://www.ceobecanteen.top/#about-us')"
         >CeobeCanteen</v-btn
       >
     </div>

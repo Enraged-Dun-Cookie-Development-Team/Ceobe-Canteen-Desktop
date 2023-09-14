@@ -33,7 +33,7 @@
           >
         </template>
       </SettingItem>
-      <SettingItem
+      <SettingItem v-if="!isDebug"
           title="测试弹窗"
       >
         <template v-slot:action>
@@ -71,7 +71,7 @@ import {computed, onMounted, PropType, reactive, ref} from "vue";
 import operate from "../api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
 import notification, {allNotifyMode, NotifyMode} from "@/api/operations/notification";
-import {app} from "@tauri-apps/api";
+import {app, invoke} from "@tauri-apps/api";
 
 const emits = defineEmits({
   close: null,
@@ -90,6 +90,11 @@ const props = defineProps({
     default: () => "Unknown"
   },
 });
+
+const isDebug = computed(()=>{
+  return invoke("is_debug")
+})
+
 // test send notification
 const sen_d = () => {
   operate.openNotificationWindow({

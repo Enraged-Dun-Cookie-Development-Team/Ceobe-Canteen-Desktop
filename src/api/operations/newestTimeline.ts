@@ -9,7 +9,7 @@ import { Cookie, CookieList } from "../resourceFetcher/cookieList";
 
 export interface TimelineData extends CookieList {
   comb_id: string;
-  update_cookie_id: string;
+  update_cookie_id: string | null;
 }
 
 class NewestTimeline {

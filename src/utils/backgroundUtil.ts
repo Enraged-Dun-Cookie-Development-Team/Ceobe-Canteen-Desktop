@@ -125,6 +125,9 @@ export class BackgroundRunner {
       }
       this.timeline = cookies_info;
       await newestTimeline.sendTimeline(cookies_info);
+    } else if (cookie_id == null) {
+      let cookies_info: TimelineData = {cookies:[], next_page_id: null, comb_id:this.datasource_comb_id, update_cookie_id: null};
+      await newestTimeline.sendTimeline(cookies_info);
     }
 
     this.timeoutId = setTimeout(async () => {
