@@ -86,9 +86,11 @@
         "nsis"
       ],
       "windows": {
-        "certificateThumbprint": null,
+        "webviewInstallMode": {
+          "type": "embedBootstrapper",
+          "silent": true
+        },
         "digestAlgorithm": "sha256",
-        "timestampUrl": "",
         "nsis": {
           "headerImage": "assets/installer-header.bmp",
           "sidebarImage": "assets/installer-side.bmp",
