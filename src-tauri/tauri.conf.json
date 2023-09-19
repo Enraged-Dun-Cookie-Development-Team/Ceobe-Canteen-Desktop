@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "小刻食堂",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "tauri": {
     "systemTray": {
@@ -69,7 +69,7 @@
         "icons/icon.ico"
       ],
       "identifier": "com.ceobe-canteen.desktop",
-      "longDescription": "",
+      "longDescription": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -77,7 +77,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "shortDescription": "",
+      "shortDescription": "帮小刻找好多好吃的饼",
       "targets": [
         "deb",
         "dmg",
