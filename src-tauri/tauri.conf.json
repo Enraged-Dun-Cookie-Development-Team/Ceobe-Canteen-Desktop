@@ -69,15 +69,15 @@
         "icons/icon.ico"
       ],
       "identifier": "com.ceobe-canteen.desktop",
-      "longDescription": "",
+      "shortDescription": "小刻要好多好多饼",
+      "longDescription": "自由的兔兔把饼到处发，就由小刻把他们找粗来",
       "macOS": {
+        "license": "assets/user-license.txt",
         "entitlements": null,
-        "exceptionDomain": "",
         "frameworks": [],
         "providerShortName": null,
-        "signingIdentity": null
       },
-      "shortDescription": "",
+
       "targets": [
         "deb",
         "dmg",
@@ -90,6 +90,7 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": "",
         "nsis": {
+          "license": "assets/user-license.txt",
           "headerImage": "assets/installer-header.bmp",
           "sidebarImage": "assets/installer-side.bmp",
           "installerIcon": "assets/installer-icon.ico",
@@ -97,11 +98,6 @@
           "languages": [
             "SimpChinese"
           ]
-        },
-        "wix": {
-          "language": "zh-CN",
-          "bannerPath": "assets/installer-banner.bmp",
-          "dialogImagePath": "assets/installer-dialog.bmp"
         }
       }
     },
