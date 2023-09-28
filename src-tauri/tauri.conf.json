@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "小刻食堂",
-    "version": "0.1.8"
+    "version": "1.0.0"
   },
   "tauri": {
     "systemTray": {
@@ -112,10 +112,12 @@
         "decorations": false,
         "fullscreen": false,
         "label": "main",
-        "height": 600,
+        "height": 640,
         "resizable": true,
         "title": "小刻食堂",
-        "width": 1200
+        "width": 1280,
+        "minWidth": 1280,
+        "minHeight": 640
       },
       {
         "label": "background",
