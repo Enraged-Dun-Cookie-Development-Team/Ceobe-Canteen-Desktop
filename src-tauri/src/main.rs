@@ -66,7 +66,7 @@ fn main() {
                 get_monitor_info,
                 message_beep,
                 get_app_cache_path,
-                get_app_config_path
+                get_app_config_path,
                 hide_notification,
                 is_debug
             ]);
