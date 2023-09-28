@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "小刻食堂",
-    "version": "1.0.0"
+    "version": "1.0.0-rc1"
   },
   "tauri": {
     "systemTray": {
@@ -87,7 +87,7 @@
       "windows": {
         "webviewInstallMode": {
           "type": "embedBootstrapper",
-          "silent": true
+          "silent": false
         },
         "digestAlgorithm": "sha256",
         "nsis": {
