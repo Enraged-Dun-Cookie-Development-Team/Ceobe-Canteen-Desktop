@@ -75,7 +75,7 @@
         "license": "assets/user-license.txt",
         "entitlements": null,
         "frameworks": [],
-        "providerShortName": null,
+        "providerShortName": null
       },
 
       "targets": [
