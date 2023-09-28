@@ -9,6 +9,7 @@ mod quit;
 mod request_client;
 mod request_refer_image;
 mod resource_location;
+mod is_debug;
 mod update_available;
 
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
@@ -22,3 +23,5 @@ pub use quit::quit;
 pub use request_client::send_request;
 pub use request_refer_image::request_refer_image;
 pub use resource_location::{get_app_cache_path, get_app_config_path};
+pub use resource_location::{get_app_cache_path,get_app_config_path};
+pub use is_debug::is_debug;
