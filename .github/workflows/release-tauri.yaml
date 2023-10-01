@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - release
+      - release_tauri
 
 env:
   CUSTOM_RELEASE_ASSET_NAME: 'CeobeCanteen'
@@ -80,7 +80,7 @@ jobs:
               // change product name for macos
               if (process.env.MACOS_PRODUCT_NAME) cfg.package.productName = process.env.MACOS_PRODUCT_NAME;
               // only work for release
-              if ('${{ github.ref_name }}' === 'release') {
+              if ('${{ github.ref_name }}'.startsWith('release')) {
                 // add sign for macos
                 if (APPLE_CERTIFICATE.length > 16) {
                   core.exportVariable("APPLE_CERTIFICATE", APPLE_CERTIFICATE);
