@@ -4,7 +4,7 @@ use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::{stdout, IoSlice, Write};
 use std::ops::Deref;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use tracing::level_filters::LevelFilter;
 use tracing::{info, Subscriber};
@@ -90,7 +90,7 @@ impl<'a> MakeWriter<'a> for LogWriter {
 }
 
 impl LogWriter {
-    fn open_log_file(path: &PathBuf) -> io::Result<File> {
+    fn open_log_file(path: &Path) -> io::Result<File> {
         let now = Local::now();
         let format = now.format("%Y-%m-%dT%H-%M-%S");
         let filename = format!("log-{format}.log");

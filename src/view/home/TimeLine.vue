@@ -4,8 +4,7 @@
       <v-btn
         :class="
           scroll.scrollShow &&
-          timeline.refreshTimelineData &&
-          timeline.refreshTimelineData?.length !== 0
+          timeline.refreshTimelineData
             ? 'refresh-btn-show'
             : ''
         "
@@ -142,12 +141,13 @@ import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
 import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
 import searchWordEvent from "../../api/operations/searchWordEvent";
-import { getCookieSearchList } from "../../api/resourceFetcher/searchCookie";
+import { getCookieSearchList } from "@/api/resourceFetcher/searchCookie";
 import operate from "../../api/operations/operate";
-import { getImage } from "../../utils/imageUtil";
-import { getCookieList } from "../../api/resourceFetcher/cookieList";
+import { getImage } from "@/utils/imageUtil";
+import { getCookieList } from "@/api/resourceFetcher/cookieList";
 import Common from "../../components/Card/Common.vue";
-import { previewUrl } from "../../utils/previewUtil";
+import { previewUrl } from "@/utils/previewUtil";
+import logger from "@/api/operations/logger";
 
 const router = useRouter();
 
@@ -169,6 +169,7 @@ const timeline = reactive<Timeline>({
 
 async function getData() {
   await newestTimeline.getTimeline((_, arg) => {
+    logger.debug("TimeLine.vue",{cookie:arg})
     console.log(arg);
     if (arg == null) {
       return;
@@ -196,8 +197,7 @@ async function getData() {
 
 function refreshTimeline() {
   if (
-    !timeline.refreshTimelineData ||
-    timeline.refreshTimelineData.length == 0
+    !timeline.refreshTimelineData
   ) {
     return;
   }
@@ -294,6 +294,12 @@ const scroll = reactive({
       return;
     }
     scroll.scrollShow = e.target.scrollTop > 600;
+
+    // 如果有数据，向上滚动小于600过程自动刷新
+    if (!scroll.scrollShow &&
+        timeline.refreshTimelineData != null) {
+          refreshTimeline();
+    }
 
     // 因为有些情况会导致高度不能正好相等，给个差值小于5来扩大判断范围
     if (

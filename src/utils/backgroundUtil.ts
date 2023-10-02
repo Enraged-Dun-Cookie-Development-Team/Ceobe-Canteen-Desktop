@@ -10,6 +10,7 @@ import {
 } from "../api/resourceFetcher/datasourceList";
 import { getCookieList } from "../api/resourceFetcher/cookieList";
 import { UnlistenFn } from "@tauri-apps/api/event";
+import logger from "../api/operations/logger";
 
 const CombineIdKey = "datasource-comb";
 
@@ -84,6 +85,13 @@ export class BackgroundRunner {
         update_cookie_id !== this.old_update_cookie_id)
     ) {
       console.log(this.datasource_comb_id, cookie_id, update_cookie_id);
+      await logger.info(
+          "backgroundUtil",
+          {
+            "combineId": this.datasource_comb_id,
+            "cookieId": cookie_id,
+            "updateCookieId": update_cookie_id
+          });
       let cookies_data = await getCookieList(
         this.datasource_comb_id,
         cookie_id,
@@ -107,6 +115,7 @@ export class BackgroundRunner {
             true,
           );
           if (this.init_fetched) {
+             logger.info("backgroundUtil",{"module":"backgroundRunner","state":"SendNewCookie"})
             operate.openNotificationWindow(cookie);
           }
         }
@@ -115,6 +124,9 @@ export class BackgroundRunner {
         this.init_fetched = true;
       }
       this.timeline = cookies_info;
+      await newestTimeline.sendTimeline(cookies_info);
+    } else if (cookie_id == null) {
+      let cookies_info: TimelineData = {cookies:[], next_page_id: null, comb_id:this.datasource_comb_id, update_cookie_id: null};
       await newestTimeline.sendTimeline(cookies_info);
     }
 

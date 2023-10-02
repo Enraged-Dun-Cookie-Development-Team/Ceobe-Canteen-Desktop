@@ -12,7 +12,6 @@
     "version": "1.0.0-rc2"
   },
   "tauri": {
-
     "systemTray": {
       "iconPath": "icons/32x32.png"
     },
@@ -24,7 +23,11 @@
       "http": {
         "all": true,
         "request": true,
-        "scope": ["http://*.ceobecanteen.top/*", "http://*", "https://*"]
+        "scope": [
+          "http://*.ceobecanteen.top/*",
+          "http://*",
+          "https://*"
+        ]
       },
       "fs": {
         "readFile": true
@@ -66,31 +69,36 @@
         "icons/icon.ico"
       ],
       "identifier": "com.ceobe-canteen.desktop",
-      "longDescription": "",
+      "longDescription": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
       "macOS": {
+        "license": "assets/user-license.txt",
         "entitlements": null,
-        "exceptionDomain": "",
         "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
+        "providerShortName": null
       },
-      "shortDescription": "",
-      "targets": "all",
+      "shortDescription": "帮小刻找好多好吃的饼",
+      "targets": [
+        "deb",
+        "dmg",
+        "app",
+        "appimage",
+        "nsis"
+      ],
       "windows": {
-        "certificateThumbprint": null,
+        "webviewInstallMode": {
+          "type": "embedBootstrapper",
+          "silent": false
+        },
         "digestAlgorithm": "sha256",
-        "timestampUrl": "",
         "nsis": {
+          "license": "assets/user-license.txt",
           "headerImage": "assets/installer-header.bmp",
           "sidebarImage": "assets/installer-side.bmp",
           "installerIcon": "assets/installer-icon.ico",
           "installMode": "both",
-          "languages": ["SimpChinese"]
-        },
-        "wix": {
-          "language": "zh-CN",
-          "bannerPath":"assets/installer-banner.bmp",
-          "dialogImagePath": "assets/installer-dialog.bmp"
+          "languages": [
+            "SimpChinese"
+          ]
         }
       }
     },
@@ -105,10 +113,12 @@
         "decorations": false,
         "fullscreen": false,
         "label": "main",
-        "height": 600,
+        "height": 640,
         "resizable": true,
-        "title": "ceobe-canteen-electron",
-        "width": 1200
+        "title": "小刻食堂",
+        "width": 1280,
+        "minWidth": 1280,
+        "minHeight": 640
       },
       {
         "label": "background",

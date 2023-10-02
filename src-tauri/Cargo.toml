@@ -3,7 +3,7 @@ name = "ceobe-canteen-desktop"
 version = "1.0.0-rc2"
 description = "小刻食堂的桌面端，恭喜你电脑有多了个和小刻一样喜欢吃东西的浏览器内核 "
 authors = ["FrozenString<frozenstringstable@gmail.com>"]
-license = "AGPL-3"
+license="AGPL-3"
 repository = "https://github.com/Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Electron"
 default-run = "ceobe-canteen-desktop"
 edition = "2021"
@@ -16,7 +16,7 @@ tauri-build = { version = "1.4.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray", "devtools"] }
+tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
 reqwest = "0.11"
 base64 = "0.21.2"
 regex = "1"
@@ -60,3 +60,8 @@ features = ["Data_Xml_Dom",
 # If you use cargo directly instead of tauri's cli you can use this feature flag to switch between tauri's `dev` and `build` modes.
 # DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+opt-level="s"
+strip = true
+lto = true
