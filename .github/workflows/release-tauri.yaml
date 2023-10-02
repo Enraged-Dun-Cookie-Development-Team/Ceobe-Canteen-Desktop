@@ -87,6 +87,8 @@ jobs:
                   core.exportVariable("APPLE_CERTIFICATE", APPLE_CERTIFICATE);
                   core.exportVariable("APPLE_CERTIFICATE_PASSWORD", "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}");
                   core.exportVariable("APPLE_SIGNING_IDENTITY", "${{ secrets.APPLE_SIGNING_IDENTITY }}");
+                  core.exportVariable("APPLE_ID", "${{ secrets.APPLE_ID }}");
+                  core.exportVariable("APPLE_PASSWORD", "${{ secrets.APPLE_PASSWORD }}");
                   core.notice("符合签名条件", {title:"本次构建将会对MacOS目标进行签名"});
                 } else {
                   core.warning("未提供有效证书", {title:"本次构建将不会对MacOS目标进行签名"});
