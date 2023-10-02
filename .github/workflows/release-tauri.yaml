@@ -82,6 +82,7 @@ jobs:
               // only work for release
               if ('${{ github.ref_name }}'.startsWith('release')) {
                 // add sign for macos
+                const APPLE_CERTIFICATE = "${{ secrets.APPLE_CERTIFICATE }}";
                 if (APPLE_CERTIFICATE.length > 16) {
                   core.exportVariable("APPLE_CERTIFICATE", APPLE_CERTIFICATE);
                   core.exportVariable("APPLE_CERTIFICATE_PASSWORD", "${{ secrets.APPLE_CERTIFICATE_PASSWORD }}");
