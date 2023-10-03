@@ -14,37 +14,36 @@ edition = "2021"
 tauri-build = { version = "1.4.0", features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
+serde_json = "1"
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "1", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
 reqwest = "0.11"
-base64 = "0.21.2"
+base64 = "0.21"
 regex = "1"
 interprocess = "1"
-byteorder = "1.4.3"
-auto-launch = "0.4.0"
-arboard = "3.2.0"
-image = "0.24.7"
+byteorder = "1"
+auto-launch = "0.4"
+arboard = "3"
+image = "0.24"
 thiserror = "1"
 once_cell = "1"
-pickledb = "0.5.1"
-parking_lot = "0.12.1"
-dirs = "5.0.1"
-http-cache-reqwest = "0.11.1"
-reqwest-middleware = "0.2.3"
-http = "0.2.9"
-url = "2.4.0"
-http-cache-semantics = "1.0.1"
-http-cache = { version = "0.14.0", default-features = false }
-futures = "0.3.28"
-tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.17", features = ["time",
+pickledb = "0.5"
+parking_lot = "0.12"
+http-cache-reqwest = "0.11"
+reqwest-middleware = "0.2"
+http = "0.2"
+url = "2"
+http-cache-semantics = "1"
+http-cache = { version = "0.14", default-features = false }
+futures = "0.3"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["time",
     "smallvec",
     "parking_lot",
 ] }
-task-local-extensions = "0.1.4"
-chrono = "0.4.26"
-reqwest-retry = "0.2.3"
+task-local-extensions = "0.1"
+chrono = "0.4"
+reqwest-retry = "0.2"
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.39"
 features = ["Data_Xml_Dom",
