@@ -30,7 +30,7 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
 
 pub fn create_system_tray_menu() -> SystemTrayMenu {
     SystemTrayMenu::new()
-        .add_submenu(SystemTraySubmenu::new("检测更新", SystemTrayMenu::new()))
-        .add_item(CustomMenuItem::new("check-update", "检查更新"))
+        //.add_submenu(SystemTraySubmenu::new("检测更新", SystemTrayMenu::new()))
+        //.add_item(CustomMenuItem::new("check-update", "检查更新"))
         .add_item(CustomMenuItem::new("quit", "退出小刻食堂"))
 }
