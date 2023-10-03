@@ -465,7 +465,7 @@ dependencies = [
 
 [[package]]
 name = "ceobe-canteen-desktop"
-version = "1.0.0-rc1"
+version = "1.0.0-rc2"
 dependencies = [
  "arboard",
  "auto-launch",
