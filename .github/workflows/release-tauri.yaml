@@ -1,6 +1,7 @@
 name: 'publish tauri'
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - release_tauri
@@ -78,6 +79,23 @@ jobs:
             } else if ('${{ matrix.platform }}'.startsWith('macos')) {
               // change product name for macos
               if (process.env.MACOS_PRODUCT_NAME) cfg.package.productName = process.env.MACOS_PRODUCT_NAME;
+              // only work for release
+              if ('${{ github.ref_name }}'.startsWith('release')) {
+                // add sign for macos
+                const APPLE_CERTIFICATE = `${{ secrets.APPLE_CERTIFICATE }}`;
+                if (APPLE_CERTIFICATE.length > 8) {
+                  core.exportVariable("APPLE_CERTIFICATE", APPLE_CERTIFICATE);
+                  core.exportVariable("APPLE_CERTIFICATE_PASSWORD", `${{ secrets.APPLE_CERTIFICATE_PASSWORD }}`);
+                  core.exportVariable("APPLE_SIGNING_IDENTITY", `${{ secrets.APPLE_SIGNING_IDENTITY }}`);
+                  core.exportVariable("APPLE_ID", `${{ secrets.APPLE_ID }}`);
+                  core.exportVariable("APPLE_PASSWORD", `${{ secrets.APPLE_PASSWORD }}`);
+                  core.notice("符合签名条件", {title:"本次构建将会对MacOS目标进行签名"});
+                } else {
+                  core.warning("未提供有效证书", {title:"本次构建将不会对MacOS目标进行签名"});
+                }
+              } else {
+                core.warning("当前构建源不是release分支", {title:"本次构建将不会对MacOS目标进行签名"});
+              }
             } else if ('${{ matrix.platform }}'.startsWith('windows')) {
               // change package version for windows
               const versionMatch = cfg.package.version.match('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}(0|6[0-5][0-5][0-3][0-5]|[1-5][0-9][0-9][0-9][0-9]|[1-9][0-9]{0,3})');
