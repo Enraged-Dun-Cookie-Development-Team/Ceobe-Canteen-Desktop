@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "小刻食堂",
-    "version": "1.0.0-rc2"
+    "version": "1.0.0-rc3"
   },
   "tauri": {
     "systemTray": {
