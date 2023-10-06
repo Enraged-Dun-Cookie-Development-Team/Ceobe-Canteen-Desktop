@@ -34,7 +34,7 @@
         </template>
       </SettingItem>
       <SettingItem v-if="!isDebug"
-          title="测试弹窗"
+                   title="测试弹窗"
       >
         <template v-slot:action>
           <v-btn @click="sen_d">
@@ -47,9 +47,9 @@
           <v-select v-model="setting.notify_mode" :hint='setting.notify_mode.tip'
                     :items="allNotifyMode"
                     item-title="value"
+                    label="通知设置"
                     persistent-hint
                     return-object
-                    label="通知设置"
                     @update:model-value="setting.setNotifyMode()"
           >
           </v-select>
@@ -58,7 +58,7 @@
       </SettingItem>
     </v-card>
     <v-snackbar v-model="showDownload">
-      检测到了新版本，即将跳转到下载网页
+      检测到了新版本，即将跳转到下载页面
     </v-snackbar>
     <v-snackbar v-model="showAlreadyNewest">
       已经是最新版本，无需下载
@@ -67,31 +67,27 @@
 </template>
 
 <script lang="ts" name="setting" setup>
-import {computed, onMounted, PropType, reactive, ref} from "vue";
+import {computed, onMounted, reactive} from "vue";
 import operate from "../api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
 import notification, {allNotifyMode, NotifyMode} from "@/api/operations/notification";
 import {app, invoke} from "@tauri-apps/api";
+import {VersionStateType} from "@/api/operations/updater";
 
-const emits = defineEmits({
-  close: null,
-  checkUpdate: null,
-});
+const emits = defineEmits<{
+  (e: "close"): void,
+  (e: "checkUpdate"): void
+}>()
 
-enum versionStateType {
-  Newest = "Newest",
-  UpdateAvailable = "UpdateAvailable",
-  Unknown = "Unknown",
-}
 
-const props = defineProps({
-  versionState: {
-    type: String as PropType<versionStateType>,
-    default: () => "Unknown"
-  },
-});
 
-const isDebug = computed(()=>{
+const props = withDefaults(defineProps<{
+  versionState: VersionStateType
+}>(), {
+  versionStateType: VersionStateType.Unknown
+})
+
+const isDebug = computed(() => {
   return invoke("is_debug")
 })
 
@@ -109,8 +105,8 @@ const sen_d = () => {
   })
 }
 
-const showDownload = computed(() => props.versionState == "UpdateAvailable")
-const showAlreadyNewest = computed(() => props.versionState == "Newest")
+const showDownload = computed(() => props.versionState === VersionStateType.UpdateAvailable)
+const showAlreadyNewest = computed(() => props.versionState === VersionStateType.Newest)
 
 const setting = reactive<{
   // auto boot setting
