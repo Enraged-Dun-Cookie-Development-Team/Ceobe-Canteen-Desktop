@@ -58,7 +58,7 @@
       </SettingItem>
     </v-card>
     <v-snackbar v-model="showDownload">
-      检测到了新版本，即将跳转到下载网页
+      检测到了新版本，即将跳转到下载页面
     </v-snackbar>
     <v-snackbar v-model="showAlreadyNewest">
       已经是最新版本，无需下载
