@@ -35,6 +35,10 @@ class Updater {
     }
   }
 }
-
+export enum VersionStateType {
+  Newest = "Newest",
+  UpdateAvailable = "UpdateAvailable",
+  Unknown = "Unknown",
+}
 const updater = new Updater();
 export default updater;
