@@ -26,10 +26,12 @@ Steps to reproduce the behavior:
 
 ## Expected behavior | 预期的行为
 A clear and concise description of what you expected to happen.
+
 描述你所预期的行为
 
 ## Screenshots | 截图
 If applicable, add screenshots to help explain your problem.
+
 如果可能，可以添加Bug 的截图
 
 ## System Information | 系统信息
@@ -39,4 +41,5 @@ If applicable, add screenshots to help explain your problem.
 
 ## Additional context | 补充说明的内容
 Add any other context about the problem here.
+
 关于这个问题的其他补充内容
