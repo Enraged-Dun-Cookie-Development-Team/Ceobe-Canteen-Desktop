@@ -1,4 +1,4 @@
-use crate::request_client::RequestClient;
+use crate::request_client::{RequestClient, response_type::ResponseType};
 use http::header;
 use http::method::InvalidMethod;
 use reqwest::{Method, Response, Url};
@@ -8,7 +8,6 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use std::string::FromUtf8Error;
 use std::time::Duration;
-use tauri::api::http::ResponseType;
 use tauri::{command, AppHandle};
 use thiserror::Error;
 use tracing::{debug, instrument};
@@ -139,8 +138,7 @@ async fn response_to_data(
     let data = match ty {
         ResponseType::Json => resp.json().await?,
         ResponseType::Text => Value::String(resp.text().await?),
-        ResponseType::Binary => serde_json::to_value(resp.bytes().await?)?,
-        _ => Value::Null,
+        ResponseType::Binary => serde_json::from_slice(&resp.bytes().await?)?,
     };
 
     Ok(ResponseData {

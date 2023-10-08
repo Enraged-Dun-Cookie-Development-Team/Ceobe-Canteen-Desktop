@@ -16,8 +16,8 @@ tauri-build = { version = "1.4.0", features = [] }
 [dependencies]
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
-tauri = { version = "1", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "http-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
-reqwest = { version = "0.11", features = ["native-tls-vendored"] }
+tauri = { version = "1", features = ["notification-all", "dialog-message", "path-all", "protocol-all", "window-all", "clipboard-all", "shell-open", "fs-read-file", "system-tray"] }
+reqwest = { version = "0.11", features = [ "__tls", "__rustls"], default-features = false }
 base64 = "0.21"
 regex = "1"
 interprocess = "1"
@@ -44,6 +44,7 @@ tracing-subscriber = { version = "0.3", features = ["time",
 task-local-extensions = "0.1"
 chrono = "0.4"
 reqwest-retry = "0.2"
+serde_repr = "0.1.16"
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.39"
 features = ["Data_Xml_Dom",
