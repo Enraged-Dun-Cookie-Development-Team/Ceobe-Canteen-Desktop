@@ -1,7 +1,10 @@
 use tauri::{command, Window};
 
+#[allow(unused_variables)]
 #[command]
-pub fn hide_notification(window: Window) -> tauri::Result<()> {
+pub fn hide_notification(
+    window: Window
+) -> tauri::Result<()> {
     #[cfg(windows)]
     {
         use windows::Win32::Graphics::Gdi::UpdateWindow;
