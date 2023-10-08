@@ -3,4 +3,3 @@
 /dist_electron/
 /dist/
 src-tauri/Cargo.lock
-package-lock.json
