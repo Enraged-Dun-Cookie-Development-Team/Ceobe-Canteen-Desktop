@@ -1,4 +1,4 @@
-use crate::request_client::{RequestClient, response_type::ResponseType};
+use crate::request_client::{response_type::ResponseType, RequestClient};
 use http::header;
 use http::method::InvalidMethod;
 use reqwest::{Method, Response, Url};
