@@ -13,7 +13,7 @@ const CEOBE_IN: &str = "CEOBE_IN";
 #[instrument(name = "SingletonService", skip_all)]
 #[allow(unused_variables)]
 pub fn run_sev(window: Window) {
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(not(unix))]
     {
         let socket = match interprocess::local_socket::LocalSocketListener::bind(LOCAL_SOCKET_NAME)
         {

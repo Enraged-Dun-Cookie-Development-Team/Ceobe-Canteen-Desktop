@@ -1,6 +1,5 @@
-import requestClient, { Payload } from "../../utils/requestUtil";
+import requestClient, { Payload, Response } from "../../utils/requestUtil";
 import { Cookie } from "./cookieList";
-import { Response } from "@tauri-apps/api/http";
 
 export interface CookiePagination {
   cookies: Cookie[];

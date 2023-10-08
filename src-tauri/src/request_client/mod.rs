@@ -14,7 +14,7 @@ use std::sync::OnceLock;
 use std::time::Duration;
 use tauri::AppHandle;
 use tracing::{info, instrument, Level};
-
+pub mod response_type;
 pub struct RequestClient {
     pub inner: ClientWithMiddleware,
 }

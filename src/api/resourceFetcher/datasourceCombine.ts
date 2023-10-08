@@ -1,5 +1,4 @@
-import requestClient, { Payload } from "../../utils/requestUtil";
-import { Body, Response } from "@tauri-apps/api/http";
+import requestClient, { Payload, Response } from "../../utils/requestUtil";
 
 export interface CombineId {
   /**

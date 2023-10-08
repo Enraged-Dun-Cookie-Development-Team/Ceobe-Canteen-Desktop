@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "小刻食堂",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "tauri": {
     "systemTray": {
@@ -19,15 +19,6 @@
       "all": false,
       "notification": {
         "all": true
-      },
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": [
-          "http://*.ceobecanteen.top/*",
-          "http://*",
-          "https://*"
-        ]
       },
       "fs": {
         "readFile": true

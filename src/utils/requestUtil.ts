@@ -1,5 +1,45 @@
-import { HttpVerb, Response } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api";
+
+/**
+ * Response object.
+ *
+ * @since 1.0.0
+ * */
+export interface Response<T> {
+  /** The request URL. */
+  url: string
+  /** The response status code. */
+  status: number
+  /** A boolean indicating whether the response was successful (status in the range 200–299) or not. */
+  ok: boolean
+  /** The response headers. */
+  headers: Record<string, string>
+  /** The response raw headers. */
+  rawHeaders: Record<string, string[]>
+  /** The response data. */
+  data: T
+}
+
+/** The request HTTP verb. */
+export type HttpVerb =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'PATCH'
+  | 'HEAD'
+  | 'OPTIONS'
+  | 'CONNECT'
+  | 'TRACE'
+
+/**
+ * @since 1.0.0
+ */
+export enum ResponseType {
+  JSON = 1,
+  Text = 2,
+  Binary = 3
+}
 
 const BASE_URL: Record<string, string> = {
   SERVER_URL: "https://server.ceobecanteen.top/api/v1",
@@ -60,13 +100,13 @@ export interface RequestOptions {
 }
 
 class RequestClient {
-  constructor() {}
+  constructor() { }
 
-  async requestPayload<T>(options:RequestOptions):Response<Payload<T>>{
-    let response:Response<Payload<T>> = await  this.request<Payload<T>>(options);
-    if (response.data.code != "00000"){
+  async requestPayload<T>(options: RequestOptions): Response<Payload<T>> {
+    let response: Response<Payload<T>> = await this.request<Payload<T>>(options);
+    if (response.data.code != "00000") {
       throw new Error(`${response.data.code}:${response.data.message} | ${response.data.msg}`)
-    }else {
+    } else {
       return response
     }
   }
