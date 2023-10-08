@@ -106,7 +106,7 @@ jobs:
             }
             require('fs').writeFileSync('./src-tauri/tauri.conf.json', JSON.stringify(cfg));
       - name: install frontend dependencies
-        run: npm install
+        run: npm ci
       - uses: tauri-apps/tauri-action@v0
         id: tauri-action-build
         env:
