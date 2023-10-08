@@ -11,6 +11,7 @@ mod request_client;
 mod request_refer_image;
 mod resource_location;
 mod update_available;
+mod system_notification;
 
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
 pub use clipboard::copy_image;
