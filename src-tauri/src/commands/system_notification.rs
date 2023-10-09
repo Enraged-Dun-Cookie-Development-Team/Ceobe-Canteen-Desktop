@@ -1,11 +1,9 @@
-
 use serde::{Deserialize, Serialize, Serializer};
 
-use tauri::{AppHandle, command, Window};
+use tauri::{command, AppHandle, Window};
 use tracing::instrument;
 
 use url::Url;
-
 
 #[derive(Debug, thiserror::Error)]
 pub enum NotifyError {
@@ -29,7 +27,10 @@ pub enum NotifyError {
 }
 
 impl Serialize for NotifyError {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
         self.to_string().serialize(serializer)
     }
 }
@@ -40,38 +41,29 @@ pub struct NotificationPayload {
     body: String,
     #[serde(default)]
     has_sound: bool,
-    time:String,
+    time: String,
     image_url: Option<Url>,
 }
 #[command(async)]
-#[instrument(name = "SendToastNotify", skip(app,window), err)]
-pub async  fn send_system_notification(
+#[instrument(name = "SendToastNotify", skip(app, window), err)]
+pub async fn send_system_notification(
     window: Window,
     app: AppHandle,
     payload: NotificationPayload,
 ) -> Result<(), NotifyError> {
     #[cfg(windows)]
     {
-        use tracing::{error, info};
+        use crate::{request_client::RequestClient, state::get_cache_dir};
         use http::{HeaderValue, Method};
         use std::sync::OnceLock;
+        use tracing::{error, info};
         use winrt_toast::{
-            Toast,
-            ToastManager,
-            Text,
-            Image,
-            content::text::TextPlacement,
-            Scenario
-        };
-        use crate::{
-            request_client::RequestClient,
-            state::get_cache_dir
+            content::text::TextPlacement, Image, Scenario, Text, Toast, ToastManager,
         };
 
-        static MANAGER:OnceLock<ToastManager> = OnceLock::new();
-        let manager = MANAGER.get_or_init(||
-        ToastManager::new(app.config().tauri.bundle.identifier.as_str())
-        );
+        static MANAGER: OnceLock<ToastManager> = OnceLock::new();
+        let manager = MANAGER
+            .get_or_init(|| ToastManager::new(app.config().tauri.bundle.identifier.as_str()));
 
         let mut toast = Toast::new();
         toast.launch("click:cookie");
@@ -80,17 +72,21 @@ pub async  fn send_system_notification(
         if let Some(img) = payload.image_url {
             let dir = get_cache_dir(app.clone());
             let client = RequestClient::get_this(app.clone());
-            let resp = client.request(Method::GET,img)
-                .header("Referer",HeaderValue::from_static("https://weibo.com/"))
-                .send().await?;
+            let resp = client
+                .request(Method::GET, img)
+                .header("Referer", HeaderValue::from_static("https://weibo.com/"))
+                .send()
+                .await?;
             let byte = resp.bytes().await?;
             let tmp_file = dir.join("notify_img.jpg");
-            std::fs::write(&tmp_file,byte)?;
+            std::fs::write(&tmp_file, byte)?;
 
             toast.image(1, Image::new_local(tmp_file)?);
         }
 
-        toast.text3(Text::new(format!("at: {}",payload.time)).with_placement(TextPlacement::Attribution));
+        toast.text3(
+            Text::new(format!("at: {}", payload.time)).with_placement(TextPlacement::Attribution),
+        );
         toast.scenario(Scenario::Reminder);
         manager.show_with_callbacks(
             &toast,
@@ -113,9 +109,10 @@ pub async  fn send_system_notification(
                     error!(Action="Notify Dismiss", Error = %err);
                 }
             })),
-            Some(Box::new(|err| {error!(Action="Notify Failure", Error = %err);}) as _),
+            Some(Box::new(|err| {
+                error!(Action="Notify Failure", Error = %err);
+            }) as _),
         )?;
-
     }
     #[cfg(not(windows))]
     {
