@@ -171,3 +171,22 @@ jobs:
               draft: false,
               prerelease: false
             })
+  
+  remove-release-if-not-success:
+    needs: [create-release, publish-release]
+    if: "always() && needs.publish-release.result != 'success'"
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: remove release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            await github.rest.repos.createRelease({
+              release_id: process.env.release_id,
+              owner: context.repo.owner, repo: context.repo.repo,
+            })
