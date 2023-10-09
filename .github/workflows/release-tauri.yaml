@@ -59,7 +59,7 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install dependencies (ubuntu only)
@@ -89,6 +89,7 @@ jobs:
                   core.exportVariable("APPLE_SIGNING_IDENTITY", `${{ secrets.APPLE_SIGNING_IDENTITY }}`);
                   core.exportVariable("APPLE_ID", `${{ secrets.APPLE_ID }}`);
                   core.exportVariable("APPLE_PASSWORD", `${{ secrets.APPLE_PASSWORD }}`);
+                  core.exportVariable("APPLE_TEAM_ID", `${{ secrets.APPLE_TEAM_ID }}`);
                   core.notice("符合签名条件", {title:"本次构建将会对MacOS目标进行签名"});
                 } else {
                   core.warning("未提供有效证书", {title:"本次构建将不会对MacOS目标进行签名"});
@@ -106,7 +107,7 @@ jobs:
             }
             require('fs').writeFileSync('./src-tauri/tauri.conf.json', JSON.stringify(cfg));
       - name: install frontend dependencies
-        run: npm ci
+        run: npm install
       - uses: tauri-apps/tauri-action@v0
         id: tauri-action-build
         env:
@@ -169,4 +170,23 @@ jobs:
               release_id: process.env.release_id,
               draft: false,
               prerelease: false
+            })
+  
+  remove-release-if-not-success:
+    needs: [create-release, publish-release]
+    if: "always() && needs.publish-release.result != 'success'"
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: remove release
+        uses: actions/github-script@v6
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+        with:
+          script: |
+            await github.rest.repos.deleteRelease({
+              release_id: process.env.release_id,
+              owner: context.repo.owner, repo: context.repo.repo,
             })
