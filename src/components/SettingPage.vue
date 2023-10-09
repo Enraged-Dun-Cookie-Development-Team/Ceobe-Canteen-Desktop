@@ -97,7 +97,7 @@ const sen_d = () => {
     datasource: 'kkwd',
     default_cookie: {
       images: [{compress_url: null, origin_url: 'https://i0.hdslb.com/bfs/new_dyn/2956e376fb056cf79cc95bcf585dbbc0161775300.jpg'}],
-      text: '欸嘿嘿，桃金娘的脚小小的~香香的~.'
+      text: '欸嘿嘿，桃金娘的脚小小的~香香的~.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     },
     icon: '/assets/icon/anime.png',
     source: {data: '123', type: 'nn'},
