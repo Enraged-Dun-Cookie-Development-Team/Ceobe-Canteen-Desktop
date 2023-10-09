@@ -25,3 +25,4 @@ pub use quit::quit;
 pub use request_client::send_request;
 pub use request_refer_image::request_refer_image;
 pub use resource_location::{get_app_cache_path, get_app_config_path};
+pub use system_notification::send_system_notification;

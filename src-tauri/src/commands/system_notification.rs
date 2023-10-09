@@ -1,52 +1,98 @@
-use serde::{Deserialize, Serialize};
-use tauri::api::notification::Sound;
-use tauri::AppHandle;
-use windows::core::InParam;
-use windows::Data::Xml::Dom::{IXmlNode, XmlDocument};
-use windows::UI::Notifications::{Notification, ToastNotificationManager, ToastTemplateType};
-use crate::commands::request_refer_image;
+
+use serde::{Deserialize, Serialize, Serializer};
+
+use tauri::{AppHandle, command, Window};
+use tracing::instrument;
+
+use url::Url;
+use crate::commands::message_beep;
+
+
+#[derive(Debug, thiserror::Error)]
+pub enum NotifyError {
+    #[error(transparent)]
+    TauriApi(#[from] tauri::api::Error),
+    #[cfg(windows)]
+    #[error(transparent)]
+    Tauri(#[from] tauri::Error),
+    #[cfg(windows)]
+    #[error(transparent)]
+    Toast(#[from] winrt_toast::WinToastError),
+}
+
+impl Serialize for NotifyError {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+        self.to_string().serialize(serializer)
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct NotificationPayload {
     title: String,
-    icon: Option<String>,
     body: String,
     has_sound: bool,
-    image_url: Option<String>,
+    image_url: Option<Url>,
 }
-
-#[cfg(windows)]
-pub async fn send_system_notification(app: AppHandle, payload: NotificationPayload) -> tauri::Result<()> {
+#[command]
+#[instrument(name = "SendToastNotify", skip(app,window), err)]
+pub fn send_system_notification(
+    window: Window,
+    app: AppHandle,
+    payload: NotificationPayload,
+) -> Result<(), NotifyError> {
     #[cfg(windows)]
     {
-        let xml = ToastNotificationManager::GetTemplateContent(ToastTemplateType::ToastImageAndText02).expect("get template failure");
-        let header_node = xml.GetElementsByTagName(&("header".into())).unwrap();
-        let header_node = header_node.Item(0).unwrap();
-        let attr = header_node.Attributes().unwrap();
-        let attr_title = attr.GetNamedItem(&("title".into())).unwrap();
-        attr_title.SetInnerText(&(payload.title.into())).unwrap();
+        use tracing::{error, info};
+        use std::sync::OnceLock;
+        use winrt_toast::{Toast,ToastManager,Text,Image,};
+        static MANAGER:OnceLock<ToastManager> = OnceLock::new();
+        let manager = MANAGER.get_or_init(||
+        ToastManager::new(app.config().tauri.bundle.identifier.as_str())
+        );
 
-        let text_node = xml.GetElementsByTagName(&("text".into())).expect("get template failure");
-        let first_line = text_node.GetAt(0).unwrap();
-        first_line.AppendChild::<InParam<IXmlNode>,_>(InParam::owned(xml.CreateTextNode(&(payload.body.into())).unwrap().into())).expect("TODO: panic message");
+        let mut toast = Toast::new();
+        toast.launch("click:cookie");
+        toast.text1(payload.title);
+        toast.text2(Text::new(payload.body));
+        if let Some(img) = payload.image_url {
+            toast.image(1, Image::new(img));
+        }
 
-        if let Some(img_url) = payload.image_url {
-            let base64 = request_refer_image(&img_url, "", app).await.unwrap();
-            let image_node = xml.GetElementsByTagName(&("image".into())).unwrap();
-            let image_node = image_node.Item(0).unwrap();
-            let img_attr = image_node.Attributes().unwrap();
-            let img_src = img_attr.GetNamedItem(&("src".into())).unwrap();
-            img_src.SetInnerText(&(base64.into())).unwrap();
+        manager.show_with_callbacks(
+            &toast,
+            Some(Box::new(move |launch| {
+                let re = launch
+                    .map_err(NotifyError::from)
+                    .and_then(|_| window.show().map_err(Into::into));
+                match re {
+                    Ok(_) => {}
+                    Err(err) => {
+                        error!(Action="Respond To User Select", Error = %err);
+                    }
+                };
+            })),
+            Some(Box::new(|reason| match reason {
+                Ok(reason) => {
+                    info!(Action="Notify Dismiss",reason= ?reason);
+                }
+                Err(err) => {
+                    error!(Action="Notify Dismiss", Error = %err);
+                }
+            })),
+            Some(Box::new(|err| {error!(Action="Notify Failure", Error = %err);}) as _),
+        )?;
+        if payload.has_sound {
+            message_beep()
         }
     }
     #[cfg(not(windows))]
     {
-        let mut notify = tauri::api::notification::Notification::new(&app.config().tauri.bundle.identifier).title(payload.title).body(payload.body);
-        if let Some(icon) = payload.icon {
-            notify = notify.icon(icon);
-        }
+        let mut notify =
+            tauri::api::notification::Notification::new(&app.config().tauri.bundle.identifier)
+                .title(payload.title)
+                .body(payload.body);
         if payload.has_sound {
-            notify = notify.sound(Sound::Default)
+            notify = notify.sound(tauri::api::notification::Sound::Default)
         }
         notify.show()?;
     }
