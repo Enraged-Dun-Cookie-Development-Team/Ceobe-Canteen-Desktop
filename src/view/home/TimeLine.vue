@@ -148,6 +148,7 @@ import { getCookieList } from "@/api/resourceFetcher/cookieList";
 import Common from "../../components/Card/Common.vue";
 import { previewUrl } from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
+import { type, OsType } from "@tauri-apps/api/os"
 
 const router = useRouter();
 
@@ -253,6 +254,7 @@ function searchTimeline() {
 
 // 卡片操作
 const card = reactive({
+  osType: "",
   isCopyImage: false, // 当前是否在截图
   copyImageId: null,
   openUrlInThis(data: { url: string; icon: string; source: string }) {
@@ -266,9 +268,15 @@ const card = reactive({
     card.copyImageId = id;
     card.isCopyImage = true;
     setTimeout(() => {
-      nextTick(() => {
+      nextTick(async () => {
+        // 包的问题，非windows多截图一次，详见：https://github.com/bubkoo/html-to-image/issues/147
+        if (card.osType !=  "Windows_NT") {
+          await htmlToImage
+            .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
+        }
+
         htmlToImage
-          .toJpeg(document.getElementById(id), { quality: 0.95 })
+          .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
           .then(function (dataUrl) {
             card.isCopyImage = false;
             operate.copy({ type: "img", data: dataUrl });
@@ -389,6 +397,9 @@ onMounted(() => {
     true,
   );
   searchTimeline();
+  type().then((osType: OsType) => {
+    card.osType = osType;
+  })
 });
 </script>
 
