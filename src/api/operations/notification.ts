@@ -32,7 +32,8 @@ class NotificationOperate {
 
     async getNotificationMode(): Promise<{ idx: number, value: string, tip: string }> {
         const idx = await storage.getItem<number>("setting.notify") ?? NotifyMode.PopUpAndBeep.idx
-        return allNotifyMode.find((mode) => mode.idx == idx)!!
+        const mode = allNotifyMode.find((mode) => mode.idx == idx);
+        return mode?mode:NotifyMode.None
     }
 
     async needNotifyPop(): Promise<boolean> {
@@ -70,9 +71,9 @@ export const NotifyMode = Object.freeze({
     }, PopUpAndBeep: {
         idx: 2, value: "弹窗且提示音", tip: "当发现新饼后不但出现右下角弹窗，同时发出提示音"
     }, SystemToast: {
-        idx: 3, value: "使用系统消息", tip: "当发现新饼时发出系统弹窗，Windows可以拉起主窗口"
+        idx: 4, value: "使用系统消息", tip: "当发现新饼时发出系统弹窗，Windows可以拉起主窗口"
     }, None: {
-        idx: -1, value: "无", tip: "当发现新饼后无任何行为"
+        idx: 3, value: "无",tip:"当发现新饼后无任何行为"
     },
 })
 export const allNotifyMode = [NotifyMode.PopUpAndBeep, NotifyMode.BeepOnly, NotifyMode.PopUpOnly,NotifyMode.SystemToast, NotifyMode.None]
