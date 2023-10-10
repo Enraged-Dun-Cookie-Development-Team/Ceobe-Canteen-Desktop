@@ -11,6 +11,11 @@ import notification from "./notification";
 class Operate {
     async openNotificationWindow(cookie: Cookie) {
         console.log(`send Notification`);
+        if (await invoke("should_silence")){
+            console.log("Detect FullScreen, cancel notify")
+            return
+        }
+
         if (await notification.needNotifyPop()) {
 
             let monitorInfo = await invoke<{
