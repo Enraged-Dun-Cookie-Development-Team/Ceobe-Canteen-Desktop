@@ -136,7 +136,7 @@
 </template>
 
 <script lang="ts" name="timeLine" setup>
-import { nextTick, onMounted, reactive } from "vue";
+import { nextTick, onMounted, reactive, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
 import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
@@ -148,6 +148,9 @@ import { getCookieList } from "@/api/resourceFetcher/cookieList";
 import Common from "../../components/Card/Common.vue";
 import { previewUrl } from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
+import { type, OsType } from "@tauri-apps/api/os"
+
+const instance = getCurrentInstance();
 
 const router = useRouter();
 
@@ -192,6 +195,7 @@ async function getData() {
       timeline.refreshUpdateCookieId = arg.update_cookie_id;
       timeline.refreshNextPageId = arg.next_page_id ?? null;
     }
+    instance.proxy.$forceUpdate();
   });
 }
 
@@ -209,6 +213,7 @@ function refreshTimeline() {
   timeline.refreshUpdateCookieId = null;
   timeline.nextPageId = timeline.refreshNextPageId;
   timeline.refreshNextPageId = null;
+  instance.proxy.$forceUpdate();
   document.querySelector(".time-line").scrollTop = 0;
 }
 
@@ -226,6 +231,7 @@ function searchTimeline() {
         timeline.timelineData = null;
         timeline.nextPageId = null;
         timeline.searchStatus = true;
+        instance.proxy.$forceUpdate();
         document.querySelector(".time-line").scrollTop = 0;
       }
       getCookieSearchList({
@@ -236,6 +242,7 @@ function searchTimeline() {
           let respData = data.data.data;
           timeline.timelineData = respData.cookies;
           timeline.nextPageId = respData.next_page_id ?? null;
+          instance.proxy.$forceUpdate();
         }
       });
     } else {
@@ -245,6 +252,7 @@ function searchTimeline() {
         timeline.searchStatus = false;
         timeline.timelineData = timeline.tempTimelineData?.slice(0) ?? null;
         timeline.nextPageId = timeline.tempNextPageId;
+        instance.proxy.$forceUpdate();
         document.querySelector(".time-line").scrollTop = 0;
       }
     }
@@ -253,6 +261,7 @@ function searchTimeline() {
 
 // 卡片操作
 const card = reactive({
+  osType: "",
   isCopyImage: false, // 当前是否在截图
   copyImageId: null,
   openUrlInThis(data: { url: string; icon: string; source: string }) {
@@ -266,9 +275,15 @@ const card = reactive({
     card.copyImageId = id;
     card.isCopyImage = true;
     setTimeout(() => {
-      nextTick(() => {
+      nextTick(async () => {
+        // 包的问题，非windows多截图一次，详见：https://github.com/bubkoo/html-to-image/issues/147
+        if (card.osType !=  "Windows_NT") {
+          await htmlToImage
+            .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
+        }
+
         htmlToImage
-          .toJpeg(document.getElementById(id), { quality: 0.95 })
+          .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
           .then(function (dataUrl) {
             card.isCopyImage = false;
             operate.copy({ type: "img", data: dataUrl });
@@ -389,6 +404,9 @@ onMounted(() => {
     true,
   );
   searchTimeline();
+  type().then((osType: OsType) => {
+    card.osType = osType;
+  })
 });
 </script>
 

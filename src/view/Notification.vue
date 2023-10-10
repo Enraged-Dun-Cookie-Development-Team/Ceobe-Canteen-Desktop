@@ -10,7 +10,7 @@
       >
         <v-toolbar color="rgba(0, 0, 0, 0)" theme="dark">
           <template #append>
-            <v-btn icon="fas fa-circle-xmark" size="small"></v-btn>
+            <v-btn icon="fas fa-circle-xmark" size="xs" @click="appWindow.hide()"   class="elevation-4" color="amber-accent-4"></v-btn>
           </template>
         </v-toolbar>
       </v-img>
@@ -77,6 +77,9 @@ onMounted(() => {
     console.log("get Info: ", data)
     updatePageData(data);
     await appWindow.show()
+    setTimeout(()=>{
+      appWindow.hide()
+    },10000);
     if (await notification.needBeep()) {
 
       await operate.messageBeep()

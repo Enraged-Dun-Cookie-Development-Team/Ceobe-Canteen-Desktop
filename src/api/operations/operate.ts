@@ -11,6 +11,11 @@ import notification from "./notification";
 class Operate {
     async openNotificationWindow(cookie: Cookie) {
         console.log(`send Notification`);
+        if (await invoke("should_silence")){
+            console.log("Detect FullScreen, cancel notify")
+            return
+        }
+
         if (await notification.needNotifyPop()) {
 
             let monitorInfo = await invoke<{
@@ -28,8 +33,17 @@ class Operate {
             console.log(await window.outerPosition());
             console.log("send cookie ", cookie)
             await window.emit("new_cookie_info", cookie);
-        }else if (await notification.needBeep()){
-          await this.messageBeep()
+        } else if (await notification.needBeep()) {
+            await this.messageBeep()
+        } else if (await notification.needSystemNotify()) {
+            await notification.sendSystemNotify({
+                body: cookie.default_cookie.text,
+                has_sound: true,
+                time:new Date(cookie.timestamp.platform!).toLocaleString(),
+                image_url: cookie.default_cookie.images ? cookie.default_cookie.images[0].origin_url: undefined ,
+                title: `小刻在${cookie.datasource}蹲到饼了`
+
+            })
         }
     }
 
