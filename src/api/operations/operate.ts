@@ -11,6 +11,10 @@ import notification from "./notification";
 class Operate {
     async openNotificationWindow(cookie: Cookie) {
         console.log(`send Notification`);
+        if (await invoke("should_silence")){
+            return
+        }
+
         if (await notification.needNotifyPop()) {
 
             let monitorInfo = await invoke<{
