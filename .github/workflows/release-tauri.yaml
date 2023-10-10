@@ -27,19 +27,31 @@ jobs:
           node-version: 16
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
-
+      - name: install npm packages
+        run: npm i semver
       - name: create release
         id: create-release
         uses: actions/github-script@v6
         with:
           script: |
-            const fs = require('fs')
+            const fs = require('fs');
+            const semver = require(`${process.env.GITHUB_WORKSPACE}/node_modules/semver`);
+            const version = semver.parse(process.env.PACKAGE_VERSION);
+            if (!version) {
+              core.error(`package.json中的版本号不是合法的语义化版本号：${process.env.PACKAGE_VERSION}`);
+              throw new Error(`package.json中的版本号不是合法的语义化版本号：${process.env.PACKAGE_VERSION}`);
+            }
+            let tagValue = version.format();
+            if (version.prerelease) {
+              core.notice('本次构建为预发布版本');
+              tagValue += `+${{ github.run_number }}.${{ github.run_attempt }}`;
+            }
             const { data } = await github.rest.repos.createRelease({
-              tag_name: `tauri-v${process.env.PACKAGE_VERSION}-build.${{ github.run_number }}.${{ github.run_attempt }}`,
+              tag_name: tagValue,
               target_commitish: '${{ github.sha }}',
               name: `CeobeCanteenDesktop v${process.env.PACKAGE_VERSION}`,
               body: `小刻食堂桌面端 v${process.env.PACKAGE_VERSION} 发布了`,
-              prerelease: false,
+              prerelease: version.prerelease,
               draft: true, owner: context.repo.owner, repo: context.repo.repo,
             })
             return data.id
