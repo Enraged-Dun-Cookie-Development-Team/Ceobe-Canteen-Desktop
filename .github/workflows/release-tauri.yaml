@@ -42,7 +42,7 @@ jobs:
               throw new Error(`package.json中的版本号不是合法的语义化版本号：${process.env.PACKAGE_VERSION}`);
             }
             let tagValue = version.format();
-            if (version.prerelease) {
+            if (version.prerelease && version.prerelease.length > 0) {
               core.notice('本次构建为预发布版本');
               tagValue += `+${{ github.run_number }}.${{ github.run_attempt }}`;
             }
@@ -51,7 +51,7 @@ jobs:
               target_commitish: '${{ github.sha }}',
               name: `CeobeCanteenDesktop v${process.env.PACKAGE_VERSION}`,
               body: `小刻食堂桌面端 v${process.env.PACKAGE_VERSION} 发布了`,
-              prerelease: version.prerelease,
+              prerelease: version.prerelease && version.prerelease.length > 0,
               draft: true, owner: context.repo.owner, repo: context.repo.repo,
             })
             return data.id
@@ -186,7 +186,7 @@ jobs:
   
   remove-release-if-not-success:
     needs: [create-release, publish-release]
-    if: "always() && needs.publish-release.result != 'success'"
+    if: "always() && needs.create-release.result == 'success' && needs.publish-release.result != 'success'"
     permissions:
       contents: write
     runs-on: ubuntu-20.04
