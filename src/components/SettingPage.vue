@@ -93,6 +93,9 @@ const isDebug = computed(() => {
 
 // test send notification
 const sen_d = () => {
+  setTimeout(
+      ()=>{
+
   operate.openNotificationWindow({
     datasource: 'kkwd',
     default_cookie: {
@@ -103,6 +106,7 @@ const sen_d = () => {
     source: {data: '123', type: 'nn'},
     timestamp: {fetcher: 114514, platform: 114514, platform_precision: 'minute'}
   })
+      },5000)
 }
 
 const showDownload = computed(() => props.versionState === VersionStateType.UpdateAvailable)

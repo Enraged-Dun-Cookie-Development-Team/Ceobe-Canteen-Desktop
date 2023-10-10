@@ -12,6 +12,7 @@ class Operate {
     async openNotificationWindow(cookie: Cookie) {
         console.log(`send Notification`);
         if (await invoke("should_silence")){
+            console.log("Detect FullScreen, cancel notify")
             return
         }
 
