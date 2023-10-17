@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize, Serializer};
 
-use tauri::{command, AppHandle, Window};
+use tauri::{command, AppHandle, Manager};
 use tracing::instrument;
 
 use url::Url;
@@ -45,9 +45,8 @@ pub struct NotificationPayload {
     image_url: Option<Url>,
 }
 #[command(async)]
-#[instrument(name = "SendToastNotify", skip(app, window), err)]
+#[instrument(name = "SendToastNotify", skip(app), err)]
 pub async fn send_system_notification(
-    window: Window,
     app: AppHandle,
     payload: NotificationPayload,
 ) -> Result<(), NotifyError> {
@@ -88,12 +87,13 @@ pub async fn send_system_notification(
             Text::new(format!("at: {}", payload.time)).with_placement(TextPlacement::Attribution),
         );
         toast.scenario(Scenario::Reminder);
+        let main_window = app.get_window("main").unwrap();
         manager.show_with_callbacks(
             &toast,
             Some(Box::new(move |launch| {
                 let re = launch
                     .map_err(NotifyError::from)
-                    .and_then(|_| window.show().map_err(Into::into));
+                    .and_then(|_| main_window.show().map_err(Into::into));
                 match re {
                     Ok(_) => {}
                     Err(err) => {
