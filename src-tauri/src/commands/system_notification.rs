@@ -45,9 +45,8 @@ pub struct NotificationPayload {
     image_url: Option<Url>,
 }
 #[command(async)]
-#[instrument(name = "SendToastNotify", skip(app, _window), err)]
+#[instrument(name = "SendToastNotify", skip(app), err)]
 pub async fn send_system_notification(
-    _window: Window,
     app: AppHandle,
     payload: NotificationPayload,
 ) -> Result<(), NotifyError> {
