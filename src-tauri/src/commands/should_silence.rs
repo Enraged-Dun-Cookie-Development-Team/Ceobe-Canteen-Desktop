@@ -6,8 +6,10 @@ pub fn should_silence() -> tauri::Result<bool> {
     {
         use std::mem::size_of;
         use windows::Win32::{
-            Foundation::{RECT},
-            Graphics::Gdi::{GetMonitorInfoW, MonitorFromWindow, MONITORINFO, MONITOR_DEFAULTTOPRIMARY},
+            Foundation::RECT,
+            Graphics::Gdi::{
+                GetMonitorInfoW, MonitorFromWindow, MONITORINFO, MONITOR_DEFAULTTOPRIMARY,
+            },
             UI::WindowsAndMessaging::{
                 GetDesktopWindow, GetForegroundWindow, GetShellWindow, GetWindowRect,
             },
@@ -16,7 +18,7 @@ pub fn should_silence() -> tauri::Result<bool> {
         let shell = unsafe { GetShellWindow() };
         let desktop = unsafe { GetDesktopWindow() };
         let hwnd = unsafe { GetForegroundWindow() };
-        if hwnd.0 == 0 ||( hwnd == shell || hwnd == desktop ){
+        if hwnd.0 == 0 || (hwnd == shell || hwnd == desktop) {
             Ok(false)
         } else {
             let mut rect = RECT::default();
@@ -31,7 +33,10 @@ pub fn should_silence() -> tauri::Result<bool> {
 
             let monitor_size = monitor_info.rcMonitor;
 
-            Ok(rect.left == monitor_size.left && rect.right == monitor_size.right && rect.top == monitor_size.top && rect.bottom == monitor_size.bottom)
+            Ok(rect.left == monitor_size.left
+                && rect.right == monitor_size.right
+                && rect.top == monitor_size.top
+                && rect.bottom == monitor_size.bottom)
         }
     }
     #[cfg(not(windows))]

@@ -103,6 +103,7 @@
       {
         "decorations": false,
         "fullscreen": false,
+        "visible": false,
         "label": "main",
         "height": 640,
         "resizable": true,
@@ -128,6 +129,15 @@
         "decorations": false,
         "url": "/#/notification"
       }
-    ]
+    ],
+    "cli": {
+      "args": [{
+        "name": "hidden",
+        "short": "c",
+        "description": "是否启动时保持后台运行",
+        "longDescription": "当给定该配置项时，将在启动时在后台静默运行"
+      }
+      ]
+    }
   }
 }
