@@ -68,7 +68,7 @@
 
 <script lang="ts" name="setting" setup>
 import {computed, onMounted, reactive} from "vue";
-import operate from "../api/operations/operate";
+import operate from "@/api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
 import notification, {allNotifyMode, NotifyMode} from "@/api/operations/notification";
 import {app, invoke} from "@tauri-apps/api";
@@ -84,7 +84,7 @@ const emits = defineEmits<{
 const props = withDefaults(defineProps<{
   versionState: VersionStateType
 }>(), {
-  versionStateType: VersionStateType.Unknown
+  versionState: VersionStateType.Unknown
 })
 
 const isDebug = computed(() => {
@@ -121,7 +121,7 @@ const setting = reactive<{
   close: () => void,
   checkUpdate: () => void
   // notification
-  notify_mode: { idx: string, tip: string, value: string },
+  notify_mode: { idx: number, tip: string, value: string },
   initNotifyMode: () => void
   setNotifyMode: () => void
   //version

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "module": "NodeNext",
     "declaration": true,
     "declarationMap": false,
@@ -12,7 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@tauri-apps/api/*": ["./node_modules/@tauri-apps/api/*"]
+      "@tauri-apps/api/*": ["./node_modules/@tauri-apps/api/*"],
     },
 
     /* Strict Type-Checking Options */
@@ -33,7 +33,7 @@
     "noUnusedParameters": false,
 
     /* Module Resolution Options */
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,

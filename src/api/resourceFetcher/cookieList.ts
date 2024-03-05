@@ -1,4 +1,4 @@
-import requestClient, { Payload, Response } from "../../utils/requestUtil";
+import requestClient, { Payload, Response } from "@/utils/requestUtil";
 
 export interface CookieList {
   cookies: Cookie[];

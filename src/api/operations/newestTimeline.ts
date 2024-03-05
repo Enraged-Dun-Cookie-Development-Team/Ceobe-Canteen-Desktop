@@ -1,6 +1,6 @@
 import {
   emit,
-  EventCallback,
+  Event,
   listen,
   once,
   UnlistenFn,
@@ -18,8 +18,14 @@ class NewestTimeline {
   ): Promise<UnlistenFn> {
     return await listen<Timeline>(
       "newest-timeline",
-      (event: EventCallback<Timeline>) => {
-        callback(event.event, event.payload);
+      (event: Event<Timeline>) => {
+        if (!event.payload.combId || !event.payload.timelineData) return;
+
+        callback(event.event, {
+          comb_id: event.payload.combId,
+          update_cookie_id: event.payload.updateCookieId,
+          cookies: event.payload.timelineData,
+        });
       },
     );
   }
@@ -33,13 +39,13 @@ class NewestTimeline {
   async knowNeedTimeline(
     callback: (event: string) => void,
   ): Promise<UnlistenFn> {
-    return await listen<void>("need-timeline", (event: EventCallback<void>) => {
+    return await listen<string>("need-timeline", (event: Event<string>) => {
       callback(event.payload);
     });
   }
 
   async needTimeline() {
-    await emit<void>("need-timeline");
+    await emit("need-timeline");
   }
 }
 

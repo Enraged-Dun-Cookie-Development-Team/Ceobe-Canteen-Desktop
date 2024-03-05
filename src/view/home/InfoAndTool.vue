@@ -29,11 +29,11 @@
 </template>
 
 <script setup name="infoAndTool" lang="ts">
-import ToolOrSource from "../../components/InfoAndTool/ToolOrSource.vue";
-import VideoList from "../../components/InfoAndTool/VideoList.vue";
-import Announcement from "../../components/InfoAndTool/Announcement.vue";
-import WeeklyQuest from "../../components/InfoAndTool/WeeklyQuest.vue";
-import operate from "../../api/operations/operate";
+import ToolOrSource from "@/components/InfoAndTool/ToolOrSource.vue";
+import VideoList from "@/components/InfoAndTool/VideoList.vue";
+import Announcement from "@/components/InfoAndTool/Announcement.vue";
+import WeeklyQuest from "@/components/InfoAndTool/WeeklyQuest.vue";
+import operate from "@/api/operations/operate";
 import {DatasourceItem, getResourceList} from "@/api/resourceFetcher/datasourceList";
 import {getToolsLinks} from "@/api/resourceFetcher/toolkits.js";
 
@@ -44,7 +44,7 @@ const cookieSourceLoader = async () => {
     return datasource.jump_url != null;
   }).map((datasource: DatasourceItem) => {
     return {
-      jump_url: datasource.jump_url,
+      jump_url: datasource.jump_url ?? '',
       nickname: datasource.nickname,
       avatar: datasource.avatar,
     };

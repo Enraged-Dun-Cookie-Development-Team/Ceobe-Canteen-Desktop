@@ -12,8 +12,8 @@
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import AppTop from "./AppTop.vue";
-import AppMain from "../view/AppMain.vue";
-import storage from "../api/operations/localStorage";
+import AppMain from "@/view/AppMain.vue";
+import storage from "@/api/operations/localStorage";
 
 const loadApp = ref(false);
 

@@ -4,7 +4,7 @@
 
 <script lang="ts" name="index" setup>
 import { onBeforeMount, onUnmounted } from "vue";
-import { BackgroundRunner } from "../utils/backgroundUtil.ts";
+import { BackgroundRunner } from "@/utils/backgroundUtil";
 
 let background: null | BackgroundRunner = null;
 

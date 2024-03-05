@@ -1,18 +1,18 @@
 <template>
   <div class="common-window">
-    <v-card class="mx-auto cursor-pointer" width="400" @click="common.openUrl">
+    <v-card class="mx-auto cursor-pointer" width="400" @click="openUrl">
       <v-img
         v-if="info.default_cookie.images"
         referrerpolicy="no-referrer"
         class="align-end text-white header-image"
-        :src="common.getImg()"
+        :src="getImg()"
         max-height="320"
         cover
       ></v-img>
 
       <v-card-text>
         <div class="cookie-text">{{ info.default_cookie.text }}</div>
-        <div v-if="info.item.retweeted" class="retweet-area">
+        <div v-if="info.item?.retweeted" class="retweet-area">
           <div>转发自：{{ info.item.retweeted.author_name }}</div>
           <div class="retweet-text">{{ info.item.retweeted.text }}</div>
         </div>
@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue";
-import { Cookie } from "../../api/resourceFetcher/cookieList";
-import ceobeRequest from "../../api/operations/ceobeRequest";
+import { onMounted, ref } from "vue";
+import { Cookie } from "@/api/resourceFetcher/cookieList";
+import ceobeRequest from "@/api/operations/ceobeRequest";
 
 const props = defineProps<{
   info: Cookie;
@@ -37,53 +37,44 @@ const emits = defineEmits({
   openUrl: null,
 });
 
-const common = reactive<{
-  imgUrl: string | string[];
-  getImg(): string | string[];
-  openImage();
-  openUrl();
-}>({
-  imgUrl: [],
-  getImg() {
-    if (!props.info.default_cookie.images) {
-      common.imgUrl = [];
-    } else if (props.info.datasource.includes("微博")) {
-      ceobeRequest
-        .getHasRefererImageBase64(
-          props.info.default_cookie.images[0].origin_url,
-        )
-        .then((res) => {
-          common.imgUrl = "data:image/jpeg;base64," + res;
-        });
-    } else {
-      let url = new URL(props.info.default_cookie.images[0].origin_url)
-      ceobeRequest
-        .getHasRefererImageBase64(
-          props.info.default_cookie.images[0].origin_url,
-          url.origin
-        )
-        .then((res) => {
-          common.imgUrl = "data:image/jpeg;base64," + res;
-        });
-    }
-    return common.imgUrl;
-  },
-  openImage() {},
-  openUrl() {
-    // 统一格式 只需要标题和url和icon
-    let data = {
-      url: props.info.item.url,
-      source: props.info.datasource,
-      icon: props.info.icon,
-    };
-    console.log(data);
-    emits("openUrl", data);
-  },
-});
+const imgUrl = ref<string>("");
+const getImg = (index: number = 0) => {
+  if (!props.info.default_cookie.images) {
+    return;
+  } else if (props.info.datasource.includes("微博")) {
+    ceobeRequest
+      .getHasRefererImageBase64(props.info.default_cookie.images[index].origin_url)
+      .then((res) => {
+        imgUrl.value = `data:image/jpeg;base64,${res}`;
+      });
+  } else {
+    let url = new URL(props.info.default_cookie.images[index].origin_url);
+    ceobeRequest
+      .getHasRefererImageBase64(
+        props.info.default_cookie.images[index].origin_url,
+        url.origin
+      )
+      .then((res) => {
+        imgUrl.value = `data:image/jpeg;base64,${res}`;
+      });
+  }
+  return imgUrl.value;
+};
+
+const openUrl = () => {
+  // 统一格式 只需要标题和url和icon
+  let data = {
+    url: props.info.item?.url,
+    source: props.info.datasource,
+    icon: props.info.icon,
+  };
+  console.log(data);
+  emits("openUrl", data);
+};
 
 onMounted(() => {
   if (props.info.default_cookie.images) {
-    common.getImg();
+    getImg();
   }
 });
 </script>

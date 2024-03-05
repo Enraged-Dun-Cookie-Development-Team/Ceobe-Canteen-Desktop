@@ -1,9 +1,9 @@
 <template>
   <div class="browser w-100">
-    <v-toolbar :title="query.source">
+    <v-toolbar :title="query?.source?.toString()">
       <template #prepend>
         <v-img
-          :src="getImage(query.icon)"
+          :src="getImage(query?.icon?.toString() ?? '')"
           class="border-radius-50"
           width="26"
         ></v-img>
@@ -34,17 +34,17 @@
 <script lang="ts" name="index" setup>
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
-import { getImage } from "../utils/imageUtil";
+import { getImage } from "@/utils/imageUtil";
 import {invoke} from "@tauri-apps/api";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
 const router = useRouter();
 const route = useRoute();
-const query = ref({});
+const query = ref<typeof route.query | null>(null);
 
 interface WebView extends HTMLElement {
-  insertCSS: (string) => void;
-  executeJavaScript: (string) => any;
+  insertCSS: (arg0: string) => void;
+  executeJavaScript: (arg0: string) => any;
 }
 
 const webviewWindow = reactive<{
@@ -55,7 +55,8 @@ const webviewWindow = reactive<{
 }>({
   webview: null,
   init() {
-    webviewWindow.webview = document.querySelector("iframe");
+    webviewWindow.webview = document.querySelector("iframe") as unknown as WebView;
+
     if (webviewWindow.webview)
       webviewWindow.webview.addEventListener("dom-ready", () => {
         webviewWindow.insertCss();
@@ -95,7 +96,7 @@ const webviewWindow = reactive<{
   },
   insertJs() {
     if (webviewWindow.webview) {
-      webviewWindow.webview.executeJavaScript("").then((res) => {
+      webviewWindow.webview.executeJavaScript("").then((res: any) => {
         console.log(res);
       });
     }

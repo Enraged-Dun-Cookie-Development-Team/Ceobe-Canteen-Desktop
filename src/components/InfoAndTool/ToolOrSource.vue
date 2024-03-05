@@ -25,7 +25,7 @@
 
 <script setup name="tool" lang="ts">
 import {getImage} from "@/utils/imageUtil";
-import operate from "../../api/operations/operate";
+import operate from "@/api/operations/operate";
 import {onMounted, ref} from "vue";
 import {Datum} from "@/api/resourceFetcher/toolkits.js";
 
