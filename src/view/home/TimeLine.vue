@@ -181,10 +181,12 @@ const _backTopTimeLine = () => {
 };
 
 async function getData() {
+  console.log("await newestTimeline.getTimeline");
   await newestTimeline.getTimeline((_, arg) => {
     logger.debug("TimeLine.vue",{cookie:arg})
     console.log(arg);
     if (arg == null) {
+      console.warn("no data")
       return;
     }
     if (timeline.searchStatus) {
@@ -416,6 +418,7 @@ onMounted(() => {
   getData();
   // 如果没有数据，让后台发一份过来
   if (!timeline.timelineData) {
+    console.warn("no data, needTimeline")
     newestTimeline.needTimeline();
   }
   window.addEventListener(

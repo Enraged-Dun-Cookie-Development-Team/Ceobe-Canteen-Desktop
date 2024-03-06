@@ -16,22 +16,16 @@ class NewestTimeline {
   async getTimeline(
     callback: (event: string, payload: TimelineData) => void,
   ): Promise<UnlistenFn> {
-    return await listen<Timeline>(
+    return await listen<TimelineData>(
       "newest-timeline",
-      (event: Event<Timeline>) => {
-        if (!event.payload.combId || !event.payload.timelineData) return;
-
-        callback(event.event, {
-          comb_id: event.payload.combId,
-          update_cookie_id: event.payload.updateCookieId,
-          cookies: event.payload.timelineData,
-        });
+      (event: Event<TimelineData>) => {
+        callback(event.event, event.payload);
       },
     );
   }
 
   async sendTimeline(data: TimelineData) {
-    console.log("sending");
+    console.log("time line sending");
     console.log(data);
     await emit("newest-timeline", data);
   }
@@ -45,6 +39,7 @@ class NewestTimeline {
   }
 
   async needTimeline() {
+    console.log("get need-timeline event");
     await emit("need-timeline");
   }
 }
