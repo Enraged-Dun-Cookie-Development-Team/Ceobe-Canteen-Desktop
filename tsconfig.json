@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ESNext", "DOM"],
-    "module": "NodeNext",
+    "module": "ES2022",
     "declaration": true,
     "declarationMap": false,
     "sourceMap": false,
