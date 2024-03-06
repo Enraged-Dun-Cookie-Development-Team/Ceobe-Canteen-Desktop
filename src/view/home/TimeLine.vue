@@ -1,5 +1,5 @@
 <template>
-  <div class="time-line">
+  <div class="time-line" :ref="setTimeLineRef">
     <div class="fix-btn">
       <v-btn
         :class="
@@ -136,23 +136,27 @@
 </template>
 
 <script lang="ts" name="timeLine" setup>
-import { nextTick, onMounted, reactive, getCurrentInstance } from "vue";
+import { nextTick, onMounted, reactive, ref, VNodeRef } from "vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
-import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
-import searchWordEvent from "../../api/operations/searchWordEvent";
+import newestTimeline, { Timeline } from "@/api/operations/newestTimeline";
+import searchWordEvent from "@/api/operations/searchWordEvent";
 import { getCookieSearchList } from "@/api/resourceFetcher/searchCookie";
-import operate from "../../api/operations/operate";
+import operate from "@/api/operations/operate";
 import { getImage } from "@/utils/imageUtil";
 import { getCookieList } from "@/api/resourceFetcher/cookieList";
-import Common from "../../components/Card/Common.vue";
+import Common from "@/components/Card/Common.vue";
 import { previewUrl } from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
 import { type, OsType } from "@tauri-apps/api/os"
 
-const instance = getCurrentInstance();
-
 const router = useRouter();
+
+const timeLineRef = ref<HTMLElement | null>(null);
+
+const setTimeLineRef = (ref: any) => {
+  timeLineRef.value = ref;
+};
 
 // 卡片数据
 const timeline = reactive<Timeline>({
@@ -171,14 +175,9 @@ const timeline = reactive<Timeline>({
 });
 
 const _backTopTimeLine = () => {
-  let timeLineClass = document.querySelector(".time-line");
-  if (timeLineClass) {
-    timeLineClass.scrollTop = 0;
+  if (timeLineRef.value) {
+    timeLineRef.value.scrollTop = 0;
   }
-};
-
-const _forceUpdateInstance = () => {
-  instance?.proxy?.$forceUpdate();
 };
 
 async function getData() {
@@ -206,7 +205,6 @@ async function getData() {
       timeline.refreshUpdateCookieId = arg.update_cookie_id;
       timeline.refreshNextPageId = arg.next_page_id ?? null;
     }
-    _forceUpdateInstance();
   });
 }
 
@@ -224,7 +222,6 @@ function refreshTimeline() {
   timeline.refreshUpdateCookieId = null;
   timeline.nextPageId = timeline.refreshNextPageId;
   timeline.refreshNextPageId = null;
-  _forceUpdateInstance();
   _backTopTimeLine();
 }
 
@@ -242,7 +239,6 @@ function searchTimeline() {
         timeline.timelineData = null;
         timeline.nextPageId = null;
         timeline.searchStatus = true;
-        _forceUpdateInstance();
         _backTopTimeLine();
       }
       getCookieSearchList({
@@ -253,7 +249,6 @@ function searchTimeline() {
           let respData = data.data.data;
           timeline.timelineData = respData.cookies;
           timeline.nextPageId = respData.next_page_id ?? null;
-          _forceUpdateInstance();
         }
       });
     } else {
@@ -264,7 +259,6 @@ function searchTimeline() {
         timeline.timelineData = timeline.tempTimelineData?.slice(0) ?? null;
         timeline.nextPageId = timeline.tempNextPageId;
         _backTopTimeLine();
-        _forceUpdateInstance();
       }
     }
   });
