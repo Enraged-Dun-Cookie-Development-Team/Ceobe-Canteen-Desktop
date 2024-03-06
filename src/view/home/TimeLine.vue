@@ -46,7 +46,7 @@
     >
       <v-timeline-item
         v-for="cookie in timeline.timelineData"
-        :key="cookie.item?.id"
+        :key="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
         :left="true"
         dot-color="#fff"
         :fill-dot="true"
