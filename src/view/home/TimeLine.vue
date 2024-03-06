@@ -46,7 +46,7 @@
     >
       <v-timeline-item
         v-for="cookie in timeline.timelineData"
-        :key="cookie.item.id"
+        :key="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
         :left="true"
         dot-color="#fff"
         fill-dot="fill-dot"
@@ -195,7 +195,6 @@ async function getData() {
       timeline.refreshUpdateCookieId = arg.update_cookie_id;
       timeline.refreshNextPageId = arg.next_page_id ?? null;
     }
-    instance.proxy.$forceUpdate();
   });
 }
 
@@ -213,7 +212,6 @@ function refreshTimeline() {
   timeline.refreshUpdateCookieId = null;
   timeline.nextPageId = timeline.refreshNextPageId;
   timeline.refreshNextPageId = null;
-  instance.proxy.$forceUpdate();
   document.querySelector(".time-line").scrollTop = 0;
 }
 
@@ -231,7 +229,6 @@ function searchTimeline() {
         timeline.timelineData = null;
         timeline.nextPageId = null;
         timeline.searchStatus = true;
-        instance.proxy.$forceUpdate();
         document.querySelector(".time-line").scrollTop = 0;
       }
       getCookieSearchList({
@@ -242,7 +239,6 @@ function searchTimeline() {
           let respData = data.data.data;
           timeline.timelineData = respData.cookies;
           timeline.nextPageId = respData.next_page_id ?? null;
-          instance.proxy.$forceUpdate();
         }
       });
     } else {
@@ -252,7 +248,6 @@ function searchTimeline() {
         timeline.searchStatus = false;
         timeline.timelineData = timeline.tempTimelineData?.slice(0) ?? null;
         timeline.nextPageId = timeline.tempNextPageId;
-        instance.proxy.$forceUpdate();
         document.querySelector(".time-line").scrollTop = 0;
       }
     }
