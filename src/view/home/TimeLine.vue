@@ -46,7 +46,7 @@
     >
       <v-timeline-item
         v-for="cookie in timeline.timelineData"
-        :key="`${cookie.source.type}:${cookie.source.data}:${cookie.item?.id}`"
+        :key="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
         :left="true"
         dot-color="#fff"
         :fill-dot="true"
@@ -57,12 +57,12 @@
         </template>
         <component
           :is="component.getComponentName()"
-          :id="cookie.source.type+':'+cookie.source.data+':'+cookie.item?.id"
+          :id="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
           :info="cookie"
           @open-url="card.openUrlInThis"
         >
           <template
-            v-if="card.isCopyImage && `${cookie.source.type}:${cookie.source.data}:${cookie.item?.id}` == card.copyImageId"
+            v-if="card.isCopyImage && `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}` == card.copyImageId"
             #default="info"
           >
             <div class="h-100 w-100 d-flex flex-column">

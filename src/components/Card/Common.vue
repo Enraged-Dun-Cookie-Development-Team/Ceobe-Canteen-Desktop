@@ -12,7 +12,7 @@
 
       <v-card-text>
         <div class="cookie-text">{{ info.default_cookie.text }}</div>
-        <div v-if="info.item?.retweeted" class="retweet-area">
+        <div v-if="info.item.retweeted" class="retweet-area">
           <div>转发自：{{ info.item.retweeted.author_name }}</div>
           <div class="retweet-text">{{ info.item.retweeted.text }}</div>
         </div>
@@ -64,7 +64,7 @@ const getImg = (index: number = 0) => {
 const openUrl = () => {
   // 统一格式 只需要标题和url和icon
   let data = {
-    url: props.info.item?.url,
+    url: props.info.item.url,
     source: props.info.datasource,
     icon: props.info.icon,
   };

@@ -110,11 +110,11 @@ export class BackgroundRunner {
         cookies_info.cookies.forEach((cookie) => {
           if (
             !this.old_cookie_id_map.get(
-              `${cookie.source.type}:${cookie.source.data}:${cookie.item?.id}`,
+              `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`,
             )
           ) {
             this.old_cookie_id_map.set(
-              `${cookie.source.type}:${cookie.source.data}:${cookie.item?.id}`,
+              `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`,
               true,
             );
             if (this.init_fetched) {
