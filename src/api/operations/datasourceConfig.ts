@@ -5,7 +5,7 @@ class DatasourceConfig {
     return await listen<void>("update-datasource-comb", callback);
   }
   async updateDatasourceComb() {
-    await emit<void>("update-datasource-comb");
+    await emit("update-datasource-comb");
   }
 }
 

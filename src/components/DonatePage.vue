@@ -62,16 +62,16 @@
 
 <script setup name="donate" lang="ts">
 import { ref } from "vue";
-import operate from "../api/operations/operate";
-import { getImage } from "../utils/imageUtil";
+import operate from "@/api/operations/operate";
+import { getImage } from "@/utils/imageUtil";
 const emits = defineEmits({
   close: null,
 });
 const donate = ref<{
   show: boolean;
   list: { img: string; text: string; link?: string }[];
-  openUrl(url: string);
-  close();
+  openUrl(url: string): void;
+  close(): void;
 }>({
   show: false,
   list: [
@@ -95,7 +95,7 @@ const donate = ref<{
     },
   ],
   // 查看收支一览表
-  openUrl(url) {
+  openUrl(url: string) {
     if (!url) {
       return;
     }

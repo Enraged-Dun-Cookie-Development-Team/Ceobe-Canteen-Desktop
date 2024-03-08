@@ -4,7 +4,7 @@
       <v-card-text>
         <div class="d-flex flex-row">
           <div>
-            <div v-for="(item, index) in quest.countdown" :key="index">
+            <div v-for="(item, index) in countdowns" :key="index">
               <div>
                 距离
                 <v-tooltip
@@ -20,17 +20,17 @@
                 </v-tooltip>
                 <span v-else class="online-orange">{{ item.text }}</span>
                 <span title="国服 UTC-8">{{
-                  " " + quest.calcActivityDiff(item.time)
+                  " " + calcActivityDiff(item.time)
                 }}</span>
               </div>
             </div>
           </div>
         </div>
         <div class="d-flex flex-row justify-space-around mt-2">
-          <span v-for="item in quest.resources" :key="item.name">
+          <span v-for="item in resources" :key="item.name">
             <v-tooltip
               location="bottom"
-              :text="`${item.name} - 开放日期： ${quest.calcResourceOpenDay(
+              :text="`${item.name} - 开放日期： ${calcResourceOpenDay(
                 item.day,
               )}`"
             >
@@ -53,85 +53,89 @@
 </template>
 
 <script setup name="weeklyQuest" lang="ts">
-import { reactive, onMounted } from "vue";
-import { dayInfo } from "../../constant";
-import ceobeRequest from "../../api/operations/ceobeRequest";
-import { calcDiff, changeToCCT, numberToWeek } from "../../utils/timeUtil";
-import { getImage } from "../../utils/imageUtil";
+import { ref, onMounted } from "vue";
+import { dayInfo } from "@/constant";
+import type { DayInfo } from "@/constant";
+import ceobeRequest from "@/api/operations/ceobeRequest";
+import type { ResourceInfo, Countdown } from "@/api/resourceFetcher/resource";
+import { calcDiff, changeToCCT, numberToWeek } from "@/utils/timeUtil";
+import { getImage } from "@/utils/imageUtil";
 import {DateTime} from "luxon";
 
-const quest = reactive({
-  dayInfo: dayInfo,
-  openResources: false,
-  resourceInfo: {},
-  resources: [],
-  countdown: [],
-  getData() {
-    ceobeRequest.getResourceInfo().then((res) => {
-      quest.resourceInfo = res.data.data;
-      quest.resourcesNotToday();
-      quest.calcCountdown();
-    });
-  },
-  calcCountdown() {
-    // 倒计时
-    quest.countdown = quest.resourceInfo.countdown.filter(
-      (x) =>
-        DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
-        DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
-    );
-  },
-  // 今天有没有该资源可以刷
-  resourcesNotToday() {
-    let date = changeToCCT(new Date());
-    // 如果日期在里面
-    if (quest.resourceInfo) {
-      let starTime = new Date(quest.resourceInfo.resources.start_time);
-      let overTime = new Date(quest.resourceInfo.resources.over_time);
-      if (date >= starTime && date <= overTime) {
-        quest.resources = quest.dayInfo.map((item) => {
-          return {
-            ...item,
-            notToday: false,
-          };
-        });
-        quest.openResources = true;
-        return;
-      }
+const openResources = ref(false);
+const resourceInfo = ref<ResourceInfo | null>(null);
+const resources = ref<(DayInfo & { notToday? : boolean})[]>([]);
+const countdowns = ref<Countdown[]>([]);
+
+const getResourceInfo = () => {
+  ceobeRequest.getResourceInfo().then((res) => {
+    resourceInfo.value = res.data.data;
+    resourcesNotToday();
+    calcCountdown();
+  });
+};
+
+const calcCountdown = () => {
+  // 倒计时
+  if (!resourceInfo.value) return;
+  countdowns.value = resourceInfo.value.countdown.filter(
+    (x) =>
+      DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
+      DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
+  );
+};
+
+// 今天有没有该资源可以刷
+const resourcesNotToday = () => {
+  let date = changeToCCT(new Date());
+  // 如果日期在里面
+  if (resourceInfo.value) {
+    let starTime = new Date(resourceInfo.value.resources.start_time);
+    let overTime = new Date(resourceInfo.value.resources.over_time);
+    if (date >= starTime && date <= overTime) {
+      resources.value = dayInfo.map((item) => {
+        return {
+          ...item,
+          notToday: false,
+        };
+      });
+      openResources.value = true;
+      return;
     }
-    // 如果不在里面
-    let week = date.getDay();
-    // 判断4点更新
-    week = date.getHours() >= 4 ? week : week - 1;
-    week = week == -1 ? 6 : week;
-    quest.resources = quest.dayInfo.map((item) => {
-      return {
-        ...item,
-        notToday: !item.day.includes(week),
-      };
-    });
-    quest.openResources = false;
-  },
-  calcActivityDiff(endDate) {
-    const diff = calcDiff(DateTime.fromSQL(endDate, {zone: "Asia/Shanghai"}));
-    if (diff) {
-      return "剩" + diff;
-    } else {
-      return "已结束";
-    }
-  },
-  // 计算资源关卡开启时间
-  calcResourceOpenDay(days) {
-    if (quest.openResources) {
-      return "活动期间，“资源收集”限时全天开放";
-    } else {
-      return days.map((x) => numberToWeek(x)).join();
-    }
-  },
-});
+  }
+  // 如果不在里面
+  let week = date.getDay();
+  // 判断4点更新
+  week = date.getHours() >= 4 ? week : week - 1;
+  week = week == -1 ? 6 : week;
+  resources.value = dayInfo.map((item) => {
+    return {
+      ...item,
+      notToday: !item.day.includes(week),
+    };
+  });
+  openResources.value = false;
+};
+
+const calcActivityDiff = (endDate: string) => {
+  const diff = calcDiff(DateTime.fromSQL(endDate, {zone: "Asia/Shanghai"}).toMillis());
+  if (diff) {
+    return "剩" + diff;
+  } else {
+    return "已结束";
+  }
+};
+
+const calcResourceOpenDay = (days: number[]) => {
+  if (openResources.value) {
+    return "活动期间，“资源收集”限时全天开放";
+  } else {
+    return days.map((x) => numberToWeek(x)).join();
+  }
+};
 
 onMounted(() => {
-  quest.getData();
+  getResourceInfo();
 });
 </script>
 
