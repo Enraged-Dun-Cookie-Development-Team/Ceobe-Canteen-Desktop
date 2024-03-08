@@ -23,9 +23,7 @@ class Operate {
             }>("get_monitor_info");
 
             let size = monitorInfo.work_space;
-            let window = getAll().find((window: WebviewWindow) => window.label == "notification",) ?? null;
-            if (!window) return;
-            
+            let window = getAll().find((window: WebviewWindow) => window.label == "notification")!!;
             let winSize = await window.outerSize();
             console.log(winSize, size);
             let w = size?.width ?? 1920;
