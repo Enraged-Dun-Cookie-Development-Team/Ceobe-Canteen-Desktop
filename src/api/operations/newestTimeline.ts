@@ -31,11 +31,9 @@ class NewestTimeline {
   }
 
   async knowNeedTimeline(
-    callback: (event: string) => void,
+    callback: () => void,
   ): Promise<UnlistenFn> {
-    return await listen<string>("need-timeline", (event: Event<string>) => {
-      callback(event.payload);
-    });
+    return await listen<void>("need-timeline", callback);
   }
 
   async needTimeline() {
