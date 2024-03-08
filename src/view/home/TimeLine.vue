@@ -57,7 +57,7 @@
         </template>
         <component
           :is="component.getComponentName()"
-          :id="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
+          :id="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
           :info="cookie"
           @open-url="card.openUrlInThis"
         >
