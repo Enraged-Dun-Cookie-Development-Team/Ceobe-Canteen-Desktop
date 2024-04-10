@@ -82,7 +82,7 @@
       <v-btn
           icon="fas fa-gear"
           variant="text"
-          @click="setting.show = true"
+          @click="openSettingPage"
       ></v-btn>
       <v-btn
           icon="fas fa-minus"
@@ -111,29 +111,10 @@
   >
     <donate-page @close="donate.show = false"></donate-page>
   </v-dialog>
-
-  <v-dialog
-      v-model="setting.show"
-      persistent
-      transition="dialog-top-transition"
-      width="400"
-  >
-    <setting-page :versionState="setting.versionState" @checkUpdate="version.getNewestVersion"
-                  @close="setting.close"></setting-page>
-  </v-dialog>
-  <v-dialog
-      v-model="version.show"
-      persistent
-      transition="dialog-top-transition"
-      width="600"
-  >
-    <version-page :force="version.force" :versionInfo="version.version_info"
-                  @close="version.show = false"></version-page>
-  </v-dialog>
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue";
+import { reactive, ref} from "vue";
 import storage from "../api/operations/localStorage";
 import {
   DatasourceItem,
@@ -144,11 +125,7 @@ import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import searchWordEvent from "../api/operations/searchWordEvent";
 import operate from "../api/operations/operate";
 import DonatePage from "./DonatePage.vue";
-import SettingPage from "./SettingPage.vue";
-import VersionPage from "./VersionPage.vue";
-import {getVersion, DesktopVersion} from "@/api/resourceFetcher/version";
-import updater, {VersionStateType} from "../api/operations/updater";
-import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/api/notification";
+import { openSettingPage } from "@/api/function";
 
 const winMax = ref(false);
 
@@ -269,68 +246,6 @@ const handleWindow = reactive({
 const donate = reactive({
   show: false,
 });
-
-const setting = reactive({
-  show: false,
-  // updater setting
-  versionState: VersionStateType.Unknown,
-  close() {
-    setting.show = false;
-    setting.versionState = VersionStateType.Unknown;
-  },
-});
-
-const ErrVersionInfo: DesktopVersion = {
-  baidu: "<Missing>",
-  baidu_text: "<Missing>",
-  description: "<Missing>",
-  dmg: "<Missing>",
-  exe: "<Missing>",
-  force: false,
-  last_force_version: "<Missing>",
-  spare_dmg: "<Missing>",
-  spare_exe: "<Missing>",
-  version: "<Missing>",
-};
-
-const version = reactive<{
-  show: boolean,
-  version_info: DesktopVersion,
-  force: boolean,
-  getNewestVersion(): void
-}>({
-  show: false,
-  force: false,
-  version_info: ErrVersionInfo,
-  async getNewestVersion() {
-    try {
-      if (setting.show) {
-        setting.versionState = VersionStateType.Newest;
-      }
-      const currentVersion = await getVersion()
-      version.version_info = currentVersion.data.data
-      // version.force = await updater.judgmentVersion(version.version_info.last_force_version)
-      version.show = await updater.judgmentVersion(version.version_info.version)
-      if (version.show) {
-        setting.versionState = VersionStateType.UpdateAvailable
-      }
-    } catch (error: any) {
-      console.log("Failure loading New Version")
-      if (!await isPermissionGranted()) {
-        await requestPermission()
-      }
-      sendNotification({
-        title: "小刻出错了！",
-        icon: "/asserts/icon.png",
-        body: error.toString()
-      })
-    }
-  }
-});
-
-onMounted(() => {
-  version.getNewestVersion();
-})
 
 </script>
 
