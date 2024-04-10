@@ -16,7 +16,7 @@ use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
     get_app_config_path, get_item, get_monitor_info, hide_notification, is_debug, message_beep,
     quit, read_detail, request_refer_image, send_request, send_system_notification,
-    set_auto_launch, set_item, should_silence,
+    set_auto_launch, set_item, should_silence, open_setting_page, close_setting_page,
 };
 use crate::setup::logger::init_logger;
 use crate::setup::system_tray::new_system_tray;
@@ -30,6 +30,7 @@ fn main() {
         let builder = Builder::default()
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
+                window.center().unwrap();
                 let args = app.get_cli_matches()?.args;
                 if let Some(arg) = args.get("hidden") {
                     if arg.occurrences == 0 {
@@ -76,7 +77,9 @@ fn main() {
                 hide_notification,
                 is_debug,
                 send_system_notification,
-                should_silence
+                should_silence,
+                open_setting_page,
+                close_setting_page,
             ]);
 
         let app = builder

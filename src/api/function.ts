@@ -45,3 +45,11 @@ export async function bootStartSetting(isBoot: boolean): Promise<boolean> {
 export async function getBootStartSetting(): Promise<boolean> {
   return await invoke<boolean>("auto_launch_setting");
 }
+
+export async function openSettingPage() {
+  return await invoke<void>("open_setting_page");
+}
+
+export async function closeSettingPage() {
+  return await invoke<void>("close_setting_page");
+}
