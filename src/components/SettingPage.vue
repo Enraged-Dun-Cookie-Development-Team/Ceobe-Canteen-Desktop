@@ -1,15 +1,29 @@
 <template>
-  <div class="setting" data-tauri-drag-region>
+  <v-app class="setting">
+
+    <div >
+      <v-app-bar title="设置" id="drag" color="#e6a23c" density="compact" data-tauri-drag-region>
+
+        <template #prepend>
+          <v-icon icon="fa fa-cog"/>
+        </template>
+        <template #append>
+          <v-btn data-tauri-drag-region
+            icon="fa-solid fa-xmark"
+            variant="text"
+            @click="setting.close"
+          ></v-btn>
+        </template>
+        <template #default>
+
+        <div data-tauri-drag-region style="width: 100%;height: 100%"></div>
+        </template>
+      </v-app-bar>
+    </div>
+    <v-main>
+
     <v-card>
-      <v-toolbar id="drag" color="#e6a23c">
-        <v-toolbar-title>设置</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon="fa-solid fa-xmark"
-          variant="text"
-          @click="setting.close"
-        ></v-btn>
-      </v-toolbar>
+
       <SettingItem sub-title="每次开机就能自动蹲饼呢~" title="开机自启">
         <template v-slot:action="{ color }">
           <v-switch
@@ -25,12 +39,12 @@
           当前版本 {{ setting.currentVersion }}
         </template>
         <template v-slot:action="{ color }">
-          <v-btn :color="color" @click="setting.checkUpdate">检查更新 </v-btn>
+          <v-btn :color="color" @click="setting.checkUpdate">检查更新</v-btn>
         </template>
       </SettingItem>
       <SettingItem v-if="isDebug" title="测试弹窗">
         <template v-slot:action>
-          <v-btn @click="sen_d"> 弹窗 </v-btn>
+          <v-btn @click="sen_d"> 弹窗</v-btn>
         </template>
       </SettingItem>
       <SettingItem>
@@ -55,7 +69,8 @@
     <v-snackbar v-model="showAlreadyNewest">
       已经是最新版本，无需下载
     </v-snackbar>
-  </div>
+    </v-main>
+  </v-app>
   <v-dialog
     v-model="version.show"
     persistent
@@ -71,23 +86,16 @@
 </template>
 
 <script lang="ts" name="setting" setup>
-import { computed, onMounted, reactive, ref } from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import VersionPage from "./VersionPage.vue";
 import operate from "@/api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
-import notification, {
-  allNotifyMode,
-  NotifyMode,
-} from "@/api/operations/notification";
-import { app, invoke } from "@tauri-apps/api";
-import updater, { VersionStateType } from "@/api/operations/updater";
-import { closeSettingPage } from "@/api/function";
-import {
-  isPermissionGranted,
-  requestPermission,
-  sendNotification,
-} from "@tauri-apps/api/notification";
-import { getVersion, DesktopVersion } from "@/api/resourceFetcher/version";
+import notification, {allNotifyMode, NotifyMode,} from "@/api/operations/notification";
+import {app, invoke} from "@tauri-apps/api";
+import updater, {VersionStateType} from "@/api/operations/updater";
+import {closeSettingPage} from "@/api/function";
+import {isPermissionGranted, requestPermission, sendNotification,} from "@tauri-apps/api/notification";
+import {DesktopVersion, getVersion} from "@/api/resourceFetcher/version";
 
 const versionState = ref<VersionStateType>(VersionStateType.Unknown);
 
@@ -111,7 +119,7 @@ const sen_d = () => {
         text: "欸嘿嘿，桃金娘的脚小小的~香香的~.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       },
       icon: "/assets/icon/anime.png",
-      source: { data: "123", type: "nn" },
+      source: {data: "123", type: "nn"},
       timestamp: {
         fetcher: 114514,
         platform: 114514,
@@ -167,7 +175,8 @@ const setting = reactive<{
   },
   autoBoot: false,
   setAutoBoot() {
-    operate.bootSetting(setting.autoBoot).then(() => {});
+    operate.bootSetting(setting.autoBoot).then(() => {
+    });
   },
   initAutoBoot() {
     operate.getBootSetting().then((res) => {

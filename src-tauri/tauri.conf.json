@@ -126,7 +126,9 @@
         "title": "设置",
         "width": 720,
         "minWidth": 720,
-        "minHeight": 640
+        "minHeight": 640,
+        "fileDropEnabled": false,
+        "maximizable": false
       },
       {
         "label": "background",
