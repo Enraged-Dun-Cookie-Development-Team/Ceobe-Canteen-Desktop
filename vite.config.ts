@@ -16,7 +16,9 @@ export default defineConfig(async () => {
           }
         }
       }),
-      vuetify({ autoImport: true }),
+      vuetify({ autoImport: true
+
+      }),
       // eslintPlugin({
       // include:['src/**/*.ts','src/**/*.vue']
       // }),

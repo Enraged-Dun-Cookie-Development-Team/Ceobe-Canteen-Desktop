@@ -16,5 +16,8 @@ export default createVuetify({
       fa,
       mdi,
     },
+    theme:{
+
+    }
   },
 });
