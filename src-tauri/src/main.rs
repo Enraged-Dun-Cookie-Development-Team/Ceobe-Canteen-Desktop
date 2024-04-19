@@ -1,14 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod commands;
-mod listeners;
-mod request_client;
-mod setup;
-mod state;
-mod storage;
+use std::ffi::CString;
+
 use tauri::api::path::app_log_dir;
 use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
+use windows::core::PCSTR;
+use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR, MB_OK};
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
@@ -19,6 +17,13 @@ use crate::commands::{
 use crate::setup::logger::init_logger;
 use crate::setup::single_instance::{BeforeExit, SingleInstanceManager};
 use crate::setup::system_tray::new_system_tray;
+
+mod commands;
+mod listeners;
+mod request_client;
+mod setup;
+mod state;
+mod storage;
 
 fn main() {
     let context: Context<_> = generate_context!();
@@ -82,6 +87,25 @@ fn main() {
             .expect("Create App Failure");
         app.run(|_, _| {});
     } else {
-        println!("others start")
+        println!("others start");
+        #[cfg(target_os = "windows")]
+        {
+            let message = format! { "\"CeobeCanteen\" is already running.\n\
+             If there is indeed no running \"CeobeCanteen\", \
+             please delete the file located in [{:?}] and restart the application.",
+            SingleInstanceManager.get_lck_file(context.config())
+            };
+            let message = CString::new(message).expect("Bad String");
+            let title = CString::new("Error").expect("Bad String");
+
+            unsafe {
+                MessageBoxA(
+                    None,
+                    PCSTR::from_raw(message.as_ptr() as _),
+                    PCSTR::from_raw(title.as_ptr() as _),
+                    MB_OK | MB_ICONERROR,
+                );
+            }
+        }
     }
 }

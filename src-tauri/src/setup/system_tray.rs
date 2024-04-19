@@ -20,6 +20,10 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
                 println!("{tray_id}:{id}");
                 if id == "quit" {
                     handle.graceful_exit(0)
+                } else if id == "open" {
+                    let window = handle.get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
                 }
             }
             _ => {}

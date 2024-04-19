@@ -2,7 +2,9 @@ use crate::state::get_config_dir;
 use parking_lot::RwLock;
 use std::fs::File;
 use std::io;
-use std::io::ErrorKind;
+use std::io::{ErrorKind, Write};
+use std::path::PathBuf;
+use std::process::id;
 use tauri::{AppHandle, Config, Manager};
 use tracing::{error, info, instrument};
 
@@ -18,13 +20,22 @@ impl From<File> for FileHandle {
 pub struct SingleInstanceManager;
 
 impl SingleInstanceManager {
+    pub fn get_lck_file(&self, config: &Config) -> PathBuf {
+        let dir = get_config_dir(config);
+        dir.join(LOCK_FILE_NAME)
+    }
+
     #[instrument(name = "CheckSingleInstance", skip_all)]
     pub fn check_instance(&self, handle: &Config) -> io::Result<FileHandle> {
         let dir = get_config_dir(handle);
         let file_path = dir.join(LOCK_FILE_NAME);
+        let current_id = id();
         match File::create_new(file_path) {
             // file no exist, go
-            Ok(file) => Ok(file.into()),
+            Ok(mut file) => {
+                file.write_all(format!("{current_id}").as_bytes())?;
+                Ok(file.into())
+            }
             Err(err) => {
                 // file not exist, can be startup
                 if err.kind() == ErrorKind::AlreadyExists {
