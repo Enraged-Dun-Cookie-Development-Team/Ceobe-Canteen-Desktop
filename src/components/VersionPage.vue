@@ -69,10 +69,9 @@
 
 <script setup name="version" lang="ts">
 import { defineEmits, defineProps, onMounted, reactive, ref } from "vue";
-import operate from "../api/operations/operate";
-import { DesktopVersion } from "../api/resourceFetcher/version";
+import operate from "@/api/operations/operate";
+import { DesktopVersion } from "@/api/resourceFetcher/version";
 import { app } from "@tauri-apps/api";
-import { forEachChild } from "../../node_modules/typescript/lib/typescript";
 
 const props = defineProps<{
   versionInfo: DesktopVersion;

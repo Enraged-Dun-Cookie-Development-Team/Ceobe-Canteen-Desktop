@@ -148,28 +148,28 @@ import SettingPage from "./SettingPage.vue";
 import VersionPage from "./VersionPage.vue";
 import {getVersion, DesktopVersion} from "@/api/resourceFetcher/version";
 import updater, {VersionStateType} from "../api/operations/updater";
-import {notification} from "@tauri-apps/api";
+import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/api/notification";
 
 const winMax = ref(false);
 
-interface ViewDataSourceItem extends DatasourceItem {
+interface ViewDatasourceItem extends DatasourceItem {
   check: boolean;
 }
 
 const menuShow = reactive<{
   notOpened: boolean;
   show: boolean;
-  datasourceList: ViewDataSourceItem[];
-  changeSelectSource: (DatasourceItem) => void;
-  changeDatasourceOpen: (boolean) => void;
+  datasourceList: ViewDatasourceItem[];
+  changeSelectSource: (data: ViewDatasourceItem) => void;
+  changeDatasourceOpen: (value: boolean) => void;
 }>({
   notOpened: true, // 没有打开过
   show: false,
   datasourceList: [],
-  changeSelectSource(data) {
+  changeSelectSource(data: ViewDatasourceItem) {
     data.check = !data.check;
   },
-  async changeDatasourceOpen(value) {
+  async changeDatasourceOpen(value: boolean) {
     if (value) {
       if (menuShow.notOpened) {
         menuShow.notOpened = false;
@@ -181,9 +181,11 @@ const menuShow = reactive<{
       getConfigDatasourceList().then((data) => {
         if (data.status == 200) {
           menuShow.datasourceList = data.data.data.map(
-              (data: ViewDataSourceItem) => {
-                data.check = false;
-                return data;
+              (data: DatasourceItem) => {
+                return {
+                  ...data,
+                  check: false,
+                }
               },
           );
           if (datasourceConfig) {
@@ -271,21 +273,35 @@ const donate = reactive({
 const setting = reactive({
   show: false,
   // updater setting
-  versionState: "Unknown",
+  versionState: VersionStateType.Unknown,
   close() {
     setting.show = false;
-    setting.versionState = "Unknown";
+    setting.versionState = VersionStateType.Unknown;
   },
 });
 
+const ErrVersionInfo: DesktopVersion = {
+  baidu: "<Missing>",
+  baidu_text: "<Missing>",
+  description: "<Missing>",
+  dmg: "<Missing>",
+  exe: "<Missing>",
+  force: false,
+  last_force_version: "<Missing>",
+  spare_dmg: "<Missing>",
+  spare_exe: "<Missing>",
+  version: "<Missing>",
+};
+
 const version = reactive<{
   show: boolean,
-  version_info?: DesktopVersion,
+  version_info: DesktopVersion,
   force: boolean,
   getNewestVersion(): void
 }>({
   show: false,
   force: false,
+  version_info: ErrVersionInfo,
   async getNewestVersion() {
     try {
       if (setting.show) {
@@ -300,10 +316,10 @@ const version = reactive<{
       }
     } catch (error: any) {
       console.log("Failure loading New Version")
-      if (!await notification.isPermissionGranted()) {
-        await notification.requestPermission()
+      if (!await isPermissionGranted()) {
+        await requestPermission()
       }
-      notification.sendNotification({
+      sendNotification({
         title: "小刻出错了！",
         icon: "/asserts/icon.png",
         body: error.toString()
@@ -315,6 +331,7 @@ const version = reactive<{
 onMounted(() => {
   version.getNewestVersion();
 })
+
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

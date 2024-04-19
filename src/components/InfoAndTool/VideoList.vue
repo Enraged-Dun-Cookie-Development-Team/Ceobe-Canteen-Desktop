@@ -31,8 +31,7 @@
 
 <script setup name="video" lang="ts">
 import { onMounted, reactive } from "vue";
-import { getVideoList, VideoItem } from "../../api/resourceFetcher/videoList";
-import { changeToCCT } from "../../utils/timeUtil";
+import { getVideoList, VideoItem } from "@/api/resourceFetcher/videoList";
 import operate from "../../api/operations/operate";
 import {DateTime} from "luxon";
 
@@ -52,7 +51,7 @@ const videoInfo = reactive<{
     });
   },
 });
-function openUrl(url) {
+const openUrl = (url: string) => {
   operate.openUrlInBrowser(url);
 }
 

@@ -11,7 +11,7 @@ class NotificationOperate {
     }
 
     async closeWindow() {
-        let window: WebviewWindow | null = getAll().find((window: WebviewWindow) => window.label == "main")
+        let window: WebviewWindow | null = getAll().find((window: WebviewWindow) => window.label == "main") ?? null;
         if (window) {
             if (await window.isMinimized()) {
                 await window.unminimize()

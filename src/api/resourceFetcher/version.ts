@@ -1,4 +1,4 @@
-import requestClient, { Payload, Response } from "../../utils/requestUtil";
+import requestClient, { Payload, Response } from "@/utils/requestUtil";
 export interface DesktopVersion {
   /**
    * 百度云下载路径

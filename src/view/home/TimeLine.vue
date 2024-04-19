@@ -1,5 +1,5 @@
 <template>
-  <div class="time-line">
+  <div class="time-line" :ref="setTimeLineRef">
     <div class="fix-btn">
       <v-btn
         :class="
@@ -46,10 +46,10 @@
     >
       <v-timeline-item
         v-for="cookie in timeline.timelineData"
-        :key="cookie.item.id"
+        :key="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
         :left="true"
         dot-color="#fff"
-        fill-dot="fill-dot"
+        :fill-dot="true"
         size="50"
       >
         <template #icon>
@@ -57,7 +57,7 @@
         </template>
         <component
           :is="component.getComponentName()"
-          :id="cookie.source.type+':'+cookie.source.data+':'+cookie.item.id"
+          :id="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
           :info="cookie"
           @open-url="card.openUrlInThis"
         >
@@ -76,7 +76,7 @@
                   </div>
                   <div class="font-weight-light subtitle">
                     {{
-                      new Date(info.info.timestamp.platform).toLocaleString()
+                      new Date(info.info.timestamp.platform ?? 0).toLocaleString()
                     }}
                   </div>
                 </div>
@@ -136,23 +136,27 @@
 </template>
 
 <script lang="ts" name="timeLine" setup>
-import { nextTick, onMounted, reactive, getCurrentInstance } from "vue";
+import { nextTick, onMounted, reactive, ref, VNodeRef } from "vue";
 import { useRouter } from "vue-router";
 import * as htmlToImage from "html-to-image";
-import newestTimeline, { Timeline } from "../../api/operations/newestTimeline";
-import searchWordEvent from "../../api/operations/searchWordEvent";
+import newestTimeline, { Timeline } from "@/api/operations/newestTimeline";
+import searchWordEvent from "@/api/operations/searchWordEvent";
 import { getCookieSearchList } from "@/api/resourceFetcher/searchCookie";
-import operate from "../../api/operations/operate";
+import operate from "@/api/operations/operate";
 import { getImage } from "@/utils/imageUtil";
 import { getCookieList } from "@/api/resourceFetcher/cookieList";
-import Common from "../../components/Card/Common.vue";
+import Common from "@/components/Card/Common.vue";
 import { previewUrl } from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
 import { type, OsType } from "@tauri-apps/api/os"
 
-const instance = getCurrentInstance();
-
 const router = useRouter();
+
+const timeLineRef = ref<HTMLElement | null>(null);
+
+const setTimeLineRef = (ref: any) => {
+  timeLineRef.value = ref;
+};
 
 // 卡片数据
 const timeline = reactive<Timeline>({
@@ -170,11 +174,19 @@ const timeline = reactive<Timeline>({
   searchStatus: false,
 });
 
+const _backTopTimeLine = () => {
+  if (timeLineRef.value) {
+    timeLineRef.value.scrollTop = 0;
+  }
+};
+
 async function getData() {
+  console.log("await newestTimeline.getTimeline");
   await newestTimeline.getTimeline((_, arg) => {
     logger.debug("TimeLine.vue",{cookie:arg})
     console.log(arg);
     if (arg == null) {
+      console.warn("no data")
       return;
     }
     if (timeline.searchStatus) {
@@ -188,14 +200,13 @@ async function getData() {
       timeline.combId = arg.comb_id;
       timeline.updateCookieId = arg.update_cookie_id;
       timeline.nextPageId = arg.next_page_id ?? null;
-      document.querySelector(".time-line").scrollTop = 0;
+      _backTopTimeLine();
     } else {
       timeline.refreshTimelineData = arg.cookies;
       timeline.refreshCombId = arg.comb_id;
       timeline.refreshUpdateCookieId = arg.update_cookie_id;
       timeline.refreshNextPageId = arg.next_page_id ?? null;
     }
-    instance.proxy.$forceUpdate();
   });
 }
 
@@ -213,12 +224,11 @@ function refreshTimeline() {
   timeline.refreshUpdateCookieId = null;
   timeline.nextPageId = timeline.refreshNextPageId;
   timeline.refreshNextPageId = null;
-  instance.proxy.$forceUpdate();
-  document.querySelector(".time-line").scrollTop = 0;
+  _backTopTimeLine();
 }
 
 function searchTimeline() {
-  searchWordEvent.getSearchWord<string>((_, searchWord) => {
+  searchWordEvent.getSearchWord((_, searchWord) => {
     timeline.searchWord = searchWord;
     if (searchWord !== "" && searchWord !== null) {
       // 先确保数据更新到显示
@@ -231,18 +241,16 @@ function searchTimeline() {
         timeline.timelineData = null;
         timeline.nextPageId = null;
         timeline.searchStatus = true;
-        instance.proxy.$forceUpdate();
-        document.querySelector(".time-line").scrollTop = 0;
+        _backTopTimeLine();
       }
       getCookieSearchList({
-        datasource_comb_id: timeline.combId.toString(),
+        datasource_comb_id: timeline.combId?.toString() ?? "",
         search_word: searchWord,
       }).then((data) => {
         if (data.status == 200) {
           let respData = data.data.data;
           timeline.timelineData = respData.cookies;
           timeline.nextPageId = respData.next_page_id ?? null;
-          instance.proxy.$forceUpdate();
         }
       });
     } else {
@@ -252,8 +260,7 @@ function searchTimeline() {
         timeline.searchStatus = false;
         timeline.timelineData = timeline.tempTimelineData?.slice(0) ?? null;
         timeline.nextPageId = timeline.tempNextPageId;
-        instance.proxy.$forceUpdate();
-        document.querySelector(".time-line").scrollTop = 0;
+        _backTopTimeLine();
       }
     }
   });
@@ -263,7 +270,7 @@ function searchTimeline() {
 const card = reactive({
   osType: "",
   isCopyImage: false, // 当前是否在截图
-  copyImageId: null,
+  copyImageId: "",
   openUrlInThis(data: { url: string; icon: string; source: string }) {
     previewUrl(data.url, data.source);
     router.push({
@@ -271,19 +278,23 @@ const card = reactive({
       query: data,
     });
   },
-  copyImage(id) {
+  copyImage(id: string) {
     card.copyImageId = id;
     card.isCopyImage = true;
     setTimeout(() => {
       nextTick(async () => {
         // 包的问题，非windows多截图一次，详见：https://github.com/bubkoo/html-to-image/issues/147
+        let elem = document.getElementById(id);
+          if (!elem) {
+            return;
+          }
         if (card.osType !=  "Windows_NT") {
           await htmlToImage
-            .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
+            .toJpeg(elem, { quality: 0.95, pixelRatio: 3 })
         }
 
         htmlToImage
-          .toJpeg(document.getElementById(id), { quality: 0.95, pixelRatio: 3 })
+          .toJpeg(elem, { quality: 0.95, pixelRatio: 3 })
           .then(function (dataUrl) {
             card.isCopyImage = false;
             operate.copy({ type: "img", data: dataUrl });
@@ -291,11 +302,11 @@ const card = reactive({
       });
     }, 500);
   },
-  copy(url) {
+  copy(url: string) {
     // show.value = true;
     operate.copy({ type: "text", data: url });
   },
-  openUrlInBrowser(url) {
+  openUrlInBrowser(url: string) {
     operate.openUrlInBrowser(url);
   },
 });
@@ -304,7 +315,7 @@ const card = reactive({
 const scroll = reactive({
   scrollShow: false,
 
-  bindHandleScroll(e) {
+  bindHandleScroll(e: any) { // FIXME：看不出来是什么类型，先any
     if (document.querySelector(".time-line") !== e.target) {
       return;
     }
@@ -323,6 +334,9 @@ const scroll = reactive({
       ) < 5
     ) {
       if (!timeline.nextPageId) {
+        return;
+      }
+      if (!timeline.combId || !timeline.searchWord) {
         return;
       }
       if (timeline.searchStatus) {
@@ -355,10 +369,18 @@ const scroll = reactive({
     }
   },
   scrollToTop() {
-    let top = document.querySelector(".time-line").scrollTop;
+    let elem = document.querySelector(".time-line");
+    if (!elem) {
+      return;
+    }
+    let top = elem.scrollTop;
     let changeTop = top / 10;
     const timeTop = setInterval(() => {
-      document.querySelector(".time-line").scrollTop = top -= changeTop;
+      if (!elem) {
+        clearInterval(timeTop);
+        return;
+      }
+      elem.scrollTop = top -= changeTop;
       if (top <= 0) {
         clearInterval(timeTop);
       }
@@ -367,9 +389,9 @@ const scroll = reactive({
 });
 
 // 简单的节流函数
-const throttle = (fn, t) => {
-  let last;
-  let timer;
+const throttle = (fn: Function, t: number) => {
+  let last: number;
+  let timer: NodeJS.Timeout;
   let interval = t || 500;
   return function () {
     let args = arguments;
@@ -378,11 +400,11 @@ const throttle = (fn, t) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
         last = now;
-        fn.apply(this, args);
+        fn.apply(fn, args);
       }, interval);
     } else {
       last = now;
-      fn.apply(this, args);
+      fn.apply(fn, args);
     }
   };
 };
@@ -396,6 +418,7 @@ onMounted(() => {
   getData();
   // 如果没有数据，让后台发一份过来
   if (!timeline.timelineData) {
+    console.warn("no data, needTimeline")
     newestTimeline.needTimeline();
   }
   window.addEventListener(
