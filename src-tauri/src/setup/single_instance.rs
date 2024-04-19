@@ -3,11 +3,10 @@ use parking_lot::RwLock;
 use std::fs::File;
 use std::io;
 use std::io::ErrorKind;
-use tauri::{App, AppHandle, Config, Manager};
+use tauri::{AppHandle, Config, Manager};
 use tracing::{error, info, instrument};
-use tracing_subscriber::reload::Handle;
 
-const LOCK_FILE_NAME: &'static str = "ceobe-desktop.lck";
+const LOCK_FILE_NAME: &str = "ceobe-desktop.lck";
 pub struct FileHandle(RwLock<Option<File>>);
 
 impl From<File> for FileHandle {

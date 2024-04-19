@@ -41,7 +41,7 @@ pub static CONFIG_DIR: OnceCell<PathBuf> = OnceCell::new();
 #[instrument(skip_all)]
 pub fn get_config_dir(config: &Config) -> &'static PathBuf {
     CONFIG_DIR.get_or_init(move || {
-        let path = app_config_dir(&config).expect("Platform not support");
+        let path = app_config_dir(config).expect("Platform not support");
         create_dir_all(&path).expect("Cannot Create Config Dir");
         info!(firstInit = "CONFIG_DIR", path = ?path);
         path

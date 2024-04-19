@@ -28,6 +28,7 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
         .build(app)
 }
 
+#[allow(clippy::let_and_return)]
 pub fn create_system_tray_menu() -> SystemTrayMenu {
     let menu = SystemTrayMenu::new()
         //.add_submenu(SystemTraySubmenu::new("检测更新", SystemTrayMenu::new()))
