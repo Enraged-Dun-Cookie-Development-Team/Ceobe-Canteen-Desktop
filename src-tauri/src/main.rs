@@ -5,10 +5,8 @@ mod commands;
 mod listeners;
 mod request_client;
 mod setup;
-mod single_instance;
 mod state;
 mod storage;
-use std::thread::spawn;
 use tauri::api::path::app_log_dir;
 use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 
@@ -19,15 +17,16 @@ use crate::commands::{
     set_auto_launch, set_item, should_silence,
 };
 use crate::setup::logger::init_logger;
+use crate::setup::single_instance::{BeforeExit, SingleInstanceManager};
 use crate::setup::system_tray::new_system_tray;
-use crate::single_instance::{run_sev, try_start};
 
 fn main() {
     let context: Context<_> = generate_context!();
     let log_dir = app_log_dir(context.config()).expect("Log Dir Not available");
     init_logger(log_dir).expect("Init Log File failure");
-    if let Ok(true) | Err(_) = try_start() {
+    if let Ok(fd) = SingleInstanceManager.check_instance(context.config()) {
         let builder = Builder::default()
+            .manage(fd)
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 let args = app.get_cli_matches()?.args;
@@ -36,12 +35,11 @@ fn main() {
                         window.show()?;
                     }
                 }
-                // single instance
-                spawn({
-                    let main_window = window.clone();
-                    move || run_sev(main_window)
-                });
-
+                ctrlc_async::set_handler({
+                    let local_app = app.handle().clone();
+                    move || local_app.graceful_exit(0)
+                })
+                .expect("Set Exit Handler Error");
                 new_system_tray(app)?;
 
                 window.clone().on_window_event(move |event| {

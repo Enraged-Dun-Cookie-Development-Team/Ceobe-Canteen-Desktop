@@ -45,6 +45,7 @@ task-local-extensions = "0.1"
 chrono = "0.4"
 reqwest-retry = "0.2"
 serde_repr = "0.1.16"
+ctrlc-async = { version = "3", features = ["termination"] }
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.39"
 features = [

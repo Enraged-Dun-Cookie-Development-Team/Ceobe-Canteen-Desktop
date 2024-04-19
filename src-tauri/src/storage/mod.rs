@@ -21,7 +21,7 @@ impl LocalStorage {
     #[instrument(name = "LocalStorage", skip_all)]
     pub fn get_this(app: AppHandle) -> &'static LocalStorage {
         STORAGE.get_or_init(move || {
-            let path = get_config_dir(app).join(DB_NAME);
+            let path = get_config_dir(&app.config()).join(DB_NAME);
             info!(firstInit="Storage",path = ?path);
             let db = PickleDb::load(&path, AutoDump, Bin)
                 .unwrap_or_else(|_| PickleDb::new(&path, AutoDump, Bin));

@@ -3,7 +3,7 @@ use std::fs::create_dir_all;
 use std::path::PathBuf;
 use std::{env, io};
 use tauri::api::path::{app_cache_dir, app_config_dir};
-use tauri::AppHandle;
+use tauri::{AppHandle, Config};
 use tracing::{info, instrument};
 
 pub static APP_NAME: OnceCell<String> = OnceCell::new();
@@ -39,9 +39,9 @@ pub fn get_current_exe() -> io::Result<&'static PathBuf> {
 pub static CONFIG_DIR: OnceCell<PathBuf> = OnceCell::new();
 
 #[instrument(skip_all)]
-pub fn get_config_dir(app: AppHandle) -> &'static PathBuf {
+pub fn get_config_dir(config: &Config) -> &'static PathBuf {
     CONFIG_DIR.get_or_init(move || {
-        let path = app_config_dir(&app.config()).expect("Platform not support");
+        let path = app_config_dir(&config).expect("Platform not support");
         create_dir_all(&path).expect("Cannot Create Config Dir");
         info!(firstInit = "CONFIG_DIR", path = ?path);
         path
