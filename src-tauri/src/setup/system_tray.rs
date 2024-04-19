@@ -1,3 +1,4 @@
+use crate::setup::single_instance::BeforeExit;
 use tauri::{
     App, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayHandle, SystemTrayMenu,
 };
@@ -18,7 +19,11 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
             SystemTrayEvent::MenuItemClick { tray_id, id, .. } => {
                 println!("{tray_id}:{id}");
                 if id == "quit" {
-                    handle.exit(0)
+                    handle.graceful_exit(0)
+                } else if id == "open" {
+                    let window = handle.get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
                 }
             }
             _ => {}
@@ -27,9 +32,14 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
         .build(app)
 }
 
+#[allow(clippy::let_and_return)]
 pub fn create_system_tray_menu() -> SystemTrayMenu {
-    SystemTrayMenu::new()
+    let menu = SystemTrayMenu::new()
         //.add_submenu(SystemTraySubmenu::new("检测更新", SystemTrayMenu::new()))
         //.add_item(CustomMenuItem::new("check-update", "检查更新"))
-        .add_item(CustomMenuItem::new("quit", "退出小刻食堂"))
+        .add_item(CustomMenuItem::new("quit", "退出小刻食堂"));
+
+    #[cfg(not(target_os = "windows"))]
+    let menu = menu.add_item(CustomMenuItem::new("open", "打开首页"));
+    menu
 }
