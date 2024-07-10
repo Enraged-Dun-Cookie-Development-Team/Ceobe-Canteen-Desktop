@@ -19,10 +19,14 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
                 println!("{tray_id}:{id}");
                 match id.as_str() {
                     "quit" => handle.exit(0),
-                    "open" => {
+                    "display-switch" => {
                         let window = handle.get_window("main").unwrap();
-                        window.show().unwrap();
-                        window.set_focus().unwrap();
+                        if window.is_visible().unwrap() {
+                            window.hide().unwrap();
+                        } else {
+                            window.show().unwrap();
+                            window.set_focus().unwrap();
+                        }
                     },
                     _ => {}
                 }
@@ -37,6 +41,6 @@ pub fn create_system_tray_menu() -> SystemTrayMenu {
     SystemTrayMenu::new()
         //.add_submenu(SystemTraySubmenu::new("检测更新", SystemTrayMenu::new()))
         //.add_item(CustomMenuItem::new("check-update", "检查更新"))
-        .add_item(CustomMenuItem::new("open", "打开主窗口"))
+        .add_item(CustomMenuItem::new("display-switch", "显隐主窗口"))
         .add_item(CustomMenuItem::new("quit", "退出"))
 }
