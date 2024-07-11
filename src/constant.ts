@@ -1,3 +1,10 @@
+interface ToolInfo {
+  url: string,
+  name: string,
+  img: string,
+  radius: boolean
+}
+
 const toolInfo = [
   {
     url: "http://prts.wiki/",
@@ -54,7 +61,15 @@ const toolInfo = [
     radius: false,
   },
 ];
-const sourceInfo = [
+
+interface SourceInfo {
+  url: string,
+  name: string,
+  img: string,
+  radius?: boolean
+}
+
+const sourceInfo: SourceInfo[] = [
   {
     url: "https://ak.hypergryph.com/#information",
     name: "官网",
@@ -130,7 +145,15 @@ const sourceInfo = [
     radius: true,
   },
 ];
-const dayInfo = [
+
+interface DayInfo {
+  type: number;
+  name: string;
+  day: number[];
+  src: string;
+}
+
+const dayInfo: DayInfo[] = [
   {
     type: 1,
     name: "高级作战记录",
@@ -188,3 +211,4 @@ const dayInfo = [
 ];
 
 export { toolInfo, sourceInfo, dayInfo };
+export type { ToolInfo, SourceInfo, DayInfo };

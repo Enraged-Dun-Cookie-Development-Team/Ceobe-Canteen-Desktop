@@ -1,4 +1,4 @@
-import requestClient, { Payload, Response } from "../../utils/requestUtil";
+import requestClient, { Payload, Response } from "@/utils/requestUtil";
 
 export interface CookieList {
   cookies: Cookie[];
@@ -24,12 +24,17 @@ export interface Cookie {
   /**
    * 这个下面有些平台自己的字段，写的时候再对接吧
    */
-  item?: Record<string, any>;
+  item: CookieItemBase & { [props: string]: any };
   /**
    * 数据源信息
    */
   source: Source;
   timestamp: Timestamp;
+}
+
+export interface CookieItemBase {
+  id: string;
+  url: string;
 }
 
 /**

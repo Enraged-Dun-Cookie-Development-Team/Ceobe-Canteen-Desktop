@@ -1,4 +1,4 @@
-import requestClient, { Response } from "../../utils/requestUtil";
+import requestClient, { Response } from "@/utils/requestUtil";
 
 export interface NewestCookies {
   /**

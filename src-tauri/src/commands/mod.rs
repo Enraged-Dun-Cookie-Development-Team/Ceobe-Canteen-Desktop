@@ -10,9 +10,9 @@ mod quit;
 mod request_client;
 mod request_refer_image;
 mod resource_location;
+mod should_silence;
 mod system_notification;
 mod update_available;
-mod should_silence;
 
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
 pub use clipboard::copy_image;
@@ -26,5 +26,5 @@ pub use quit::quit;
 pub use request_client::send_request;
 pub use request_refer_image::request_refer_image;
 pub use resource_location::{get_app_cache_path, get_app_config_path};
-pub use system_notification::send_system_notification;
 pub use should_silence::should_silence;
+pub use system_notification::send_system_notification;

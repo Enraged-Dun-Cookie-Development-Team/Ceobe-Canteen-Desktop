@@ -2,7 +2,7 @@
   <div class="announcement mt-2">
     <v-card>
       <v-carousel
-        v-model="announcementInfo.index"
+        v-model="announcementIndex"
         cycle
         interval="3000"
         :show-arrows="false"
@@ -11,7 +11,7 @@
         hide-delimiter-background
         delimiter-icon="mdi: mdi-square"
       >
-        <v-carousel-item v-for="(item, i) in announcementInfo.data" :key="i">
+        <v-carousel-item v-for="(item, i) in announcementData" :key="i">
           <div v-html="item.html"></div>
         </v-carousel-item>
       </v-carousel>
@@ -20,29 +20,27 @@
 </template>
 
 <script setup name="announcement" lang="ts">
-import { onMounted, reactive } from "vue";
-import ceobeRequest from "../../api/operations/ceobeRequest";
-import { changeToCCT } from "../../utils/timeUtil";
+import { onMounted, ref } from "vue";
+import ceobeRequest from "@/api/operations/ceobeRequest";
+import type { Announcement } from "@/api/resourceFetcher/announcement";
 import {DateTime} from "luxon";
 
-const announcementInfo = reactive({
-  data: [],
-  index: 0,
-  getData() {
-    ceobeRequest.getAnnouncementInfo().then((res) => {
-      if (res.status == 200) {
-        announcementInfo.data = res.data.data.filter(
-          (x) =>
-            DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
-            DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
-        );
-      }
-    });
-  },
-});
+const announcementData = ref<Announcement[]>([]);
+const announcementIndex = ref(0);
+const getAnnouncementData = () => {
+  ceobeRequest.getAnnouncementInfo().then((res) => {
+    if (res.status == 200) {
+      announcementData.value = res.data.data.filter(
+        (x) =>
+          DateTime.fromSQL(x.start_time, {zone: "Asia/Shanghai"}) <= DateTime.local() &&
+          DateTime.fromSQL(x.over_time, {zone: "Asia/Shanghai"}) >= DateTime.local(),
+      );
+    }
+  });
+};
 
 onMounted(() => {
-  announcementInfo.getData();
+  getAnnouncementData();
 });
 </script>
 

@@ -102,7 +102,7 @@ export interface RequestOptions {
 class RequestClient {
   constructor() { }
 
-  async requestPayload<T>(options: RequestOptions): Response<Payload<T>> {
+  async requestPayload<T>(options: RequestOptions): Promise<Response<Payload<T>>> {
     let response: Response<Payload<T>> = await this.request<Payload<T>>(options);
     if (response.data.code != "00000") {
       throw new Error(`${response.data.code}:${response.data.message} | ${response.data.msg}`)
@@ -110,7 +110,7 @@ class RequestClient {
       return response
     }
   }
-  async request<T>(options: RequestOptions): Response<T> {
+  async request<T>(options: RequestOptions): Promise<Response<T>> {
     let base;
 
     if (options.requestTarget === "Server") {
@@ -139,18 +139,22 @@ class RequestClient {
         // 处理http错误，抛到业务代码
         msg = showStatus(status);
         if (typeof response.data === "string") {
-          response.data = { msg };
+          response.data = msg as T;
         } else {
-          response.data.msg = msg;
+          response.data = {
+            ...response.data,
+            msg
+          };
         }
         return response;
       } else if (status == 200) {
         return response;
       } else if (status == 500) {
         msg = showStatus(status);
-        response.data = { msg: msg };
+        response.data = { msg: msg } as T;
         return response;
       }
+      throw new Error(`未知错误，状态码：${status}`);
     } catch (err: any) {
       console.error(err);
       err.message = "请求超时或服务器异常，请检查网络或联系管理员！";
