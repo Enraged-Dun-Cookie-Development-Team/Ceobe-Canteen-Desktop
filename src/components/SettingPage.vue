@@ -27,10 +27,31 @@
           当前版本 {{ setting.currentVersion }}
         </template>
         <template v-slot:action="{color}">
-          <v-btn :color="color" @click="setting.checkUpdate"
-          >检查更新
+          <v-btn 
+            :color="color" 
+            @click="setting.checkUpdate"
+          >
+          检查更新
           </v-btn
           >
+        </template>
+      </SettingItem>
+      <SettingItem title="缓存">
+        <template v-slot:sub-title>
+          当前缓存: {{ setting.cacheSize }}
+        </template>
+        <template v-slot:action="{color}">
+          <v-btn 
+            v-bind="props"
+            :color="color" 
+            @click="operate.clearCacheDir"
+          >
+          立即清理
+          <v-tooltip
+            activator="parent"
+            location="top"
+          >超过 3 天的缓存将被清除</v-tooltip>
+          </v-btn>
         </template>
       </SettingItem>
       <SettingItem v-if="!isDebug"
@@ -79,7 +100,7 @@ const emits = defineEmits<{
   (e: "checkUpdate"): void
 }>()
 
-
+let toggle = null;
 
 const props = withDefaults(defineProps<{
   versionState: VersionStateType
@@ -97,6 +118,10 @@ const sen_d = () => {
       ()=>{
 
   operate.openNotificationWindow({
+    item: {
+      "id": "114514",
+      "url": "https://www.bilibili.com",
+    },
     datasource: 'kkwd',
     default_cookie: {
       images: [{compress_url: null, origin_url: 'https://i0.hdslb.com/bfs/new_dyn/2956e376fb056cf79cc95bcf585dbbc0161775300.jpg'}],
@@ -127,6 +152,9 @@ const setting = reactive<{
   //version
   currentVersion: string,
   getAppVersion: () => void
+  // cache
+  cacheSize: string,
+  getCacheSize: () => void
 }>({
   currentVersion: "",
   getAppVersion: () => {
@@ -160,12 +188,21 @@ const setting = reactive<{
   checkUpdate(): void {
     emits("checkUpdate");
   },
+
+  cacheSize: "Unknown",
+  getCacheSize() {
+    operate.getCacheDirSize().then((res) => {
+      setting.cacheSize = res;
+    });
+  }
+  
 });
 
 onMounted(async () => {
   setting.initAutoBoot();
   setting.initNotifyMode();
   setting.getAppVersion();
+  setting.getCacheSize();
 });
 </script>
 

@@ -87,6 +87,16 @@ class Operate {
     async hideNotifyIcon() {
         await invoke("hide_notification")
     }
+
+    async getCacheDirSize() {
+        // return await invoke<string>("get_cache_dir_size")
+        return "0KB"
+    }
+
+    async clearCacheDir() {
+        // await invoke("clear_cache_dir")
+        console.log("clear cache")
+    }
 }
 
 const operate = new Operate();
