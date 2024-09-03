@@ -43,8 +43,8 @@ impl FileSize {
     pub fn new(bytes_size: u64) -> Self {
         let level: [u64; 5] = {
             let mut arr = [0; 5];
-            for i in 0..5 {
-                arr[i] = bytes_size >> (i * 10);
+            for (i, item) in arr.iter_mut().enumerate() {
+                *item = bytes_size >> (i * 10);
             }
             arr.reverse();
             arr
@@ -109,7 +109,7 @@ pub async fn clear_cache_dir(app: AppHandle) -> Result<ClearStatus, Error> {
     let now = SystemTime::now();
     let mut count = 0;
 
-    for entry in fs::read_dir(&cache_dir)? {
+    for entry in fs::read_dir(cache_dir)? {
         let entry = entry?;
         let metadata = entry.metadata()?;
         let modified = metadata.modified().unwrap();
