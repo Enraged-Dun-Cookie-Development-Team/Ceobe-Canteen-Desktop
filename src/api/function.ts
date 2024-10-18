@@ -1,6 +1,6 @@
-import { readTextFile } from "@tauri-apps/api/fs";
-import { open } from "@tauri-apps/api/shell";
-import { writeText } from "@tauri-apps/api/clipboard";
+import { readTextFile } from "@tauri-apps/plugin-fs";
+import { open } from "@tauri-apps/plugin-shell";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { invoke } from "@tauri-apps/api";
 
 // 获取文件

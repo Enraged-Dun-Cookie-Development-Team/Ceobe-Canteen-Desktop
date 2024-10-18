@@ -148,7 +148,7 @@ import SettingPage from "./SettingPage.vue";
 import VersionPage from "./VersionPage.vue";
 import {getVersion, DesktopVersion} from "@/api/resourceFetcher/version";
 import updater, {VersionStateType} from "../api/operations/updater";
-import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/api/notification";
+import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/plugin-notification";
 
 const winMax = ref(false);
 

@@ -1,5 +1,5 @@
 import {invoke} from "@tauri-apps/api";
-import {open} from "@tauri-apps/api/shell";
+import {open} from "@tauri-apps/plugin-shell";
 
 class LocationFetch{
     async configDir():Promise<string>{

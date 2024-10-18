@@ -2,11 +2,12 @@ import {
     bootStartSetting, copyInfo, getBootStartSetting, openUrlInUserBrowser,
 } from "../function";
 import {
-    appWindow, getAll, PhysicalPosition, PhysicalSize, WebviewWindow,
-} from "@tauri-apps/api/window";
+    getCurrentWebviewWindow, getAll, PhysicalPosition, PhysicalSize, WebviewWindow,
+} from "@tauri-apps/api/webviewWindow";
 import {Cookie} from "../resourceFetcher/cookieList";
 import {invoke} from "@tauri-apps/api";
 import notification from "./notification";
+const appWindow = getCurrentWebviewWindow()
 
 class Operate {
     async openNotificationWindow(cookie: Cookie) {

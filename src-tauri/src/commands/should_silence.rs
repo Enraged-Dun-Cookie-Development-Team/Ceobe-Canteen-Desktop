@@ -18,7 +18,7 @@ pub fn should_silence() -> tauri::Result<bool> {
         let shell = unsafe { GetShellWindow() };
         let desktop = unsafe { GetDesktopWindow() };
         let hwnd = unsafe { GetForegroundWindow() };
-        if hwnd.0 == 0 || (hwnd == shell || hwnd == desktop) {
+        if hwnd.0 as usize == 0 || (hwnd == shell || hwnd == desktop) {
             Ok(false)
         } else {
             let mut rect = RECT::default();

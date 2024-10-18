@@ -1,5 +1,6 @@
-import {http} from "@tauri-apps/api";
-import {ResponseType} from "@tauri-apps/api/http";
+import {} from "@tauri-apps/api";
+import {ResponseType} from "@tauri-apps/plugin-http";
+import * as http from "@tauri-apps/plugin-http"
 
 class WebView extends HTMLIFrameElement {
 

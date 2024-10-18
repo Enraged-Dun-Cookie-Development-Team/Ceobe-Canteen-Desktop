@@ -31,7 +31,8 @@ import notification from "../api/operations/notification";
 import {Cookie} from "@/api/resourceFetcher/cookieList";
 import {UnlistenFn} from "@tauri-apps/api/event";
 import operate from "@/api/operations/operate";
-import {appWindow} from "@tauri-apps/api/window";
+import {getCurrentWebviewWindow} from "@tauri-apps/api/webviewWindow";
+const appWindow = getCurrentWebviewWindow()
 
 const info = ref({
   setImg: false,

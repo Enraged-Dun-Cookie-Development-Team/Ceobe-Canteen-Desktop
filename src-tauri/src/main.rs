@@ -9,8 +9,6 @@ mod single_instance;
 mod state;
 mod storage;
 use std::thread::spawn;
-use tauri::api::path::app_log_dir;
-use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
@@ -21,16 +19,25 @@ use crate::commands::{
 use crate::setup::logger::init_logger;
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
+use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
+use tauri_plugin_cli::Cli;
 
 fn main() {
-    let context: Context<_> = generate_context!();
-    let log_dir = app_log_dir(context.config()).expect("Log Dir Not available");
-    init_logger(log_dir).expect("Init Log File failure");
+    // let context: Context<_> = generate_context!();
+    // TODO: shift to plugin
+    // let context
+    // let log_dir = context().log_dir().expect("Log Dir Not available");
+    // init_logger(log_dir).expect("Init Log File failure");
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
+            .plugin(tauri_plugin_cli::init())
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
-                let args = app.get_cli_matches()?.args;
+                fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
+                    app.state::<Cli<_>>().inner()
+                }
+                let cli = get_cli(app);
+                let args = cli.matches()?.args;
                 if let Some(arg) = args.get("hidden") {
                     if arg.occurrences == 0 {
                         window.show()?;
@@ -51,7 +58,7 @@ fn main() {
                     }
                 });
                 #[cfg(debug_assertions)]
-                app.windows()
+                app.webviews()
                     .values()
                     .for_each(|window| window.open_devtools());
 

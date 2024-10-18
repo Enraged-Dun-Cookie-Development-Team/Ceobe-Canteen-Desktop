@@ -1,8 +1,9 @@
-import {appWindow, getAll, WebviewWindow} from "@tauri-apps/api/window";
+import {getCurrentWebviewWindow, getAll, WebviewWindow} from "@tauri-apps/api/webviewWindow";
 import {listen, UnlistenFn, Event} from "@tauri-apps/api/event";
 import {Cookie} from "../resourceFetcher/cookieList";
 import storage from "./localStorage";
 import {invoke} from "@tauri-apps/api";
+const appWindow = getCurrentWebviewWindow()
 
 
 class NotificationOperate {

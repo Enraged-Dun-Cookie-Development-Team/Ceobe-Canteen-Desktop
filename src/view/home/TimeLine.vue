@@ -148,7 +148,7 @@ import { getCookieList } from "@/api/resourceFetcher/cookieList";
 import Common from "@/components/Card/Common.vue";
 import { previewUrl } from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
-import { type, OsType } from "@tauri-apps/api/os"
+import { type, OsType } from "@tauri-apps/plugin-os"
 
 const router = useRouter();
 
