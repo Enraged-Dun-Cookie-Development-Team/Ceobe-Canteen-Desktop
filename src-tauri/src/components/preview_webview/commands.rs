@@ -1,8 +1,7 @@
-use tauri::{
-    AppHandle, command, LogicalPosition, LogicalSize, Manager, WebviewBuilder, WebviewUrl,
-    Window,
-};
 use tauri::webview::PageLoadEvent;
+use tauri::{
+    command, AppHandle, LogicalPosition, LogicalSize, Manager, WebviewBuilder, WebviewUrl, Window,
+};
 use url::Url;
 
 use crate::components::preview_webview::{MAIN_WINDOWS, PREVIEW_WEBVIEW_LABEL};

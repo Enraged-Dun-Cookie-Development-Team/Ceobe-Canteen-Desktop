@@ -18,12 +18,12 @@ use crate::commands::{
     quit, read_detail, request_refer_image, send_request, send_system_notification,
     set_auto_launch, set_item, should_silence,
 };
+use crate::components::preview_webview::preview_webview_init;
 use crate::setup::logger::logger_plugin;
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
 use tauri_plugin_cli::Cli;
-use crate::components::preview_webview::preview_webview_init;
 
 fn main() {
     // let context: Context<_> = generate_context!();
