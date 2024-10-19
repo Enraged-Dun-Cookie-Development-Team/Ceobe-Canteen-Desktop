@@ -2,8 +2,8 @@ use once_cell::sync::OnceCell;
 use std::fs::create_dir_all;
 use std::path::PathBuf;
 use std::{env, io};
-use tauri::api::path::{app_cache_dir, app_config_dir};
-use tauri::AppHandle;
+
+use tauri::{AppHandle, Manager};
 use tracing::{info, instrument};
 
 pub static APP_NAME: OnceCell<String> = OnceCell::new();
@@ -12,7 +12,7 @@ pub static APP_NAME: OnceCell<String> = OnceCell::new();
 pub fn get_app_name(app: AppHandle) -> &'static str {
     APP_NAME.get_or_init({
         move || {
-            let config = &app.config().package;
+            let config = &app.config();
             let name = config
                 .product_name
                 .as_deref()
@@ -41,7 +41,7 @@ pub static CONFIG_DIR: OnceCell<PathBuf> = OnceCell::new();
 #[instrument(skip_all)]
 pub fn get_config_dir(app: AppHandle) -> &'static PathBuf {
     CONFIG_DIR.get_or_init(move || {
-        let path = app_config_dir(&app.config()).expect("Platform not support");
+        let path = app.path().config_dir().expect("Platform not support");
         create_dir_all(&path).expect("Cannot Create Config Dir");
         info!(firstInit = "CONFIG_DIR", path = ?path);
         path
@@ -53,7 +53,7 @@ pub static CACHE_DIR: OnceCell<PathBuf> = OnceCell::new();
 #[instrument(skip_all)]
 pub fn get_cache_dir(app: AppHandle) -> &'static PathBuf {
     CACHE_DIR.get_or_init(move || {
-        let path = app_cache_dir(&app.config()).expect("Platform not support");
+        let path = app.path().cache_dir().expect("Platform not support");
         create_dir_all(&path).expect("Cannot Create Config Dir");
         info!(firstInit = "CACHE_DIR", path = ?path);
         path

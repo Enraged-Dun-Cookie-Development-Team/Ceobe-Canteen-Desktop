@@ -58,7 +58,7 @@ pub fn message_beep() {
             System::Diagnostics::Debug::MessageBeep, UI::WindowsAndMessaging::MB_ICONSTOP,
         };
         unsafe {
-            MessageBeep(MB_ICONSTOP.0);
+            MessageBeep(MB_ICONSTOP);
         }
     }
 }
