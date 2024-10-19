@@ -2,12 +2,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod commands;
+mod components;
 mod listeners;
 mod request_client;
 mod setup;
 mod single_instance;
 mod state;
 mod storage;
+
 use std::thread::spawn;
 
 use crate::commands::{
@@ -21,6 +23,7 @@ use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
 use tauri_plugin_cli::Cli;
+use crate::components::preview_webview::preview_webview_init;
 
 fn main() {
     // let context: Context<_> = generate_context!();
@@ -38,6 +41,7 @@ fn main() {
             .plugin(tauri_plugin_clipboard_manager::init())
             .plugin(tauri_plugin_notification::init())
             // .plugin(tauri_plugin_http::init())
+            .plugin(preview_webview_init())
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
