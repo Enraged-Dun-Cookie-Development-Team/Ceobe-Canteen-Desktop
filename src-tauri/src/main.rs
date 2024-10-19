@@ -36,6 +36,7 @@ fn main() {
             .plugin(tauri_plugin_os::init())
             .plugin(tauri_plugin_clipboard_manager::init())
             .plugin(tauri_plugin_notification::init())
+            // .plugin(tauri_plugin_http::init())
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {

@@ -53,6 +53,7 @@ tauri-plugin-os = "2"
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-notification = "2"
+tauri-plugin-http = "2"
 
 [target.'cfg(windows)'.dependencies.windows]
 version = "0.58"

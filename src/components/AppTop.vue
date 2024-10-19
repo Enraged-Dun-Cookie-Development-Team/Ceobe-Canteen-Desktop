@@ -315,7 +315,7 @@ const version = reactive<{
         setting.versionState = VersionStateType.UpdateAvailable
       }
     } catch (error: any) {
-      console.log("Failure loading New Version")
+      console.log("Failure loading New Version", error)
       if (!await isPermissionGranted()) {
         await requestPermission()
       }
