@@ -3,40 +3,40 @@
     <v-toolbar :title="query?.source?.toString()">
       <template #prepend>
         <v-img
-          :src="getImage(query?.icon?.toString() ?? '')"
-          class="border-radius-50"
-          width="26"
+            :src="getImage(query?.icon?.toString() ?? '')"
+            class="border-radius-50"
+            width="26"
         ></v-img>
       </template>
       <v-btn
-        icon="fas fa-circle-xmark"
-        size="small"
-        title="关闭"
-        @click="back"
+          icon="fas fa-circle-xmark"
+          size="small"
+          title="关闭"
+          @click="back"
       ></v-btn>
     </v-toolbar>
-<!--    <iframe-->
-<!--      :src="query.url"-->
-<!--      :style="{ width: query.width ? query.width : '100%' }"-->
-<!--      :useragent="query.useragent ? query.useragent : null"-->
-<!--      class="webview"-->
-<!--      style="margin: auto"-->
-<!--    ></iframe>-->
-<!--    <iframe-->
-<!--      :src="query.url"-->
-<!--      :style="{ width: query.width ? query.width : '100%' }"-->
-<!--      :useragent="query.useragent ? query.useragent : null"-->
-<!--      style="margin: auto"-->
-<!--    ></iframe>-->
+    <!--    <iframe-->
+    <!--      :src="query.url"-->
+    <!--      :style="{ width: query.width ? query.width : '100%' }"-->
+    <!--      :useragent="query.useragent ? query.useragent : null"-->
+    <!--      class="webview"-->
+    <!--      style="margin: auto"-->
+    <!--    ></iframe>-->
+    <!--    <iframe-->
+    <!--      :src="query.url"-->
+    <!--      :style="{ width: query.width ? query.width : '100%' }"-->
+    <!--      :useragent="query.useragent ? query.useragent : null"-->
+    <!--      style="margin: auto"-->
+    <!--    ></iframe>-->
   </div>
 </template>
 
 <script lang="ts" name="index" setup>
-import { useRoute, useRouter } from "vue-router";
-import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
-import { getImage } from "@/utils/imageUtil";
-import {invoke} from "@tauri-apps/api";
-import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import {useRoute, useRouter} from "vue-router";
+import {onMounted, onUnmounted, reactive, ref, watch} from "vue";
+import {getImage} from "@/utils/imageUtil";
+import {invoke} from "@tauri-apps/api/core";
+import {listen, UnlistenFn} from "@tauri-apps/api/event";
 
 const router = useRouter();
 const route = useRoute();
@@ -111,11 +111,11 @@ function back() {
 }
 
 watch(
-  () => route.query,
-  () => {
-    query.value = route.query;
-    webviewWindow.init();
-  },
+    () => route.query,
+    () => {
+      query.value = route.query;
+      webviewWindow.init();
+    },
 );
 
 let unlisten: UnlistenFn;

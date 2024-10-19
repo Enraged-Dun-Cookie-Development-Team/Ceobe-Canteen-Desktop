@@ -1,8 +1,9 @@
-import {getCurrentWebviewWindow, getAll, WebviewWindow} from "@tauri-apps/api/webviewWindow";
+import {getCurrentWebviewWindow, getAllWebviewWindows, WebviewWindow} from "@tauri-apps/api/webviewWindow";
 import {listen, UnlistenFn, Event} from "@tauri-apps/api/event";
 import {Cookie} from "../resourceFetcher/cookieList";
 import storage from "./localStorage";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
+
 const appWindow = getCurrentWebviewWindow()
 
 
@@ -12,7 +13,7 @@ class NotificationOperate {
     }
 
     async closeWindow() {
-        let window: WebviewWindow | null = getAll().find((window: WebviewWindow) => window.label == "main") ?? null;
+        let window: WebviewWindow | null = getAllWebviewWindows().find((window: WebviewWindow) => window.label == "main") ?? null;
         if (window) {
             if (await window.isMinimized()) {
                 await window.unminimize()
@@ -34,7 +35,7 @@ class NotificationOperate {
     async getNotificationMode(): Promise<{ idx: number, value: string, tip: string }> {
         const idx = await storage.getItem<number>("setting.notify") ?? NotifyMode.PopUpAndBeep.idx
         const mode = allNotifyMode.find((mode) => mode.idx == idx);
-        return mode?mode:NotifyMode.None
+        return mode ? mode : NotifyMode.None
     }
 
     async needNotifyPop(): Promise<boolean> {
@@ -46,7 +47,8 @@ class NotificationOperate {
         const mode = await this.getNotificationMode()
         return mode.idx == NotifyMode.PopUpAndBeep.idx || mode.idx == NotifyMode.BeepOnly.idx;
     }
-    async needSystemNotify():Promise<boolean>{
+
+    async needSystemNotify(): Promise<boolean> {
         const mode = await this.getNotificationMode()
         return mode.idx == NotifyMode.SystemToast.idx
     }
@@ -59,7 +61,7 @@ class NotificationOperate {
 export interface NotifyPayload {
     title: string,
     body: string,
-    time:string,
+    time: string,
     has_sound?: boolean,
     image_url?: string
 }
@@ -74,10 +76,10 @@ export const NotifyMode = Object.freeze({
     }, SystemToast: {
         idx: 4, value: "使用系统消息", tip: "当发现新饼时发出系统弹窗，Windows可以拉起主窗口"
     }, None: {
-        idx: 3, value: "无",tip:"当发现新饼后无任何行为"
+        idx: 3, value: "无", tip: "当发现新饼后无任何行为"
     },
 })
-export const allNotifyMode = [NotifyMode.PopUpAndBeep, NotifyMode.BeepOnly, NotifyMode.PopUpOnly,NotifyMode.SystemToast, NotifyMode.None]
+export const allNotifyMode = [NotifyMode.PopUpAndBeep, NotifyMode.BeepOnly, NotifyMode.PopUpOnly, NotifyMode.SystemToast, NotifyMode.None]
 const notification = new NotificationOperate();
 
 export default notification;

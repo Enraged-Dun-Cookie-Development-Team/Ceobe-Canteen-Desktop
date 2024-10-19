@@ -4,7 +4,9 @@
   "description": "permissions that were migrated from v1",
   "local": true,
   "windows": [
-    "main"
+    "main",
+    "notification",
+    "background"
   ],
   "permissions": [
     "core:default",
@@ -41,7 +43,18 @@
     "core:window:allow-set-ignore-cursor-events",
     "core:window:allow-start-dragging",
     "core:webview:allow-print",
-    "shell:allow-open"
+    "shell:allow-open",
+    "fs:allow-app-read",
+    "os:allow-os-type",
+    "clipboard-manager:allow-write-text",
+    "clipboard-manager:allow-write-image",
+    "notification:allow-notify",
+    "notification:allow-permission-state",
+    "notification:default",
+    "notification:allow-request-permission",
+    "core:event:default",
+    "core:event:allow-emit",
+    "core:event:allow-listen"
   ],
   "capabilities": [
   ]

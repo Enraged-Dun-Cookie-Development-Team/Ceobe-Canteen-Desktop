@@ -2,20 +2,20 @@
   <div class="time-line" :ref="setTimeLineRef">
     <div class="fix-btn">
       <v-btn
-        :class="
+          :class="
           scroll.scrollShow &&
           timeline.refreshTimelineData
             ? 'refresh-btn-show'
             : ''
         "
-        :ripple="false"
-        class="refresh-btn"
-        color="#ffba4b"
-        density="default"
-        elevation="0"
-        prepend-icon="fas fa-arrows-rotate"
-        rounded="xl"
-        @click.stop="refreshTimeline"
+          :ripple="false"
+          class="refresh-btn"
+          color="#ffba4b"
+          density="default"
+          elevation="0"
+          prepend-icon="fas fa-arrows-rotate"
+          rounded="xl"
+          @click.stop="refreshTimeline"
       >
         <template #prepend>
           <v-icon color="#fff"></v-icon>
@@ -23,52 +23,52 @@
         <span style="color: #fff">有新饼</span>
       </v-btn>
       <v-btn
-        :class="scroll.scrollShow ? 'top-btn-show' : ''"
-        class="top-btn"
-        color="#ffba4b"
-        density="default"
-        elevation="0"
-        icon="fas fa-arrow-up"
-        size="small"
-        style="color: #fff"
-        @click.stop="scroll.scrollToTop"
+          :class="scroll.scrollShow ? 'top-btn-show' : ''"
+          class="top-btn"
+          color="#ffba4b"
+          density="default"
+          elevation="0"
+          icon="fas fa-arrow-up"
+          size="small"
+          style="color: #fff"
+          @click.stop="scroll.scrollToTop"
       ></v-btn>
     </div>
     <div v-if="!timeline.timelineData" class="loading-image">
-      <img :src="getImage('/assets/image/load/list-load.gif')" alt="" />
+      <img :src="getImage('/assets/image/load/list-load.gif')" alt=""/>
     </div>
     <v-timeline
-      v-else
-      ref="timeline_area"
-      align="start"
-      side="end"
-      truncate-line="start"
+        v-else
+        ref="timeline_area"
+        align="start"
+        side="end"
+        truncate-line="start"
     >
       <v-timeline-item
-        v-for="cookie in timeline.timelineData"
-        :key="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
-        :left="true"
-        dot-color="#fff"
-        :fill-dot="true"
-        size="50"
+          v-for="cookie in timeline.timelineData"
+          :key="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
+          :left="true"
+          dot-color="#fff"
+          :fill-dot="true"
+          size="50"
       >
         <template #icon>
           <v-avatar :image="cookie.icon" rounded></v-avatar>
         </template>
         <component
-          :is="component.getComponentName()"
-          :id="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
-          :info="cookie"
-          @open-url="card.openUrlInThis"
+            :is="component.getComponentName()"
+            :id="`${cookie.source.type}:${cookie.source.data}:${cookie.item.id}`"
+            :info="cookie"
+            @open-url="card.openUrlInThis"
         >
           <template
-            v-if="card.isCopyImage && `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}` == card.copyImageId"
-            #default="info"
+              v-if="card.isCopyImage && `${cookie.source.type}:${cookie.source.data}:${cookie.item.id}` == card.copyImageId"
+              #default="info"
           >
             <div class="h-100 w-100 d-flex flex-column">
               <v-divider class="my-2"></v-divider>
               <div
-                class="h-100 w-100 d-flex justify-space-between align-center print px-2"
+                  class="h-100 w-100 d-flex justify-space-between align-center print px-2"
               >
                 <div class="d-flex flex-column">
                   <div class="font-weight-bold title">
@@ -82,9 +82,9 @@
                 </div>
                 <div class="d-flex align-center">
                   <img
-                    :src="getImage('/assets/image/logo/icon.png')"
-                    width="35"
-                    alt=""
+                      :src="getImage('/assets/image/logo/icon.png')"
+                      width="35"
+                      alt=""
                   />
                   <v-divider class="mx-2" vertical></v-divider>
                   <div>
@@ -99,30 +99,30 @@
           </template>
           <template v-else #default="info">
             <span class="font-weight-bold pl-2">{{
-              new Date(
-                info.info.timestamp?.platform ??
-                  info.info.timestamp?.fetcher ??
-                  "",
-              ).toLocaleString()
-            }}</span>
+                new Date(
+                    info.info.timestamp?.platform ??
+                    info.info.timestamp?.fetcher ??
+                    "",
+                ).toLocaleString()
+              }}</span>
             <v-spacer></v-spacer>
             <v-btn
-              icon="fas fa-copy"
-              size="small"
-              title="复制链接"
-              @click.stop="card.copy(info.info.item.url ?? '')"
+                icon="fas fa-copy"
+                size="small"
+                title="复制链接"
+                @click.stop="card.copy(info.info.item.url ?? '')"
             ></v-btn>
             <v-btn
-              icon="fas fa-share-nodes"
-              size="small"
-              title="生成卡片"
-              @click.stop="card.copyImage(cookie.source.type+':'+cookie.source.data+':'+cookie.item.id)"
+                icon="fas fa-share-nodes"
+                size="small"
+                title="生成卡片"
+                @click.stop="card.copyImage(cookie.source.type+':'+cookie.source.data+':'+cookie.item.id)"
             ></v-btn>
             <v-btn
-              icon="fas fa-link"
-              size="small"
-              title="使用浏览器打开"
-              @click.stop="card.openUrlInBrowser(info.info.item.url)"
+                icon="fas fa-link"
+                size="small"
+                title="使用浏览器打开"
+                @click.stop="card.openUrlInBrowser(info.info.item.url)"
             ></v-btn>
           </template>
         </component>
@@ -136,19 +136,19 @@
 </template>
 
 <script lang="ts" name="timeLine" setup>
-import { nextTick, onMounted, reactive, ref, VNodeRef } from "vue";
-import { useRouter } from "vue-router";
+import {nextTick, onMounted, reactive, ref, VNodeRef} from "vue";
+import {useRouter} from "vue-router";
 import * as htmlToImage from "html-to-image";
-import newestTimeline, { Timeline } from "@/api/operations/newestTimeline";
+import newestTimeline, {Timeline} from "@/api/operations/newestTimeline";
 import searchWordEvent from "@/api/operations/searchWordEvent";
-import { getCookieSearchList } from "@/api/resourceFetcher/searchCookie";
+import {getCookieSearchList} from "@/api/resourceFetcher/searchCookie";
 import operate from "@/api/operations/operate";
-import { getImage } from "@/utils/imageUtil";
-import { getCookieList } from "@/api/resourceFetcher/cookieList";
+import {getImage} from "@/utils/imageUtil";
+import {getCookieList} from "@/api/resourceFetcher/cookieList";
 import Common from "@/components/Card/Common.vue";
-import { previewUrl } from "@/utils/previewUtil";
+import {previewUrl} from "@/utils/previewUtil";
 import logger from "@/api/operations/logger";
-import { type, OsType } from "@tauri-apps/plugin-os"
+import {type as getOsType, OsType} from "@tauri-apps/plugin-os"
 
 const router = useRouter();
 
@@ -183,7 +183,7 @@ const _backTopTimeLine = () => {
 async function getData() {
   console.log("await newestTimeline.getTimeline");
   await newestTimeline.getTimeline((_, arg) => {
-    logger.debug("TimeLine.vue",{cookie:arg})
+    logger.debug("TimeLine.vue", {cookie: arg})
     console.log(arg);
     if (arg == null) {
       console.warn("no data")
@@ -212,7 +212,7 @@ async function getData() {
 
 function refreshTimeline() {
   if (
-    !timeline.refreshTimelineData
+      !timeline.refreshTimelineData
   ) {
     return;
   }
@@ -285,26 +285,26 @@ const card = reactive({
       nextTick(async () => {
         // 包的问题，非windows多截图一次，详见：https://github.com/bubkoo/html-to-image/issues/147
         let elem = document.getElementById(id);
-          if (!elem) {
-            return;
-          }
-        if (card.osType !=  "Windows_NT") {
+        if (!elem) {
+          return;
+        }
+        if (card.osType != "Windows_NT") {
           await htmlToImage
-            .toJpeg(elem, { quality: 0.95, pixelRatio: 3 })
+              .toJpeg(elem, {quality: 0.95, pixelRatio: 3})
         }
 
         htmlToImage
-          .toJpeg(elem, { quality: 0.95, pixelRatio: 3 })
-          .then(function (dataUrl) {
-            card.isCopyImage = false;
-            operate.copy({ type: "img", data: dataUrl });
-          });
+            .toJpeg(elem, {quality: 0.95, pixelRatio: 3})
+            .then(function (dataUrl) {
+              card.isCopyImage = false;
+              operate.copy({type: "img", data: dataUrl});
+            });
       });
     }, 500);
   },
   copy(url: string) {
     // show.value = true;
-    operate.copy({ type: "text", data: url });
+    operate.copy({type: "text", data: url});
   },
   openUrlInBrowser(url: string) {
     operate.openUrlInBrowser(url);
@@ -324,14 +324,14 @@ const scroll = reactive({
     // 如果有数据，向上滚动小于600过程自动刷新
     if (!scroll.scrollShow &&
         timeline.refreshTimelineData != null) {
-          refreshTimeline();
+      refreshTimeline();
     }
 
     // 因为有些情况会导致高度不能正好相等，给个差值小于5来扩大判断范围
     if (
-      Math.abs(
-        e.target.scrollTop + e.target.clientHeight - e.target.scrollHeight,
-      ) < 5
+        Math.abs(
+            e.target.scrollTop + e.target.clientHeight - e.target.scrollHeight,
+        ) < 5
     ) {
       if (!timeline.nextPageId) {
         return;
@@ -353,18 +353,18 @@ const scroll = reactive({
         });
       } else {
         getCookieList(
-          timeline.combId.toString(),
-          timeline.nextPageId,
-          timeline.updateCookieId??undefined,
+            timeline.combId.toString(),
+            timeline.nextPageId,
+            timeline.updateCookieId ?? undefined,
         )
-          .then((resp) => {
-            let cookies_info = resp.data.data;
-            timeline.timelineData?.push(...cookies_info.cookies);
-            timeline.nextPageId = cookies_info.next_page_id ?? null;
-          })
-          .catch(() => {
-            // TODO：弹窗处理一下
-          });
+            .then((resp) => {
+              let cookies_info = resp.data.data;
+              timeline.timelineData?.push(...cookies_info.cookies);
+              timeline.nextPageId = cookies_info.next_page_id ?? null;
+            })
+            .catch(() => {
+              // TODO：弹窗处理一下
+            });
       }
     }
   },
@@ -422,14 +422,16 @@ onMounted(() => {
     newestTimeline.needTimeline();
   }
   window.addEventListener(
-    "scroll",
-    throttle(scroll.bindHandleScroll, 500),
-    true,
+      "scroll",
+      throttle(scroll.bindHandleScroll, 500),
+      true,
   );
   searchTimeline();
-  type().then((osType: OsType) => {
-    card.osType = osType;
-  })
+  console.log(getOsType)
+  card.osType = getOsType()
+  // getOsType().then((osType: OsType) => {
+  //   card.osType = osType;
+  // })
 });
 </script>
 

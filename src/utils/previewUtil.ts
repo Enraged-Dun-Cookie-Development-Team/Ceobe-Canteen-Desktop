@@ -1,8 +1,8 @@
-import { invoke } from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 
 export async function previewUrl(url: string, title: string) {
-  await invoke("read_detail", {
-    url: url,
-    title: title,
-  });
+    await invoke("read_detail", {
+        url: url,
+        title: title,
+    });
 }

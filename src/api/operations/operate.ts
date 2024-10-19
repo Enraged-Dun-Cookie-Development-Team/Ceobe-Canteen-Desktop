@@ -2,17 +2,19 @@ import {
     bootStartSetting, copyInfo, getBootStartSetting, openUrlInUserBrowser,
 } from "../function";
 import {
-    getCurrentWebviewWindow, getAll, PhysicalPosition, PhysicalSize, WebviewWindow,
+    getCurrentWebviewWindow, getAllWebviewWindows, WebviewWindow,
 } from "@tauri-apps/api/webviewWindow";
+import {PhysicalPosition, PhysicalSize} from "@tauri-apps/api/dpi";
 import {Cookie} from "../resourceFetcher/cookieList";
-import {invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
 import notification from "./notification";
+
 const appWindow = getCurrentWebviewWindow()
 
 class Operate {
     async openNotificationWindow(cookie: Cookie) {
         console.log(`send Notification`);
-        if (await invoke("should_silence")){
+        if (await invoke("should_silence")) {
             console.log("Detect FullScreen, cancel notify")
             return
         }
@@ -40,8 +42,8 @@ class Operate {
             await notification.sendSystemNotify({
                 body: cookie.default_cookie.text,
                 has_sound: true,
-                time:new Date(cookie.timestamp.platform!).toLocaleString(),
-                image_url: cookie.default_cookie.images ? cookie.default_cookie.images[0].origin_url: undefined ,
+                time: new Date(cookie.timestamp.platform!).toLocaleString(),
+                image_url: cookie.default_cookie.images ? cookie.default_cookie.images[0].origin_url : undefined,
                 title: `小刻在${cookie.datasource}蹲到饼了`
 
             })

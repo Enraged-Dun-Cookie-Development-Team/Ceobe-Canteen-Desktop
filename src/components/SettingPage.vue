@@ -71,14 +71,14 @@ import {computed, onMounted, reactive} from "vue";
 import operate from "@/api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
 import notification, {allNotifyMode, NotifyMode} from "@/api/operations/notification";
-import {app, invoke} from "@tauri-apps/api";
+import {invoke} from "@tauri-apps/api/core";
+import {getVersion} from "@tauri-apps/api/app"
 import {VersionStateType} from "@/api/operations/updater";
 
 const emits = defineEmits<{
   (e: "close"): void,
   (e: "checkUpdate"): void
 }>()
-
 
 
 const props = withDefaults(defineProps<{
@@ -94,19 +94,22 @@ const isDebug = computed(() => {
 // test send notification
 const sen_d = () => {
   setTimeout(
-      ()=>{
+      () => {
 
-  operate.openNotificationWindow({
-    datasource: 'kkwd',
-    default_cookie: {
-      images: [{compress_url: null, origin_url: 'https://i0.hdslb.com/bfs/new_dyn/2956e376fb056cf79cc95bcf585dbbc0161775300.jpg'}],
-      text: '欸嘿嘿，桃金娘的脚小小的~香香的~.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-    },
-    icon: '/assets/icon/anime.png',
-    source: {data: '123', type: 'nn'},
-    timestamp: {fetcher: 114514, platform: 114514, platform_precision: 'minute'}
-  })
-      },5000)
+        operate.openNotificationWindow({
+          datasource: 'kkwd',
+          default_cookie: {
+            images: [{
+              compress_url: null,
+              origin_url: 'https://i0.hdslb.com/bfs/new_dyn/2956e376fb056cf79cc95bcf585dbbc0161775300.jpg'
+            }],
+            text: '欸嘿嘿，桃金娘的脚小小的~香香的~.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+          },
+          icon: '/assets/icon/anime.png',
+          source: {data: '123', type: 'nn'},
+          timestamp: {fetcher: 114514, platform: 114514, platform_precision: 'minute'}
+        })
+      }, 5000)
 }
 
 const showDownload = computed(() => props.versionState === VersionStateType.UpdateAvailable)
@@ -130,7 +133,7 @@ const setting = reactive<{
 }>({
   currentVersion: "",
   getAppVersion: () => {
-    app.getVersion().then((version) => {
+    getVersion().then((version) => {
       setting.currentVersion = version
     })
   },

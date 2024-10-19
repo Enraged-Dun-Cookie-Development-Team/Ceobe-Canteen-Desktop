@@ -31,6 +31,11 @@ fn main() {
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .plugin(tauri_plugin_cli::init())
+            .plugin(tauri_plugin_shell::init())
+            .plugin(tauri_plugin_fs::init())
+            .plugin(tauri_plugin_os::init())
+            .plugin(tauri_plugin_clipboard_manager::init())
+            .plugin(tauri_plugin_notification::init())
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
