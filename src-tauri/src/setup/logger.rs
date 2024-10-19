@@ -6,13 +6,26 @@ use std::io::{stdout, IoSlice, Write};
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
+use tauri::plugin::{Builder, Plugin, TauriPlugin};
+use tauri::{Manager, Runtime};
 use tracing::level_filters::LevelFilter;
 use tracing::{info, Subscriber};
 use tracing_subscriber::fmt::{format, MakeWriter};
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::{fmt, Layer};
-pub fn init_logger(log_dir: PathBuf) -> io::Result<()> {
+
+pub fn logger_plugin<R: Runtime>() -> TauriPlugin<R, ()> {
+    Builder::new("logger")
+        .setup(|app, _| {
+            let log_dir = app.path().app_log_dir()?;
+            init_logger(log_dir).expect("init logger failure");
+            Ok(())
+        })
+        .build()
+}
+
+fn init_logger(log_dir: PathBuf) -> io::Result<()> {
     tracing_subscriber::registry()
         .with(LevelLayer)
         .with(

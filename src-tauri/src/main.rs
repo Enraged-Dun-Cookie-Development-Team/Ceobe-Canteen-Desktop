@@ -16,7 +16,7 @@ use crate::commands::{
     quit, read_detail, request_refer_image, send_request, send_system_notification,
     set_auto_launch, set_item, should_silence,
 };
-use crate::setup::logger::init_logger;
+use crate::setup::logger::logger_plugin;
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
@@ -30,6 +30,7 @@ fn main() {
     // init_logger(log_dir).expect("Init Log File failure");
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
+            .plugin(logger_plugin())
             .plugin(tauri_plugin_cli::init())
             .plugin(tauri_plugin_shell::init())
             .plugin(tauri_plugin_fs::init())
