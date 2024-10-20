@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use tauri::plugin::{Builder, TauriPlugin};
 use tauri::utils::config::AppConfig;
 use tauri::{
-    generate_handler, AppHandle, LogicalPosition, Manager, Runtime, WebviewBuilder, WindowBuilder,
+    generate_handler, AppHandle, LogicalPosition, Runtime, WebviewBuilder, WindowBuilder,
     WindowEvent, Wry,
 };
 pub fn preview_webview_init() -> TauriPlugin<Wry, ()> {

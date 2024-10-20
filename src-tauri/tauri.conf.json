@@ -87,7 +87,8 @@
         "title": "小刻食堂",
         "width": 1280,
         "minWidth": 1280,
-        "minHeight": 640
+        "minHeight": 640,
+        "create": false
       },
       {
         "label": "background",
@@ -104,7 +105,9 @@
         "alwaysOnTop": true,
         "visible": false,
         "decorations": false,
-        "url": "/#/notification"
+        "url": "/#/notification",
+        "focus": false,
+        "skipTaskbar": true
       }
     ],
     "security": {

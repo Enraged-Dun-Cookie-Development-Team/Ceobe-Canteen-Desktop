@@ -1,7 +1,6 @@
 mod auto_launch;
 mod clipboard;
 mod front_logger;
-mod hide_notification;
 mod is_debug;
 mod local_storage;
 mod monitor_info;
@@ -17,7 +16,6 @@ mod update_available;
 pub use self::auto_launch::{auto_launch_setting, set_auto_launch};
 pub use clipboard::copy_image;
 pub use front_logger::front_logger;
-pub use hide_notification::hide_notification;
 pub use is_debug::is_debug;
 pub use local_storage::{get_item, set_item};
 pub use monitor_info::{get_monitor_info, message_beep};
