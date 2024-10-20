@@ -1,6 +1,5 @@
 //! 根据 https://v2.tauri.app/start/migrate/from-tauri-1/#migrate-to-tray-icon-module 迁移
 
-use tauri::image::Image;
 use tauri::menu::{Menu, MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, TrayIcon, TrayIconBuilder, TrayIconEvent};
 use tauri::{App, Manager, Runtime, UserAttentionType};

@@ -1,15 +1,72 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, UnlistenFn, Event } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { getAllWindows, Window } from "@tauri-apps/api/window";
+import { PhysicalPosition, primaryMonitor, Window } from "@tauri-apps/api/window";
 
 import { Cookie } from "../resourceFetcher/cookieList";
 
 import storage from "./localStorage";
+import operate from "./operate";
 
 const appWindow = getCurrentWebviewWindow();
 
 class NotificationOperate {
+  async openNotificationWindow(cookie: Cookie) {
+    console.log(`send Notification`);
+    if (await invoke("should_silence")) {
+      console.log("Detect FullScreen, cancel notify");
+      return;
+    }
+
+    if (await notification.needNotifyPop()) {
+
+      const monitorInfo = await primaryMonitor()
+
+      if(!monitorInfo){
+        //todo : 发送无屏幕信息
+        return
+      }
+
+      const size = monitorInfo.size;
+      const left_top = monitorInfo.position;
+      const window =await operate.getWindow("notification")
+
+      if(!window){
+        //TODO: 发送没有可用通知窗口信息
+        return;
+      }
+
+      const winSize = await window.outerSize();
+      console.log(winSize, size);
+      const w = size?.width ?? 1920;
+      const h = size?.height ?? 1080;
+      console.log(w, h);
+      await window.setPosition(
+        new PhysicalPosition(
+          w - winSize.width + left_top.x,
+          h - winSize.height + left_top.y,
+        ),
+      );
+
+      console.log(winSize);
+      console.log("send cookie", cookie);
+      await window.emit("new_cookie_info", cookie);
+
+    } else if (await notification.needBeep()) {
+      await this.messageBeep();
+    } else if (await notification.needSystemNotify()) {
+      await notification.sendSystemNotify({
+        body: cookie.default_cookie.text,
+        has_sound: true,
+        time: new Date(cookie.timestamp.platform!).toLocaleString(),
+        image_url: cookie.default_cookie.images
+          ? cookie.default_cookie.images[0].origin_url
+          : undefined,
+        title: `小刻在${cookie.datasource}蹲到饼了`,
+      });
+    }
+  }
+
   async getInfo(
     callback: (event: string, payload: Cookie) => void,
   ): Promise<UnlistenFn> {
@@ -19,9 +76,7 @@ class NotificationOperate {
   }
 
   async closeWindow() {
-    const allWindows = await getAllWindows();
-    const window: Window | null =
-      allWindows.find((window: Window) => window.label === "main") ?? null;
+    const window: Window | null = await operate.getWindow("main")
     if (window) {
       if (await window.isMinimized()) {
         await window.unminimize();
@@ -75,6 +130,10 @@ class NotificationOperate {
 
   async sendSystemNotify(payload: NotifyPayload) {
     await invoke("send_system_notification", { payload });
+  }
+
+  async messageBeep() {
+    await invoke("message_beep");
   }
 }
 

@@ -6,7 +6,7 @@ use std::io::{stdout, IoSlice, Write};
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use tauri::plugin::{Builder, Plugin, TauriPlugin};
+use tauri::plugin::{Builder, TauriPlugin};
 use tauri::{Manager, Runtime};
 use tracing::level_filters::LevelFilter;
 use tracing::{info, Subscriber};

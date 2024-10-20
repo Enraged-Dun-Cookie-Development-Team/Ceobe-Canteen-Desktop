@@ -4,7 +4,6 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { UnlistenFn } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 
-import operate from "@/api/operations/operate";
 import { Cookie } from "@/api/resourceFetcher/cookieList";
 import { getImage } from "@/utils/imageUtil";
 
@@ -52,7 +51,6 @@ let unliten: UnlistenFn;
 onMounted(() => {
   notification
     .getInfo(async (_, data) => {
-      await operate.hideNotifyIcon();
       console.log("get Info:", data);
       updatePageData(data);
       await appWindow.show();
@@ -60,7 +58,7 @@ onMounted(() => {
         appWindow.hide();
       }, 10_000);
       if (await notification.needBeep()) {
-        await operate.messageBeep();
+        await notification.messageBeep();
       }
     })
     .then((closer) => {

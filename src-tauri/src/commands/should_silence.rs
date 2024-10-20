@@ -22,14 +22,16 @@ pub fn should_silence() -> tauri::Result<bool> {
             Ok(false)
         } else {
             let mut rect = RECT::default();
-            unsafe { GetWindowRect(hwnd, &mut rect) };
+            // TODO: handle Windows Error
+            let _ = unsafe {  GetWindowRect(hwnd, &mut rect) };
 
             let mut monitor_info = MONITORINFO {
                 cbSize: size_of::<MONITORINFO>() as u32,
                 ..Default::default()
             };
             let monitor = unsafe { MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY) };
-            unsafe { GetMonitorInfoW(monitor, &mut monitor_info) };
+            // TODO: handle Windows error
+            let _ = unsafe { GetMonitorInfoW(monitor, &mut monitor_info) };
 
             let monitor_size = monitor_info.rcMonitor;
 

@@ -14,23 +14,18 @@ use std::thread::spawn;
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
-    get_app_config_path, get_item, get_monitor_info, hide_notification, is_debug, message_beep,
+    get_app_config_path, get_item, is_debug, message_beep,
     quit, read_detail, request_refer_image, send_request, send_system_notification,
     set_auto_launch, set_item, should_silence,
 };
-use crate::components::preview_webview::preview_webview_init;
-use crate::setup::logger::logger_plugin;
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
+use setup::logger::logger_plugin;
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
 use tauri_plugin_cli::Cli;
 
 fn main() {
-    // let context: Context<_> = generate_context!();
-    // TODO: shift to plugin
-    // let context
-    // let log_dir = context().log_dir().expect("Log Dir Not available");
-    // init_logger(log_dir).expect("Init Log File failure");
+
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .plugin(logger_plugin())
@@ -41,7 +36,7 @@ fn main() {
             .plugin(tauri_plugin_clipboard_manager::init())
             .plugin(tauri_plugin_notification::init())
             // .plugin(tauri_plugin_http::init())
-            .plugin(preview_webview_init())
+            // .plugin(preview_webview_init()) TODO: Plugin Limit Too many
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
@@ -87,11 +82,9 @@ fn main() {
                 quit,
                 back_preview,
                 front_logger,
-                get_monitor_info,
                 message_beep,
                 get_app_cache_path,
                 get_app_config_path,
-                hide_notification,
                 is_debug,
                 send_system_notification,
                 should_silence
