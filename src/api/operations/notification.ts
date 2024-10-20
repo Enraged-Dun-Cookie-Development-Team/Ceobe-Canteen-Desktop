@@ -1,10 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, UnlistenFn, Event } from "@tauri-apps/api/event";
-import {
-  getCurrentWebviewWindow,
-  getAllWebviewWindows,
-  WebviewWindow,
-} from "@tauri-apps/api/webviewWindow";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { getAllWindows, Window } from "@tauri-apps/api/window";
 
 import { Cookie } from "../resourceFetcher/cookieList";
 
@@ -22,10 +19,9 @@ class NotificationOperate {
   }
 
   async closeWindow() {
-    const window: WebviewWindow | null =
-      getAllWebviewWindows().find(
-        (window: WebviewWindow) => window.label === "main",
-      ) ?? null;
+    const allWindows = await getAllWindows();
+    const window: Window | null =
+      allWindows.find((window: Window) => window.label === "main") ?? null;
     if (window) {
       if (await window.isMinimized()) {
         await window.unminimize();
