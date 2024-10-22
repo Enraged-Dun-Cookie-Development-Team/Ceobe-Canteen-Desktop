@@ -1,7 +1,11 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, UnlistenFn, Event } from "@tauri-apps/api/event";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { PhysicalPosition, primaryMonitor, Window } from "@tauri-apps/api/window";
+import {
+  PhysicalPosition,
+  primaryMonitor,
+  Window,
+} from "@tauri-apps/api/window";
 
 import { Cookie } from "../resourceFetcher/cookieList";
 
@@ -19,19 +23,18 @@ class NotificationOperate {
     }
 
     if (await notification.needNotifyPop()) {
+      const monitorInfo = await primaryMonitor();
 
-      const monitorInfo = await primaryMonitor()
-
-      if(!monitorInfo){
+      if (!monitorInfo) {
         //todo : 发送无屏幕信息
-        return
+        return;
       }
 
       const size = monitorInfo.size;
       const left_top = monitorInfo.position;
-      const window =await operate.getWindow("notification")
+      const window = await operate.getWindow("notification");
 
-      if(!window){
+      if (!window) {
         //TODO: 发送没有可用通知窗口信息
         return;
       }
@@ -51,7 +54,6 @@ class NotificationOperate {
       console.log(winSize);
       console.log("send cookie", cookie);
       await window.emit("new_cookie_info", cookie);
-
     } else if (await notification.needBeep()) {
       await this.messageBeep();
     } else if (await notification.needSystemNotify()) {
@@ -76,7 +78,7 @@ class NotificationOperate {
   }
 
   async closeWindow() {
-    const window: Window | null = await operate.getWindow("main")
+    const window: Window | null = await operate.getWindow("main");
     if (window) {
       if (await window.isMinimized()) {
         await window.unminimize();
