@@ -1,4 +1,9 @@
 import { invoke } from "@tauri-apps/api/core";
+import {
+  getAllWindows,
+  getCurrentWindow,
+  Window,
+} from "@tauri-apps/api/window";
 
 import {
   bootStartSetting,
@@ -7,16 +12,14 @@ import {
   openUrlInUserBrowser,
 } from "../function";
 
-import { getAllWindows, getCurrentWindow, Window } from "@tauri-apps/api/window";
-
 const appWindow = getCurrentWindow();
 
 class Operate {
-  async getWindow(label:string):Promise<Window | null>{
-    const allWindows = await getAllWindows()
-    const window = allWindows.find((window:Window)=>window.label === label)
+  async getWindow(label: string): Promise<Window | null> {
+    const allWindows = await getAllWindows();
+    const window = allWindows.find((window: Window) => window.label === label);
 
-    return window?window:null
+    return window ?? null;
   }
 
   async copy(param: { data: string; type: string }) {
@@ -51,8 +54,6 @@ class Operate {
   async getBootSetting() {
     return await getBootStartSetting();
   }
-
-
 }
 
 const operate = new Operate();
