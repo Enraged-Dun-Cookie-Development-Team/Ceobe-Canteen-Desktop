@@ -1,7 +1,4 @@
 import { invoke } from "@tauri-apps/api/core";
-import {
-  getCurrentWebviewWindow,
-} from "@tauri-apps/api/webviewWindow";
 
 import {
   bootStartSetting,
@@ -10,21 +7,17 @@ import {
   openUrlInUserBrowser,
 } from "../function";
 
-import { getAllWindows, Window } from "@tauri-apps/api/window";
+import { getAllWindows, getCurrentWindow, Window } from "@tauri-apps/api/window";
 
-const appWindow = getCurrentWebviewWindow();
+const appWindow = getCurrentWindow();
 
 class Operate {
   async getWindow(label:string):Promise<Window | null>{
     const allWindows = await getAllWindows()
     const window = allWindows.find((window:Window)=>window.label === label)
-    if(window){
-      return window
-    }else{
-      return null
-    }
-  }
 
+    return window?window:null
+  }
 
   async copy(param: { data: string; type: string }) {
     await copyInfo(param);
@@ -35,7 +28,7 @@ class Operate {
   }
 
   async minus() {
-    const window = appWindow;
+    const window = getCurrentWindow();
     await window.minimize();
   }
 
