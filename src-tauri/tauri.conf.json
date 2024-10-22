@@ -88,7 +88,8 @@
         "width": 1280,
         "minWidth": 1280,
         "minHeight": 640,
-        "create": false
+        "create": false,
+        "shadow": true
       },
       {
         "label": "background",

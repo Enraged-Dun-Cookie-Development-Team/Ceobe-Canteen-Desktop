@@ -20,7 +20,8 @@ use crate::commands::{
 };
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
-use components::preview_webview::preview_webview_init;
+use components::preview_webview::{self, PreviewWebviewComponent};
+use components::ComponentTrait;
 use setup::logger::logger_plugin;
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
 use tauri_plugin_cli::Cli;
@@ -37,14 +38,19 @@ fn main() {
             .plugin(tauri_plugin_clipboard_manager::init())
             .plugin(tauri_plugin_notification::init())
             // .plugin(tauri_plugin_http::init())
-            .plugin(preview_webview_init()) //TODO: Plugin Limit Too many
+            // .plugin(preview_webview_init()) //TODO: Plugin Limit Too many
             .setup(|app| {
+                PreviewWebviewComponent::setup(app)?;
+
+                tracing::info!(step="fetch main window");
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
                     app.state::<Cli<_>>().inner()
                 }
                 let cli = get_cli(app);
+                tracing::info!(step="handle Cli Args");
                 let args = cli.matches()?.args;
+                let args = dbg!(args);
                 if let Some(arg) = args.get("hidden") {
                     if arg.occurrences == 0 {
                         window.show()?;
@@ -72,6 +78,10 @@ fn main() {
                 Ok(())
             })
             .invoke_handler(tauri::generate_handler![
+                preview_webview::commands::show_preview_webview,
+                preview_webview::commands::hidden_preview_webview,
+                preview_webview::commands::update_preview_webview,
+
                 request_refer_image,
                 read_detail,
                 copy_image,
