@@ -18,18 +18,20 @@ pub fn should_silence() -> tauri::Result<bool> {
         let shell = unsafe { GetShellWindow() };
         let desktop = unsafe { GetDesktopWindow() };
         let hwnd = unsafe { GetForegroundWindow() };
-        if hwnd.0 == 0 || (hwnd == shell || hwnd == desktop) {
+        if hwnd.0 as usize == 0 || (hwnd == shell || hwnd == desktop) {
             Ok(false)
         } else {
             let mut rect = RECT::default();
-            unsafe { GetWindowRect(hwnd, &mut rect) };
+            // TODO: handle Windows Error
+            let _ = unsafe { GetWindowRect(hwnd, &mut rect) };
 
             let mut monitor_info = MONITORINFO {
                 cbSize: size_of::<MONITORINFO>() as u32,
                 ..Default::default()
             };
             let monitor = unsafe { MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY) };
-            unsafe { GetMonitorInfoW(monitor, &mut monitor_info) };
+            // TODO: handle Windows error
+            let _ = unsafe { GetMonitorInfoW(monitor, &mut monitor_info) };
 
             let monitor_size = monitor_info.rcMonitor;
 

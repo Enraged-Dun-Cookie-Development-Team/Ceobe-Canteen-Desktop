@@ -1,107 +1,81 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "https://schema.tauri.app/config/2",
   "build": {
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:8080",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:8080"
   },
-  "package": {
-    "productName": "小刻食堂",
-    "version": "1.0.4"
-  },
-  "tauri": {
-    "systemTray": {
-      "iconPath": "icons/32x32.png"
-    },
-    "allowlist": {
-      "all": false,
-      "notification": {
-        "all": true
+  "bundle": {
+    "active": true,
+    "category": "SocialNetworking",
+    "copyright": "CeobeCanteen",
+    "targets": [
+      "deb",
+      "dmg",
+      "app",
+      "appimage",
+      "nsis"
+    ],
+    "externalBin": [],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper",
+        "silent": false
       },
-      "fs": {
-        "readFile": true
-      },
-      "shell": {
-        "open": true
-      },
-      "clipboard": {
-        "all": true
-      },
-      "window": {
-        "all": true
-      },
-      "path": {
-        "all": true
-      },
-      "protocol": {
-        "asset": true,
-        "all": true,
-        "assetScope": []
-      },
-      "dialog": {
-        "message": true
-      },
-      "os":{
-        "all": true
+      "digestAlgorithm": "sha256",
+      "nsis": {
+        "languages": [
+          "SimpChinese"
+        ],
+        "headerImage": "assets/installer-header.bmp",
+        "sidebarImage": "assets/installer-side.bmp",
+        "installerIcon": "assets/installer-icon.ico",
+        "installMode": "both"
       }
     },
-    "bundle": {
-      "active": true,
-      "category": "SocialNetworking",
-      "copyright": "CeobeCanteen",
+    "longDescription": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
+    "macOS": {
+      "providerShortName": null,
+      "entitlements": null,
+      "frameworks": []
+    },
+    "shortDescription": "帮小刻找好多好吃的饼",
+    "linux": {
       "deb": {
         "depends": []
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.ceobe-canteen.desktop",
-      "longDescription": "自由的兔兔把烙好的饼到处藏，就由小刻把它们都找出来吧！",
-      "macOS": {
-        "license": "assets/user-license.license",
-        "entitlements": null,
-        "frameworks": [],
-        "providerShortName": null
-      },
-      "shortDescription": "帮小刻找好多好吃的饼",
-      "targets": [
-        "deb",
-        "dmg",
-        "app",
-        "appimage",
-        "nsis"
-      ],
-      "windows": {
-        "webviewInstallMode": {
-          "type": "embedBootstrapper",
-          "silent": false
-        },
-        "digestAlgorithm": "sha256",
-        "nsis": {
-          "license": "assets/user-license.license",
-          "headerImage": "assets/installer-header.bmp",
-          "sidebarImage": "assets/installer-side.bmp",
-          "installerIcon": "assets/installer-icon.ico",
-          "installMode": "both",
-          "languages": [
-            "SimpChinese"
-          ]
-        }
       }
     },
-    "security": {
-      "csp": "default-src * data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src * data: blob: ; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline'; frame-ancestors * data: blob:;"
+    "licenseFile": "assets/user-license.license"
+  },
+  "productName": "小刻食堂",
+  "mainBinaryName": "小刻食堂",
+  "version": "1.0.4",
+  "identifier": "com.ceobe-canteen.desktop",
+  "plugins": {
+    "cli": {
+      "args": [
+        {
+          "name": "hidden",
+          "short": "c",
+          "description": "是否启动时保持后台运行",
+          "longDescription": "当给定该配置项时，将在启动时在后台静默运行"
+        }
+      ]
+    }
+  },
+  "app": {
+    "trayIcon": {
+      "iconPath": "icons/32x32.png"
     },
-    "updater": {
-      "active": false
-    },
+    "withGlobalTauri": true,
     "windows": [
       {
         "decorations": false,
@@ -113,7 +87,9 @@
         "title": "小刻食堂",
         "width": 1280,
         "minWidth": 1280,
-        "minHeight": 640
+        "minHeight": 640,
+        "create": false,
+        "shadow": true
       },
       {
         "label": "background",
@@ -130,17 +106,13 @@
         "alwaysOnTop": true,
         "visible": false,
         "decorations": false,
-        "url": "/#/notification"
+        "url": "/#/notification",
+        "focus": false,
+        "skipTaskbar": true
       }
     ],
-    "cli": {
-      "args": [{
-        "name": "hidden",
-        "short": "c",
-        "description": "是否启动时保持后台运行",
-        "longDescription": "当给定该配置项时，将在启动时在后台静默运行"
-      }
-      ]
+    "security": {
+      "csp": "default-src * data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src ipc: http://ipc.localhost * data: blob: 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src * data: blob: ; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline'; frame-ancestors * data: blob:;"
     }
   }
 }

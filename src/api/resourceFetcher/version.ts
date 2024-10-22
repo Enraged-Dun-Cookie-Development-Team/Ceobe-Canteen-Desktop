@@ -49,7 +49,7 @@ export function getVersion(
     url: "/canteen/operate/version/desktop",
     method: "GET",
     query: {
-      version: version,
+      version,
     },
   });
 }

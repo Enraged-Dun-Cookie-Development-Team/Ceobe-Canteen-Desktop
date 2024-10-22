@@ -1,14 +1,14 @@
 use serde::{Deserialize, Serialize, Serializer};
 
-use tauri::{command, AppHandle};
+use tauri::{command, AppHandle, Manager};
 use tracing::instrument;
 
 use url::Url;
 
 #[derive(Debug, thiserror::Error)]
 pub enum NotifyError {
-    #[error(transparent)]
-    TauriApi(#[from] tauri::api::Error),
+    // #[error(transparent)]
+    // TauriApi(#[from] tauri::Error),
     #[cfg(windows)]
     #[error(transparent)]
     Tauri(#[from] tauri::Error),
@@ -24,6 +24,8 @@ pub enum NotifyError {
     #[cfg(windows)]
     #[error(transparent)]
     Io(#[from] std::io::Error),
+    #[error(transparent)]
+    Notify(#[from] tauri_plugin_notification::Error),
 }
 
 impl Serialize for NotifyError {
@@ -48,10 +50,13 @@ pub struct NotificationPayload {
 #[instrument(name = "SendToastNotify", skip(app), err)]
 pub async fn send_system_notification(
     app: AppHandle,
+
     payload: NotificationPayload,
 ) -> Result<(), NotifyError> {
     #[cfg(windows)]
     {
+        //TODO: using tauri notification
+
         use crate::{request_client::RequestClient, state::get_cache_dir};
         use http::{HeaderValue, Method};
         use std::sync::OnceLock;
@@ -61,8 +66,7 @@ pub async fn send_system_notification(
         };
 
         static MANAGER: OnceLock<ToastManager> = OnceLock::new();
-        let manager = MANAGER
-            .get_or_init(|| ToastManager::new(app.config().tauri.bundle.identifier.as_str()));
+        let manager = MANAGER.get_or_init(|| ToastManager::new(app.config().identifier.as_str()));
 
         let mut toast = Toast::new();
         toast.launch("click:cookie");
@@ -116,12 +120,11 @@ pub async fn send_system_notification(
     }
     #[cfg(not(windows))]
     {
-        let mut notify =
-            tauri::api::notification::Notification::new(&app.config().tauri.bundle.identifier)
-                .title(payload.title)
-                .body(payload.body);
+        use tauri_plugin_notification::NotificationExt;
+        let notify = app.notification();
+        let mut notify = notify.builder().title(payload.title).body(payload.body);
         if payload.has_sound {
-            notify = notify.sound(tauri::api::notification::Sound::Default)
+            notify = notify.sound("default")
         }
         notify.show()?;
     }

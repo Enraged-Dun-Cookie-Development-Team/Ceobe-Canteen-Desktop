@@ -1,8 +1,12 @@
 use reqwest::Url;
+use std::borrow::Cow;
 use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
-use tauri::{command, AppHandle, Manager, Window, WindowBuilder, WindowEvent, WindowUrl};
+use tauri::{
+    command, AppHandle, Emitter, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
+    WindowEvent,
+};
 use tracing::{info, instrument};
 
 const WINDOWS_NAME: &str = "Preview";
@@ -33,7 +37,7 @@ const INSERT: &str = r#"<style type="text/css">
 #[command]
 #[instrument(skip_all, err, name = "LeavePreview")]
 pub fn back_preview(app: AppHandle) -> tauri::Result<()> {
-    if let Some(win) = app.get_window(WINDOWS_NAME) {
+    if let Some(win) = app.get_webview_window(WINDOWS_NAME) {
         win.eval("window.location.replace('about:black')")?;
         win.hide()?;
     }
@@ -43,8 +47,8 @@ pub fn back_preview(app: AppHandle) -> tauri::Result<()> {
 #[command(async)]
 #[instrument(skip(app, url), err, name = "PreviewPage")]
 pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Result<()> {
-    let main = app.get_window("main").unwrap();
-    let window = if let Some(window) = app.get_window(WINDOWS_NAME) {
+    let main = app.get_webview_window("main").unwrap();
+    let window = if let Some(window) = app.get_webview_window(WINDOWS_NAME) {
         info!(state = "WindowExist", action = "DirectUsing");
         window.eval(&format!("window.location.replace('{url}')"))?;
         sleep(Duration::from_millis(500));
@@ -52,7 +56,7 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
         window
     } else {
         info!(state = "WindowNotExist", action = "CreateWindow");
-        let w = WindowBuilder::new(&app, WINDOWS_NAME, WindowUrl::External(url))
+        let w = WebviewWindowBuilder::new(&app, WINDOWS_NAME, WebviewUrl::External(url))
             .title("Preview")
             .decorations(false)
             .visible(false)
@@ -89,7 +93,7 @@ pub async fn read_detail(app: AppHandle, url: Url, title: String) -> tauri::Resu
     Ok(())
 }
 
-fn handle_inject_css(_: &Request, resp: &mut Response) {
+fn handle_inject_css(_: Request<Vec<u8>>, resp: &mut Response<Cow<'static, [u8]>>) {
     if let Some(true) | None = resp
         .headers()
         .get("content-type")
@@ -108,99 +112,102 @@ fn handle_inject_css(_: &Request, resp: &mut Response) {
         resp_body.extend(INSERT.as_bytes());
         resp_body.extend(&origin[insert..]);
 
-        *resp.body_mut() = resp_body;
+        *resp.body_mut() = resp_body.into();
     }
 }
-
-fn move_window_to_fit(main_window: Window, preview_window: Window) -> tauri::Result<()> {
+/// 将子窗口移动到目标位置中
+fn move_window_to_fit(
+    main_window: WebviewWindow,
+    preview_window: WebviewWindow,
+) -> tauri::Result<()> {
     const LEFT_W: i32 = 500i32;
     const TOP_H: i32 = 124i32;
 
-    let main_monitor = main_window.current_monitor()?;
-    let scale = if let Some(monitor) = main_monitor {
-        monitor.scale_factor()
-    } else {
-        1.0
-    };
-
-    info!(monitor.scale = scale);
-
-    let main_window_size = main_window.inner_size()?;
-    fn child_window_location(size: tauri::PhysicalSize<u32>, scale: f64) -> (i32, i32) {
-        let width = size.width as i32 - (LEFT_W as f64 * scale) as i32;
-        let height = size.height as i32 - (TOP_H as f64 * scale) as i32;
-        (width, height)
-    }
-    let (w, h) = child_window_location(main_window_size, scale);
-    #[cfg(windows)]
-    {
-        let new_hwnd = preview_window.hwnd()?;
-        let main_hwnd = main_window.hwnd()?;
-        unsafe {
-            use windows::Win32::UI::WindowsAndMessaging::{MoveWindow, SetParent};
-            SetParent(new_hwnd, main_hwnd);
-            MoveWindow(
-                new_hwnd,
-                (LEFT_W as f64 * scale) as i32,
-                (TOP_H as f64 * scale) as i32,
-                w,
-                h,
-                true,
-            );
-        }
-    }
-    #[cfg(not(windows))]
-    {
-        preview_window.set_size(tauri::PhysicalSize::new(w, h))?;
-        let main_location = main_window.inner_position()?.to_logical::<u32>(scale);
-        preview_window.set_position(tauri::LogicalPosition::new(
-            main_location.x + LEFT_W as u32,
-            main_location.y + TOP_H as u32,
-        ))?;
-    }
-    main_window.on_window_event({
-        #[cfg(windows)]
-        let window = preview_window.hwnd()?;
-        #[cfg(not(windows))]
-        let window = preview_window.clone();
-        move |event| {
-            if let WindowEvent::Resized(size) = event {
-                let (w, h) = child_window_location(*size, scale);
-                #[cfg(windows)]
-                {
-                    use windows::Win32::UI::WindowsAndMessaging::MoveWindow;
-                    unsafe {
-                        MoveWindow(
-                            window,
-                            (LEFT_W as f64 * scale) as i32,
-                            (TOP_H as f64 * scale) as i32,
-                            w,
-                            h,
-                            true,
-                        );
-                    }
-                }
-                #[cfg(not(windows))]
-                {
-                    window
-                        .set_size(tauri::PhysicalSize::new(w, h))
-                        .expect("Cannot resize window");
-                }
-            } else if let WindowEvent::Moved(_pos) = event {
-                #[cfg(not(windows))]
-                {
-                    let main_location = _pos;
-                    use tauri::PhysicalPosition;
-                    preview_window
-                        .set_position(PhysicalPosition::new(
-                            main_location.x + ((LEFT_W as f64 * scale) as i32),
-                            main_location.y + ((LEFT_W as f64 * scale) as i32),
-                        ))
-                        .expect("cannot Move With Main");
-                }
-            }
-        }
-    });
+    // let main_monitor = main_window.current_monitor()?;
+    // let scale = if let Some(monitor) = main_monitor {
+    //     monitor.scale_factor()
+    // } else {
+    //     1.0
+    // };
+    //
+    // info!(monitor.scale = scale);
+    //
+    // let main_window_size = main_window.inner_size()?;
+    // fn child_window_location(size: tauri::PhysicalSize<u32>, scale: f64) -> (i32, i32) {
+    //     let width = size.width as i32 - (LEFT_W as f64 * scale) as i32;
+    //     let height = size.height as i32 - (TOP_H as f64 * scale) as i32;
+    //     (width, height)
+    // }
+    // let (w, h) = child_window_location(main_window_size, scale);
+    // #[cfg(windows)]
+    // {
+    //     let new_hwnd = preview_window.hwnd()?;
+    //     let main_hwnd = main_window.hwnd()?;
+    //     unsafe {
+    //         use windows::Win32::UI::WindowsAndMessaging::{MoveWindow, SetParent};
+    //         SetParent(new_hwnd, main_hwnd);
+    //         MoveWindow(
+    //             new_hwnd,
+    //             (LEFT_W as f64 * scale) as i32,
+    //             (TOP_H as f64 * scale) as i32,
+    //             w,
+    //             h,
+    //             true,
+    //         );
+    //     }
+    // }
+    // #[cfg(not(windows))]
+    // {
+    //     preview_window.set_size(tauri::PhysicalSize::new(w, h))?;
+    //     let main_location = main_window.inner_position()?.to_logical::<u32>(scale);
+    //     preview_window.set_position(tauri::LogicalPosition::new(
+    //         main_location.x + LEFT_W as u32,
+    //         main_location.y + TOP_H as u32,
+    //     ))?;
+    // }
+    // main_window.on_window_event({
+    //     #[cfg(windows)]
+    //     let window = preview_window.hwnd()?;
+    //     #[cfg(not(windows))]
+    //     let window = preview_window.clone();
+    //     move |event| {
+    //         if let WindowEvent::Resized(size) = event {
+    //             let (w, h) = child_window_location(*size, scale);
+    //             #[cfg(windows)]
+    //             {
+    //                 use windows::Win32::UI::WindowsAndMessaging::MoveWindow;
+    //                 unsafe {
+    //                     MoveWindow(
+    //                         window,
+    //                         (LEFT_W as f64 * scale) as i32,
+    //                         (TOP_H as f64 * scale) as i32,
+    //                         w,
+    //                         h,
+    //                         true,
+    //                     );
+    //                 }
+    //             }
+    //             #[cfg(not(windows))]
+    //             {
+    //                 window
+    //                     .set_size(tauri::PhysicalSize::new(w, h))
+    //                     .expect("Cannot resize window");
+    //             }
+    //         } else if let WindowEvent::Moved(_pos) = event {
+    //             #[cfg(not(windows))]
+    //             {
+    //                 let main_location = _pos;
+    //                 use tauri::PhysicalPosition;
+    //                 preview_window
+    //                     .set_position(PhysicalPosition::new(
+    //                         main_location.x + ((LEFT_W as f64 * scale) as i32),
+    //                         main_location.y + ((LEFT_W as f64 * scale) as i32),
+    //                     ))
+    //                     .expect("cannot Move With Main");
+    //             }
+    //         }
+    //     }
+    // });
 
     Ok(())
 }
