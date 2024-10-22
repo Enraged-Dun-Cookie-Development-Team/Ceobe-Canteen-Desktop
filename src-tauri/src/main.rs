@@ -20,6 +20,7 @@ use crate::commands::{
 };
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
+use components::preview_webview::preview_webview_init;
 use setup::logger::logger_plugin;
 use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEvent};
 use tauri_plugin_cli::Cli;
@@ -36,7 +37,7 @@ fn main() {
             .plugin(tauri_plugin_clipboard_manager::init())
             .plugin(tauri_plugin_notification::init())
             // .plugin(tauri_plugin_http::init())
-            // .plugin(preview_webview_init()) TODO: Plugin Limit Too many
+            .plugin(preview_webview_init()) //TODO: Plugin Limit Too many
             .setup(|app| {
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
