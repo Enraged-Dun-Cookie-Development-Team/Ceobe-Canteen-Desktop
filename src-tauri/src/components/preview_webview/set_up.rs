@@ -1,9 +1,7 @@
 use crate::components::preview_webview::{MAIN_WEBVIEW_LABEL, MAIN_WINDOWS};
 use std::collections::HashMap;
 use tauri::utils::config::AppConfig;
-use tauri::{
-    AppHandle, LogicalPosition, Runtime, WebviewBuilder, WindowBuilder,
-};
+use tauri::{AppHandle, LogicalPosition, Runtime, WebviewBuilder, WindowBuilder};
 // pub fn preview_webview_init() -> TauriPlugin<Wry, ()> {
 //     Builder::new("previewWebview")
 //         .invoke_handler(generate_handler![
@@ -19,7 +17,10 @@ use tauri::{
 //         .build()
 // }
 
-pub(super)fn setup_main_windows<R: Runtime>(app: &AppHandle<R>, config: &AppConfig) -> tauri::Result<()> {
+pub(super) fn setup_main_windows<R: Runtime>(
+    app: &AppHandle<R>,
+    config: &AppConfig,
+) -> tauri::Result<()> {
     let config_windows: HashMap<_, _> = config
         .windows
         .iter()
@@ -28,8 +29,7 @@ pub(super)fn setup_main_windows<R: Runtime>(app: &AppHandle<R>, config: &AppConf
 
     // let config_windows = dbg!(config_windows);
     if let Some(window_config) = config_windows.get(MAIN_WINDOWS) {
-        let window = WindowBuilder::from_config(app, window_config)?
-        .build()?;
+        let window = WindowBuilder::from_config(app, window_config)?.build()?;
 
         let webview =
             WebviewBuilder::new(MAIN_WEBVIEW_LABEL, window_config.url.to_owned()).auto_resize();

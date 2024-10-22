@@ -4,7 +4,8 @@ use std::thread::sleep;
 use std::time::Duration;
 use tauri::http::{Request, Response};
 use tauri::{
-    command, AppHandle, Emitter, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
+    command, AppHandle, Emitter, Manager, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
+    WindowEvent,
 };
 use tracing::{info, instrument};
 

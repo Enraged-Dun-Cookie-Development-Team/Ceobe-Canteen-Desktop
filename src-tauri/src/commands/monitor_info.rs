@@ -1,8 +1,5 @@
 use tauri::command;
 
-
-
-
 #[command]
 pub fn message_beep() {
     #[cfg(windows)]

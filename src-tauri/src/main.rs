@@ -14,9 +14,8 @@ use std::thread::spawn;
 
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
-    get_app_config_path, get_item, is_debug, message_beep,
-    quit, read_detail, request_refer_image, send_request, send_system_notification,
-    set_auto_launch, set_item, should_silence,
+    get_app_config_path, get_item, is_debug, message_beep, quit, read_detail, request_refer_image,
+    send_request, send_system_notification, set_auto_launch, set_item, should_silence,
 };
 use crate::setup::system_tray::new_system_tray;
 use crate::single_instance::{run_sev, try_start};
@@ -27,7 +26,6 @@ use tauri::{generate_context, App, Builder, Context, Manager, Runtime, WindowEve
 use tauri_plugin_cli::Cli;
 
 fn main() {
-
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .plugin(logger_plugin())
@@ -42,13 +40,13 @@ fn main() {
             .setup(|app| {
                 PreviewWebviewComponent::setup(app)?;
 
-                tracing::info!(step="fetch main window");
+                tracing::info!(step = "fetch main window");
                 let window = app.get_window("main").expect("cannot found main window");
                 fn get_cli<R: Runtime>(app: &App<R>) -> &Cli<R> {
                     app.state::<Cli<_>>().inner()
                 }
                 let cli = get_cli(app);
-                tracing::info!(step="handle Cli Args");
+                tracing::info!(step = "handle Cli Args");
                 let args = cli.matches()?.args;
                 let args = dbg!(args);
                 if let Some(arg) = args.get("hidden") {
@@ -81,7 +79,6 @@ fn main() {
                 preview_webview::commands::show_preview_webview,
                 preview_webview::commands::hidden_preview_webview,
                 preview_webview::commands::update_preview_webview,
-
                 request_refer_image,
                 read_detail,
                 copy_image,
