@@ -31,7 +31,8 @@ export function getAnnouncementInfo(): Promise<
   Response<Payload<Announcement[]>>
 > {
   return requestClient.requestPayload({
-    url: `/canteen/operate/announcement/list`,
+    url: `/cdn/operate/announcement/list`,
     method: "GET",
+    requestTarget: 'ServeCDN',
   });
 }
