@@ -1,17 +1,17 @@
 <template>
   <div class="tool">
     <v-card class="mt-2 position-relative">
-      <v-card-text v-if="listLoaded && toolsLinkList.length >0" class="d-flex flex-wrap justify-start">
+      <v-card-text v-if="listLoaded && toolsLinkList.length > 0" class="d-flex flex-wrap justify-start">
         <v-btn
             v-for="(item, index) in toolsLinkList"
             :key="index"
             class="mr-2 mb-2"
-            @click.stop="openUrl(item.jump_url)"
+            @click.stop="openUrl(item.links.find((i) => i.primary == true).url)"
         >
           <template #prepend>
-            <v-img width="20" class="btn-img" :src="getImage(item.avatar)"></v-img>
+            <v-img width="20" class="btn-img" :src="getImage(item.icon_url)"></v-img>
           </template>
-          {{ item.nickname }}
+          {{ item.localized_name.zh_CN }}
         </v-btn>
       </v-card-text>
       <v-card-text v-else>
