@@ -8,12 +8,10 @@
     <cargoProject FILE="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":tada: 初始化未来可能能用的plugin模块">
-      <change afterPath="$PROJECT_DIR$/plugins/version-manager/src/request_models.rs" afterDir="false" />
+    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":sparkles: 添加version manger">
+      <change afterPath="$PROJECT_DIR$/src/api/mangers/UpdateManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/version-manager/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/version-manager/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugins/version-manager/src/manager.rs" beforeDir="false" afterPath="$PROJECT_DIR$/plugins/version-manager/src/manager.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +23,8 @@
       <list>
         <option value="JavaScript File" />
         <option value="Vue Composition API Component" />
-        <option value="TypeScript File" />
         <option value="Rust File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -341,7 +339,7 @@
       <workItem from="1729241221413" duration="18931000" />
       <workItem from="1732878870374" duration="27000" />
       <workItem from="1736735886988" duration="843000" />
-      <workItem from="1736756439398" duration="2710000" />
+      <workItem from="1736756439398" duration="4535000" />
     </task>
     <task id="LOCAL-00037" summary=":green_heart: fix CI">
       <created>1692790427725</created>
@@ -686,7 +684,7 @@
       <option name="project" value="LOCAL" />
       <updated>1693315500256</updated>
     </task>
-    <option name="localTasksCounter" value="168" />
+    <option name="localTasksCounter" value="170" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value=":sparkles: 系统notification" />
     <MESSAGE value=":boom: fix break change of config" />
     <MESSAGE value=":sparkles: 免打扰模式添加" />
     <MESSAGE value=":wrench: 修改项目配置，配置IDE 不报错" />
@@ -752,7 +749,8 @@
     <MESSAGE value=":recycle: 调整嵌入webview的组件化实现" />
     <MESSAGE value=":recycle: 添加前端webview的预备接口文件" />
     <MESSAGE value=":tada: 初始化未来可能能用的plugin模块" />
-    <option name="LAST_COMMIT_MESSAGE" value=":tada: 初始化未来可能能用的plugin模块" />
+    <MESSAGE value=":sparkles: 添加version manger" />
+    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: 添加version manger" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

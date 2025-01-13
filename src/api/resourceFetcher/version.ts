@@ -1,55 +1,162 @@
-import requestClient, { Payload, Response } from "@/utils/requestUtil";
-export interface DesktopVersion {
-  /**
-   * 百度云下载路径
-   */
-  baidu: string;
-  /**
-   * 百度云描述
-   */
-  baidu_text: string;
-  /**
-   * 描述
-   */
-  description: string;
-  /**
-   * dmg下载路径
-   */
-  dmg: string;
-  /**
-   * exe下载路径
-   */
-  exe: string;
-  /**
-   * 是否强制更新
-   */
-  force: boolean;
-  /**
-   * 上次强制更新版本
-   */
-  last_force_version: string;
-  /**
-   * dmg备用下载路径
-   */
-  spare_dmg: string;
-  /**
-   * exe备用下载路径
-   */
-  spare_exe: string;
-  /**
-   * 版本
-   */
-  version: string;
+import requestClient, {Payload, Response} from "@/utils/requestUtil";
+
+export interface ReleaseVersion {
+    /**
+     * 是否弃用，默认情况下，该参数不需提供
+     */
+    deleted: boolean;
+    /**
+     * 发布版本描述，如果未提供，该字段获得时会跳过序列化
+     */
+    description?: string;
+    /**
+     * 可用下载源
+     */
+    download_source: DownloadSource[];
+    /**
+     * 发布目标平台，- Desktop: 桌面端
+     * - Pocket: 移动端
+     * - Plugin： 插件端
+     */
+    platform: ReleasePlatform;
+    /**
+     * 前一个强制版本
+     */
+    previous_mandatory_version: string;
+    /**
+     * 发布的新版本
+     */
+    version: string;
+
+    [property: string]: any;
 }
 
-export function getVersion(
-  version?: string,
-): Promise<Response<Payload<DesktopVersion>>> {
-  return requestClient.requestPayload({
-    url: "/canteen/operate/version/desktop",
-    method: "GET",
-    query: {
-      version: version,
-    },
-  });
+export interface DownloadSource {
+    /**
+     * 下载源描述
+     */
+    description?: string;
+    /**
+     * 下载源名称
+     */
+    name: string;
+    /**
+     * 主要下载链接
+     */
+    primary_url: PrimaryUrl;
+    /**
+     * 备用下载链接，如果没有任何备用下载链接，这个字段将不会被序列化
+     */
+    spare_urls?: SpareUrl[];
+
+    [property: string]: any;
+}
+
+/**
+ * 主要下载链接
+ */
+export interface PrimaryUrl {
+    /**
+     * 是否为手动下载链接
+     */
+    manual: boolean;
+    /**
+     * 在Primary中的URL的name为可选填写，如果需要填写需要为“Primary"”
+     */
+    name?: Name;
+    /**
+     * 支持的平台
+     */
+    support_platforms?: SupportPlatform[];
+    /**
+     * 下载链接
+     */
+    url: string;
+
+    [property: string]: any;
+}
+
+export enum Name {
+    Primary = "Primary",
+}
+
+/**
+ * Support Platform
+ */
+export enum SupportPlatform {
+    Android = "Android",
+    BrowserZIP = "BrowserZIP",
+    Chrome = "Chrome",
+    Edge = "Edge",
+    Firefox = "Firefox",
+    Harmony = "Harmony",
+    Ie = "IE",
+    Ios = "Ios",
+    Linux = "Linux",
+    MacOS = "MacOS",
+    Safari = "Safari",
+    Webkit = "Webkit",
+    WindowsPhone = "WindowsPhone",
+}
+
+export interface SpareUrl {
+    /**
+     * 是否为手动下载链接
+     */
+    manual: boolean;
+    /**
+     * 备用下载名，备用下载链接名为必填
+     */
+    name: string;
+    /**
+     * 支持的平台
+     */
+    support_platforms?: SupportPlatform[];
+    /**
+     * 下载链接
+     */
+    url: string;
+
+    [property: string]: any;
+}
+
+/**
+ * 发布目标平台，- Desktop: 桌面端
+ * - Pocket: 移动端
+ * - Plugin： 插件端
+ *
+ * 发布版本平台
+ */
+export enum ReleasePlatform {
+    Desktop = "desktop", Plugin = "plugin", Pocket = "pocket",
+}
+
+
+export function getVersion(version?: string,): Promise<Response<Payload<ReleaseVersion>>> {
+    return requestClient.requestPayload({
+        url: "/cdn/operate/version/fetch", method: "GET", query: {
+            version: version, platform: "desktop"
+        }, requestTarget: "ServeCDN"
+    });
+}
+
+export interface VersionList {
+    list: ReleaseVersion[],
+    next_id?: string
+}
+
+export function getAllVersion(firstId?: string): Promise<Response<Payload<VersionList>>> {
+    let query
+    if (firstId) {
+        query = {
+            first_id: firstId, platform: "desktop"
+        }
+    } else {
+        query = {
+            platform: "desktop"
+        }
+    }
+    return requestClient.requestPayload({
+        url: "/cdn/operate/version/fetch", method: "GET", query, requestTarget: "ServeCDN"
+    });
 }
