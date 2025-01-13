@@ -13,6 +13,9 @@ links = "tauri-plugin-version-manager"
 serde = "1.0"
 thiserror = "1.0"
 tauri = { version = "1" }
-reqwest = "0.12.12"
+reqwest = { version = "0.12.12", features = ["json"] }
+semver = { version = "1.0.24", features = ["serde"] }
+url = "2.5.4"
+serde_qs = "0.13.0"
 [build-dependencies]
 #tauri-plugin = { version = "2.0.1", features = ["build"] }

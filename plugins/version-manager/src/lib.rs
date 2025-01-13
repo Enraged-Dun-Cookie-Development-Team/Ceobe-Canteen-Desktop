@@ -1,8 +1,5 @@
-use tauri::{
-    plugin::{Builder, TauriPlugin},
-    Manager, Runtime,
-};
 
+pub use error::{Error, Result};
 pub use models::*;
 
 // #[cfg(desktop)]
@@ -14,9 +11,9 @@ mod commands;
 mod error;
 mod manager;
 mod models;
+mod request_models;
 
-pub use error::{Error, Result};
-
+pub use manager::VersionManager;
 // 保留为2.0迁移实现
 // #[cfg(desktop)]
 // use desktop::VersionManager;
