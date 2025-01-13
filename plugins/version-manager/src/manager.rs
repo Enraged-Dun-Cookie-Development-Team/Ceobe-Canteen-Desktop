@@ -13,7 +13,10 @@ impl VersionManager {
 }
 
 impl VersionManager {
-    pub async fn fetch_version(&self, version: Option<semver::Version>)->Result<ReleaseVersion,()> {
+    pub async fn fetch_version(
+        &self,
+        version: Option<semver::Version>,
+    ) -> Result<ReleaseVersion, ()> {
         let url = fetch_url(version);
         let request = self
             .client
@@ -27,10 +30,13 @@ impl VersionManager {
             .await
             .expect("Failure to send Reqesut");
 
-        let payload = resp.json::<Response<ReleaseVersion>>().await.expect("Deserialze to json failure");
-        
+        let payload = resp
+            .json::<Response<ReleaseVersion>>()
+            .await
+            .expect("Deserialze to json failure");
+
         let data = payload.data;
-        
+
         Ok(data)
     }
 }
