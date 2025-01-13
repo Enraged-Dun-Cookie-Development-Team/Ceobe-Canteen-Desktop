@@ -1,0 +1,755 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/src-tauri/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":recycle: 添加前端webview的预备接口文件" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="Vue Composition API Component" />
+        <option value="Rust File" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feat/merge-tauri2" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;,
+      &quot;reviewState&quot;: &quot;NO_REVIEW&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;reviewState&quot;: &quot;NO_REVIEW&quot;
+  }
+}</component>
+  <component name="GitLabMergeRequestsSettings">{}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:Enraged-Dun-Cookie-Development-Team/Ceobe-Canteen-Desktop.git&quot;,
+    &quot;accountId&quot;: &quot;3eeba640-83aa-422f-a407-2f62fc1c82e6&quot;
+  }
+}</component>
+  <component name="KubernetesApiProvider">{}</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="4zhly1gl" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2U3cyb82p2f2479rth6jToc8pZI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Test request.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-转运营接口到cdn&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/front_end_project/Ceobe-Canteen-Electron/src-tauri/src/components/muilt_webview&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.tauri:build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- -- -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev.executor&quot;: &quot;Run&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Composition API Component&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\front_end_project\Ceobe-Canteen-Electron\src-tauri\src\components\muilt_webview" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\front_end_project\Ceobe-Canteen-Electron\src-tauri\src\commands" />
+      <recent name="E:\front_end_project\Ceobe-Canteen-Electron\src-tauri\assets" />
+    </key>
+  </component>
+  <component name="RsExternalLinterProjectSettings">
+    <option name="runOnTheFly" value="true" />
+    <option name="tool" value="Clippy" />
+  </component>
+  <component name="RunManager" selected="npm.tauri:dev">
+    <configuration name="Test commands::font_logger::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package ceobe-canteen-desktop --bin ceobe-canteen-desktop commands::font_logger::test -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$/src-tauri" />
+      <envs />
+      <option name="emulateTerminal" value="false" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test commands::monitor_info::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="test --package ceobe-canteen-desktop --bin ceobe-canteen-desktop commands::monitor_info::test -- --exact" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$/src-tauri" />
+      <envs />
+      <option name="emulateTerminal" value="false" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="electron:serve" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="electron:serve" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="tauri dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="tauri" />
+      </scripts>
+      <arguments value="dev" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="tauri:build-debug" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="tauri:build-debug" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="tauri:build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="tauri:build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="tauri:dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="tauri:dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Cargo.Test commands::font_logger::test" />
+      <item itemvalue="Cargo.Test commands::monitor_info::test" />
+      <item itemvalue="npm.electron:serve" />
+      <item itemvalue="npm.tauri dev" />
+      <item itemvalue="npm.tauri:build-debug" />
+      <item itemvalue="npm.tauri:build" />
+      <item itemvalue="npm.tauri:dev" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.tauri:dev" />
+        <item itemvalue="npm.tauri:build" />
+        <item itemvalue="npm.tauri:build-debug" />
+        <item itemvalue="Cargo.Test commands::monitor_info::test" />
+        <item itemvalue="Cargo.Test commands::font_logger::test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="RustfmtProjectSettings">
+    <option name="runRustfmtOnSave" value="true" />
+    <option name="useRustfmt" value="true" />
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-WS-241.14494.109" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment="" />
+      <created>1692171959317</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692171959317</updated>
+      <workItem from="1692171960322" duration="3687000" />
+      <workItem from="1692718545829" duration="6817000" />
+      <workItem from="1692758719519" duration="3556000" />
+      <workItem from="1692766631288" duration="1155000" />
+      <workItem from="1692768257728" duration="11525000" />
+      <workItem from="1692781802811" duration="1241000" />
+      <workItem from="1692787666656" duration="11528000" />
+      <workItem from="1692809118738" duration="19000" />
+      <workItem from="1692854917851" duration="1827000" />
+      <workItem from="1692857576712" duration="1951000" />
+      <workItem from="1693014026332" duration="6070000" />
+      <workItem from="1693022111515" duration="840000" />
+      <workItem from="1693023124761" duration="10513000" />
+      <workItem from="1693034920414" duration="11175000" />
+      <workItem from="1693124988594" duration="4439000" />
+      <workItem from="1693132196932" duration="4569000" />
+      <workItem from="1693141052160" duration="125000" />
+      <workItem from="1693211813253" duration="10751000" />
+      <workItem from="1693276942292" duration="6224000" />
+      <workItem from="1693296562187" duration="594000" />
+      <workItem from="1693306064621" duration="3090000" />
+      <workItem from="1693551701894" duration="4945000" />
+      <workItem from="1693567719025" duration="197000" />
+      <workItem from="1693568145152" duration="3032000" />
+      <workItem from="1693574301101" duration="1490000" />
+      <workItem from="1693833469043" duration="37000" />
+      <workItem from="1694092846069" duration="5374000" />
+      <workItem from="1694099718835" duration="2075000" />
+      <workItem from="1694245617305" duration="883000" />
+      <workItem from="1694253901780" duration="8036000" />
+      <workItem from="1694269444405" duration="845000" />
+      <workItem from="1694437898220" duration="1000" />
+      <workItem from="1694605669404" duration="82000" />
+      <workItem from="1694605758107" duration="129000" />
+      <workItem from="1694605895030" duration="176000" />
+      <workItem from="1694606251105" duration="880000" />
+      <workItem from="1694651985250" duration="416000" />
+      <workItem from="1694704522612" duration="1858000" />
+      <workItem from="1695137598991" duration="1860000" />
+      <workItem from="1695166840615" duration="1644000" />
+      <workItem from="1695251986789" duration="94000" />
+      <workItem from="1695252086178" duration="161000" />
+      <workItem from="1695383617280" duration="19000" />
+      <workItem from="1695889698390" duration="6103000" />
+      <workItem from="1695899474605" duration="3960000" />
+      <workItem from="1696424038274" duration="2013000" />
+      <workItem from="1696493442956" duration="2049000" />
+      <workItem from="1696602807050" duration="282000" />
+      <workItem from="1696604848392" duration="720000" />
+      <workItem from="1696606004210" duration="2864000" />
+      <workItem from="1696759763044" duration="253000" />
+      <workItem from="1696760025110" duration="9300000" />
+      <workItem from="1696864268158" duration="5729000" />
+      <workItem from="1696909399193" duration="1125000" />
+      <workItem from="1696912874804" duration="2166000" />
+      <workItem from="1697122793447" duration="206000" />
+      <workItem from="1697123010916" duration="2000" />
+      <workItem from="1697123047532" duration="1495000" />
+      <workItem from="1697193081243" duration="1039000" />
+      <workItem from="1697983009801" duration="16000" />
+      <workItem from="1698070288837" duration="17000" />
+      <workItem from="1703592413920" duration="76000" />
+      <workItem from="1703733847054" duration="657000" />
+      <workItem from="1703760473841" duration="3171000" />
+      <workItem from="1703763917412" duration="582000" />
+      <workItem from="1704077572260" duration="148000" />
+      <workItem from="1704286451633" duration="961000" />
+      <workItem from="1704807890233" duration="37000" />
+      <workItem from="1705329085888" duration="729000" />
+      <workItem from="1705366538725" duration="99000" />
+      <workItem from="1706784691048" duration="5395000" />
+      <workItem from="1707012515761" duration="1507000" />
+      <workItem from="1707292744353" duration="1317000" />
+      <workItem from="1707355751955" duration="17000" />
+      <workItem from="1709474063696" duration="6078000" />
+      <workItem from="1712728137032" duration="1033000" />
+      <workItem from="1712729292532" duration="1063000" />
+      <workItem from="1712730526684" duration="695000" />
+      <workItem from="1712746835897" duration="15000" />
+      <workItem from="1712851273374" duration="896000" />
+      <workItem from="1712997102718" duration="34000" />
+      <workItem from="1713507683455" duration="8673000" />
+      <workItem from="1729241221413" duration="18931000" />
+      <workItem from="1732878870374" duration="27000" />
+      <workItem from="1736735886988" duration="843000" />
+      <workItem from="1736756439398" duration="1188000" />
+    </task>
+    <task id="LOCAL-00037" summary=":green_heart: fix CI">
+      <created>1692790427725</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1692790427725</updated>
+    </task>
+    <task id="LOCAL-00038" summary=":green_heart: fix CI">
+      <created>1692791096128</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1692791096128</updated>
+    </task>
+    <task id="LOCAL-00039" summary=":green_heart: fix CI">
+      <created>1692792037863</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1692792037863</updated>
+    </task>
+    <task id="LOCAL-00040" summary=":green_heart: add python env">
+      <created>1692793220111</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1692793220111</updated>
+    </task>
+    <task id="LOCAL-00041" summary=":green_heart: add python env">
+      <created>1692793854554</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1692793854554</updated>
+    </task>
+    <task id="LOCAL-00042" summary=":green_heart: set version">
+      <created>1692796748234</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1692796748234</updated>
+    </task>
+    <task id="LOCAL-00043" summary=":green_heart: using pypy 2.7">
+      <created>1692796886393</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1692796886393</updated>
+    </task>
+    <task id="LOCAL-00044" summary=":green_heart: add dmg-license">
+      <created>1692797646725</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1692797646725</updated>
+    </task>
+    <task id="LOCAL-00045" summary=":bug: fix 后续加载无法进行">
+      <created>1693019451092</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1693019451092</updated>
+    </task>
+    <task id="LOCAL-00046" summary=":sparkles: 试图实现custom element">
+      <created>1693019503846</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1693019503846</updated>
+    </task>
+    <task id="LOCAL-00047" summary=":sparkles: add help scripts">
+      <created>1693019748133</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1693019748133</updated>
+    </task>
+    <task id="LOCAL-00048" summary=":sparkles: 配置安装程序配置">
+      <created>1693026168463</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1693026168463</updated>
+    </task>
+    <task id="LOCAL-00049" summary=":sparkles: 配置安装程序配置">
+      <created>1693027260635</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1693027260635</updated>
+    </task>
+    <task id="LOCAL-00050" summary=":construction_worker: 添加tauri release">
+      <created>1693027918965</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1693027918965</updated>
+    </task>
+    <task id="LOCAL-00051" summary=":construction_worker: 添加tauri release">
+      <created>1693028088731</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1693028088731</updated>
+    </task>
+    <task id="LOCAL-00052" summary=":bug: 修复无法退出">
+      <created>1693028788928</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1693028788928</updated>
+    </task>
+    <task id="LOCAL-00053" summary=":green_heart: fix CI">
+      <created>1693029264639</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1693029264639</updated>
+    </task>
+    <task id="LOCAL-00054" summary=":bookmark: release v0.1.5">
+      <created>1693029444703</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1693029444703</updated>
+    </task>
+    <task id="LOCAL-00055" summary=":bookmark: release v0.1.5">
+      <created>1693029857132</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1693029857132</updated>
+    </task>
+    <task id="LOCAL-00056" summary=":bookmark: 嵌入窗口支持">
+      <created>1693033780443</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1693033780443</updated>
+    </task>
+    <task id="LOCAL-00057" summary=":bookmark: 更名为小刻食堂">
+      <created>1693035056076</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1693035056076</updated>
+    </task>
+    <task id="LOCAL-00058" summary=":bookmark: 添加服务失败终止">
+      <created>1693039412011</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1693039412011</updated>
+    </task>
+    <task id="LOCAL-00059" summary=":bookmark: 添加检查更新失败通知">
+      <created>1693050801508</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1693050801508</updated>
+    </task>
+    <task id="LOCAL-00060" summary=":loud_sound: 添加日志系统">
+      <created>1693055557925</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1693055557925</updated>
+    </task>
+    <task id="LOCAL-00061" summary=":loud_sound: 添加启动检查更新">
+      <created>1693056323232</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1693056323232</updated>
+    </task>
+    <task id="LOCAL-00062" summary=":art: cargo fmt">
+      <created>1693056451911</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1693056451911</updated>
+    </task>
+    <task id="LOCAL-00063" summary=":sparkles: 封装嵌入窗口">
+      <created>1693127657994</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1693127657994</updated>
+    </task>
+    <task id="LOCAL-00064" summary=":sparkles: 封装嵌入窗口">
+      <created>1693128658388</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1693128658388</updated>
+    </task>
+    <task id="LOCAL-00065" summary=":sparkles: 封装窗口嵌入">
+      <created>1693132779977</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1693132779977</updated>
+    </task>
+    <task id="LOCAL-00066" summary=":sparkles: 修复通知问题">
+      <created>1693140357557</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1693140357557</updated>
+    </task>
+    <task id="LOCAL-00067" summary=":bookmark: 发布release 0.1.5-beta.1">
+      <created>1693212759106</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1693212759106</updated>
+    </task>
+    <task id="LOCAL-00068" summary=":green_heart: fix CI">
+      <created>1693214627413</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1693214627413</updated>
+    </task>
+    <task id="LOCAL-00069" summary=":green_heart: fix CI">
+      <created>1693217939022</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1693217939022</updated>
+    </task>
+    <task id="LOCAL-00070" summary=":green_heart: fix CI">
+      <created>1693218054298</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1693218054298</updated>
+    </task>
+    <task id="LOCAL-00071" summary=":green_heart: fix CI">
+      <created>1693218196850</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1693218196850</updated>
+    </task>
+    <task id="LOCAL-00072" summary=":green_heart: fix CI">
+      <created>1693218363840</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1693218363840</updated>
+    </task>
+    <task id="LOCAL-00073" summary=":green_heart: fix CI">
+      <created>1693218689456</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1693218689456</updated>
+    </task>
+    <task id="LOCAL-00074" summary=":green_heart: fix CI">
+      <created>1693219668957</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1693219668957</updated>
+    </task>
+    <task id="LOCAL-00075" summary=":green_heart: fix CI">
+      <created>1693228465735</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1693228465735</updated>
+    </task>
+    <task id="LOCAL-00076" summary=":green_heart: fix CI">
+      <created>1693228564327</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1693228564327</updated>
+    </task>
+    <task id="LOCAL-00077" summary=":green_heart: fix CI">
+      <created>1693228707882</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1693228707882</updated>
+    </task>
+    <task id="LOCAL-00078" summary=":green_heart: fix CI">
+      <created>1693228856262</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1693228856262</updated>
+    </task>
+    <task id="LOCAL-00079" summary=":green_heart: fix CI">
+      <created>1693230095198</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1693230095198</updated>
+    </task>
+    <task id="LOCAL-00080" summary=":green_heart: fix CI">
+      <created>1693231771725</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1693231771725</updated>
+    </task>
+    <task id="LOCAL-00081" summary=":sparkles: log to file support">
+      <created>1693283329288</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1693283329288</updated>
+    </task>
+    <task id="LOCAL-00082" summary=":bookmark: release 0.1.7">
+      <created>1693283680422</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1693283680422</updated>
+    </task>
+    <task id="LOCAL-00083" summary=":bookmark: release 0.1.7">
+      <created>1693283740952</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1693283740952</updated>
+    </task>
+    <task id="LOCAL-00084" summary=":loud_sound: add log send request">
+      <created>1693310067942</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1693310067943</updated>
+    </task>
+    <task id="LOCAL-00085" summary=":bug: macos 下取消单例">
+      <created>1693315500256</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1693315500256</updated>
+    </task>
+    <option name="localTasksCounter" value="167" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feat/setting" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value=":bug: fix notification not auto hide" />
+    <MESSAGE value=":sparkles: 系统notification" />
+    <MESSAGE value=":boom: fix break change of config" />
+    <MESSAGE value=":sparkles: 免打扰模式添加" />
+    <MESSAGE value=":wrench: 修改项目配置，配置IDE 不报错" />
+    <MESSAGE value=":sparkles: 加载工具列表改用动态加载模式" />
+    <MESSAGE value=":sparkles: 添加命令行参数识别" />
+    <MESSAGE value=":art: cargo fmt" />
+    <MESSAGE value=":bug: cache 清除过期的记录" />
+    <MESSAGE value=":bug: 修复设置页面拖动问题" />
+    <MESSAGE value=":test_tube: 窗口修饰" />
+    <MESSAGE value=":see_no_evil: 版本管理不记录项目配置" />
+    <MESSAGE value=":bug: 修复单例模式" />
+    <MESSAGE value=":art: cargo fmt &amp; cargo clippy" />
+    <MESSAGE value=":sparkles: 添加非windows系统下打开首页" />
+    <MESSAGE value=":sparkles: 添加windows 下多实例启动弹窗" />
+    <MESSAGE value=":wrench: 添加RR配置文件" />
+    <MESSAGE value=":arrow_up: 升级Tauri" />
+    <MESSAGE value=":rotating_light: 修复迁移带来的不一致问题，使得可以基本启动" />
+    <MESSAGE value=":rotating_light: 调整权限配置相关" />
+    <MESSAGE value=":see_no_evil: 去除生成文件git" />
+    <MESSAGE value=":recycle: 使用plugin 模式初始 logger 模块" />
+    <MESSAGE value=":recycle: 为系统托盘图标添加图标" />
+    <MESSAGE value=":recycle: 调整嵌入webview的组件化实现" />
+    <MESSAGE value=":recycle: 添加前端webview的预备接口文件" />
+    <option name="LAST_COMMIT_MESSAGE" value=":recycle: 添加前端webview的预备接口文件" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
