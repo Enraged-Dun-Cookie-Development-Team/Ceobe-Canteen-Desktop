@@ -70,6 +70,15 @@ export interface PrimaryUrl {
     url: string;
 }
 
+export function primaryToSpare(primary_url: PrimaryUrl): SpareUrl{
+    return {
+        manual: primary_url.manual,
+        name: primary_url.name ?? "Primary",
+        url: primary_url.url,
+        support_platforms:primary_url.support_platforms
+    }
+}
+
 export enum Name {
     Primary = "Primary",
 }

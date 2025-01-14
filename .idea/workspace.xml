@@ -7,11 +7,8 @@
     <cargoProject FILE="$PROJECT_DIR$/src-tauri/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":fire: 清理嵌套plugin 当前实现">
+    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":sparkles: 调整接口类型">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src-tauri/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src-tauri/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppTop.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppTop.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -341,7 +338,8 @@
       <workItem from="1736756439398" duration="5205000" />
       <workItem from="1736818912132" duration="2412000" />
       <workItem from="1736821633913" duration="31000" />
-      <workItem from="1736821672376" duration="263000" />
+      <workItem from="1736821672376" duration="669000" />
+      <workItem from="1736822353480" duration="430000" />
     </task>
     <task id="LOCAL-00037" summary=":green_heart: fix CI">
       <created>1692790427725</created>
@@ -686,7 +684,7 @@
       <option name="project" value="LOCAL" />
       <updated>1693315500256</updated>
     </task>
-    <option name="localTasksCounter" value="172" />
+    <option name="localTasksCounter" value="173" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -727,7 +725,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value=":wrench: 修改项目配置，配置IDE 不报错" />
     <MESSAGE value=":sparkles: 加载工具列表改用动态加载模式" />
     <MESSAGE value=":sparkles: 添加命令行参数识别" />
     <MESSAGE value=":art: cargo fmt" />
@@ -752,7 +749,8 @@
     <MESSAGE value=":sparkles: 添加version manger" />
     <MESSAGE value=":recycle: 调整为使用CDN信息" />
     <MESSAGE value=":fire: 清理嵌套plugin 当前实现" />
-    <option name="LAST_COMMIT_MESSAGE" value=":fire: 清理嵌套plugin 当前实现" />
+    <MESSAGE value=":sparkles: 调整接口类型" />
+    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: 调整接口类型" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
