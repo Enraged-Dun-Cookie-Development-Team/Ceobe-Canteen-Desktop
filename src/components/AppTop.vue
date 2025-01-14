@@ -147,9 +147,9 @@ import DonatePage from "./DonatePage.vue";
 import SettingPage from "./SettingPage.vue";
 import VersionPage from "./VersionPage.vue";
 import {getVersion} from "@/api/resourceFetcher/version";
-import updateManager from "@/api/managers/UpdateManager"
 import updater, {VersionStateType} from "../api/operations/updater";
 import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/api/notification";
+import updateManager  from "@/api/managers/UpdateManager"
 
 const winMax = ref(false);
 
@@ -287,7 +287,7 @@ const setting = reactive({
 });
 
 
-const ErrVersionInfo: De = {
+const ErrVersionInfo = {
   baidu: "<Missing>",
   baidu_text: "<Missing>",
   description: "<Missing>",
@@ -300,13 +300,14 @@ const ErrVersionInfo: De = {
   version: "<Missing>",
 };
 
+
 const version = reactive<{
   show: boolean,
-  version_info: DesktopVersion,
+  version_info: ReleaseVersion,
   force: boolean,
   getNewestVersion(): void
 }>({
-  show: false,
+  show: true,
   force: false,
   version_info: ErrVersionInfo,
   async getNewestVersion() {
@@ -314,7 +315,10 @@ const version = reactive<{
       if (setting.show) {
         setting.versionState = VersionStateType.Newest;
       }
-      const currentVersion = updateManager.version.version_info = currentVersion.data.data
+      const currentVersion = await updateManager.latestVersion()
+      console.log(currentVersion)
+      if(currentVersion)
+      version.version_info = currentVersion
       // version.force = await updater.judgmentVersion(version.version_info.last_force_version)
       version.show = await updater.judgmentVersion(version.version_info.version)
       if (version.show) {

@@ -1,5 +1,4 @@
 import {getAllVersion, getVersion, ReleaseVersion} from "@/api/resourceFetcher/version";
-import {fa} from "vuetify/iconsets/fa";
 
 class UpdateManager {
 
