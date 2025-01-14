@@ -1,11 +1,5 @@
-<template>
-    
-</template>
+<script lang="ts" setup></script>
 
-<script lang="ts" setup>
+<template><a>ceobe</a></template>
 
-
-</script>
-
-<style>
-</style>
+<style></style>

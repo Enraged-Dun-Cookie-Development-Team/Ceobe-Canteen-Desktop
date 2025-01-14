@@ -1,4 +1,4 @@
-import requestClient, { Payload,Response } from "@/utils/requestUtil";
+import requestClient, { Payload, Response } from "@/utils/requestUtil";
 
 export interface Announcement {
   /**
@@ -33,6 +33,6 @@ export function getAnnouncementInfo(): Promise<
   return requestClient.requestPayload({
     url: `/cdn/operate/announcement/list`,
     method: "GET",
-    requestTarget: 'ServeCDN',
+    requestTarget: "ServeCDN",
   });
 }
