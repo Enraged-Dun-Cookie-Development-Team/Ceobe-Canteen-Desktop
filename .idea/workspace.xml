@@ -8,10 +8,8 @@
     <cargoProject FILE="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":sparkles: 添加version manger">
-      <change afterPath="$PROJECT_DIR$/src/api/mangers/UpdateManager.ts" afterDir="false" />
+    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":recycle: 调整为使用CDN信息">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +57,9 @@
     &quot;accountId&quot;: &quot;3eeba640-83aa-422f-a407-2f62fc1c82e6&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/typescript/lib/lib.es5.d.ts" root0="SKIP_INSPECTION" />
+  </component>
   <component name="KubernetesApiProvider">{}</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="4zhly1gl" />
@@ -77,43 +78,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Cargo.Test request.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feat-转运营接口到cdn&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/front_end_project/Ceobe-Canteen-Electron/src-tauri/src/components/muilt_webview&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\stylelint&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.tauri:build.executor&quot;: &quot;Run&quot;,
-    &quot;npm.tauri:dev -- -- -- --hidden.executor&quot;: &quot;Run&quot;,
-    &quot;npm.tauri:dev -- -- --hidden.executor&quot;: &quot;Run&quot;,
-    &quot;npm.tauri:dev -- --hidden.executor&quot;: &quot;Run&quot;,
-    &quot;npm.tauri:dev.executor&quot;: &quot;Run&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;language.rust.cargo.check&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Cargo.Test request.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feat-转运营接口到cdn",
+    "ignore.virus.scanning.warn.message": "true",
+    "js.linters.configure.manually.selectedeslint": "true",
+    "last_opened_file_path": "E:/front_end_project/Ceobe-Canteen-Electron/src-tauri/src/components/muilt_webview",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.stylelint": "E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\stylelint",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.tauri:build.executor": "Run",
+    "npm.tauri:dev -- -- -- --hidden.executor": "Run",
+    "npm.tauri:dev -- -- --hidden.executor": "Run",
+    "npm.tauri:dev -- --hidden.executor": "Run",
+    "npm.tauri:dev.executor": "Run",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.first.attach.projects": "true",
+    "settings.editor.selected.configurable": "language.rust.cargo.check",
+    "ts.external.directory.path": "E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Composition API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\front_end_project\Ceobe-Canteen-Electron\src-tauri\src\components\muilt_webview" />
@@ -339,7 +341,8 @@
       <workItem from="1729241221413" duration="18931000" />
       <workItem from="1732878870374" duration="27000" />
       <workItem from="1736735886988" duration="843000" />
-      <workItem from="1736756439398" duration="4535000" />
+      <workItem from="1736756439398" duration="5205000" />
+      <workItem from="1736818912132" duration="76000" />
     </task>
     <task id="LOCAL-00037" summary=":green_heart: fix CI">
       <created>1692790427725</created>
@@ -684,7 +687,7 @@
       <option name="project" value="LOCAL" />
       <updated>1693315500256</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -725,7 +728,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value=":boom: fix break change of config" />
     <MESSAGE value=":sparkles: 免打扰模式添加" />
     <MESSAGE value=":wrench: 修改项目配置，配置IDE 不报错" />
     <MESSAGE value=":sparkles: 加载工具列表改用动态加载模式" />
@@ -750,7 +752,8 @@
     <MESSAGE value=":recycle: 添加前端webview的预备接口文件" />
     <MESSAGE value=":tada: 初始化未来可能能用的plugin模块" />
     <MESSAGE value=":sparkles: 添加version manger" />
-    <option name="LAST_COMMIT_MESSAGE" value=":sparkles: 添加version manger" />
+    <MESSAGE value=":recycle: 调整为使用CDN信息" />
+    <option name="LAST_COMMIT_MESSAGE" value=":recycle: 调整为使用CDN信息" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
