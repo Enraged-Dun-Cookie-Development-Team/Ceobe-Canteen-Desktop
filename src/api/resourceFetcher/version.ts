@@ -27,8 +27,6 @@ export interface ReleaseVersion {
      * 发布的新版本
      */
     version: string;
-
-    [property: string]: any;
 }
 
 export interface DownloadSource {
@@ -48,8 +46,6 @@ export interface DownloadSource {
      * 备用下载链接，如果没有任何备用下载链接，这个字段将不会被序列化
      */
     spare_urls?: SpareUrl[];
-
-    [property: string]: any;
 }
 
 /**
@@ -72,8 +68,6 @@ export interface PrimaryUrl {
      * 下载链接
      */
     url: string;
-
-    [property: string]: any;
 }
 
 export enum Name {
@@ -116,8 +110,6 @@ export interface SpareUrl {
      * 下载链接
      */
     url: string;
-
-    [property: string]: any;
 }
 
 /**
