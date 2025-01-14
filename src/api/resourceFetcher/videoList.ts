@@ -36,6 +36,6 @@ export function getVideoList(): Promise<Response<Payload<VideoItem[]>>> {
   return requestClient.requestPayload({
     url: `/cdn/operate/video/list`,
     method: "GET",
-    requestTarget: 'ServeCDN',
+    requestTarget: "ServeCDN",
   });
 }
