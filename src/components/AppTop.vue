@@ -146,7 +146,8 @@ import operate from "../api/operations/operate";
 import DonatePage from "./DonatePage.vue";
 import SettingPage from "./SettingPage.vue";
 import VersionPage from "./VersionPage.vue";
-import {getVersion, DesktopVersion} from "@/api/resourceFetcher/version";
+import {getVersion} from "@/api/resourceFetcher/version";
+import updateManager from "@/api/managers/UpdateManager"
 import updater, {VersionStateType} from "../api/operations/updater";
 import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/api/notification";
 
@@ -156,6 +157,7 @@ interface ViewDatasourceItem extends DatasourceItem {
   check: boolean;
 }
 
+// APP顶端菜单
 const menuShow = reactive<{
   notOpened: boolean;
   show: boolean;
@@ -230,6 +232,7 @@ const menuShow = reactive<{
     }
   },
 });
+// 搜索功能
 const search = reactive({
   show: false,
   wordShow: "",
@@ -250,6 +253,7 @@ const search = reactive({
   },
 });
 
+// 窗口事件控制
 const handleWindow = reactive({
   // 最小化
   minus() {
@@ -266,10 +270,12 @@ const handleWindow = reactive({
   },
 });
 
+// 捐赠窗口控制
 const donate = reactive({
   show: false,
 });
 
+// 设置界面窗口控制
 const setting = reactive({
   show: false,
   // updater setting
@@ -280,7 +286,8 @@ const setting = reactive({
   },
 });
 
-const ErrVersionInfo: DesktopVersion = {
+
+const ErrVersionInfo: De = {
   baidu: "<Missing>",
   baidu_text: "<Missing>",
   description: "<Missing>",
@@ -307,8 +314,7 @@ const version = reactive<{
       if (setting.show) {
         setting.versionState = VersionStateType.Newest;
       }
-      const currentVersion = await getVersion()
-      version.version_info = currentVersion.data.data
+      const currentVersion = updateManager.version.version_info = currentVersion.data.data
       // version.force = await updater.judgmentVersion(version.version_info.last_force_version)
       version.show = await updater.judgmentVersion(version.version_info.version)
       if (version.show) {

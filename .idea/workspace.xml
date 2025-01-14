@@ -5,11 +5,13 @@
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/src-tauri/Cargo.toml" />
-    <cargoProject FILE="$PROJECT_DIR$/plugins/version-manager/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":recycle: 调整为使用CDN信息">
+    <list default="true" id="98e2dcab-eb9e-41a6-a945-1438de127fbf" name="Changes" comment=":fire: 清理嵌套plugin 当前实现">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src-tauri/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src-tauri/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/resourceFetcher/version.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppTop.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppTop.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,44 +80,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Test request.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat-转运营接口到cdn",
-    "ignore.virus.scanning.warn.message": "true",
-    "js.linters.configure.manually.selectedeslint": "true",
-    "last_opened_file_path": "E:/front_end_project/Ceobe-Canteen-Electron/src-tauri/src/components/muilt_webview",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.stylelint": "E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\stylelint",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.tauri:build.executor": "Run",
-    "npm.tauri:dev -- -- -- --hidden.executor": "Run",
-    "npm.tauri:dev -- -- --hidden.executor": "Run",
-    "npm.tauri:dev -- --hidden.executor": "Run",
-    "npm.tauri:dev.executor": "Run",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
-    "org.rust.first.attach.projects": "true",
-    "settings.editor.selected.configurable": "language.rust.cargo.check",
-    "ts.external.directory.path": "E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Test request.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-转运营接口到cdn&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;js.linters.configure.manually.selectedeslint&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/front_end_project/Ceobe-Canteen-Electron/src-tauri/src/components/muilt_webview&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.lint:eslint.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- -- -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev -- --hidden.executor&quot;: &quot;Run&quot;,
+    &quot;npm.tauri:dev.executor&quot;: &quot;Run&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
+    &quot;org.rust.first.attach.projects&quot;: &quot;true&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\front_end_project\\Ceobe-Canteen-Electron\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "vue.recent.templates": [
-      "Vue Composition API Component"
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Composition API Component&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\front_end_project\Ceobe-Canteen-Electron\src-tauri\src\components\muilt_webview" />
@@ -130,23 +134,6 @@
     <option name="tool" value="Clippy" />
   </component>
   <component name="RunManager" selected="npm.tauri:dev">
-    <configuration name="Test commands::font_logger::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="test --package ceobe-canteen-desktop --bin ceobe-canteen-desktop commands::font_logger::test -- --exact" />
-      <option name="workingDirectory" value="file://$PROJECT_DIR$/src-tauri" />
-      <envs />
-      <option name="emulateTerminal" value="false" />
-      <option name="channel" value="DEFAULT" />
-      <option name="requiredFeatures" value="true" />
-      <option name="allFeatures" value="false" />
-      <option name="withSudo" value="false" />
-      <option name="buildTarget" value="REMOTE" />
-      <option name="backtrace" value="SHORT" />
-      <option name="isRedirectInput" value="false" />
-      <option name="redirectInputPath" value="" />
-      <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Test commands::monitor_info::test" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="command" value="test --package ceobe-canteen-desktop --bin ceobe-canteen-desktop commands::monitor_info::test -- --exact" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$/src-tauri" />
@@ -169,6 +156,16 @@
       <command value="run" />
       <scripts>
         <script value="electron:serve" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="lint:eslint" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="lint:eslint" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -216,10 +213,10 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Cargo.Test commands::font_logger::test" />
       <item itemvalue="Cargo.Test commands::monitor_info::test" />
       <item itemvalue="npm.electron:serve" />
       <item itemvalue="npm.tauri dev" />
+      <item itemvalue="npm.lint:eslint" />
       <item itemvalue="npm.tauri:build-debug" />
       <item itemvalue="npm.tauri:build" />
       <item itemvalue="npm.tauri:dev" />
@@ -227,10 +224,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.tauri:dev" />
+        <item itemvalue="npm.lint:eslint" />
         <item itemvalue="npm.tauri:build" />
         <item itemvalue="npm.tauri:build-debug" />
         <item itemvalue="Cargo.Test commands::monitor_info::test" />
-        <item itemvalue="Cargo.Test commands::font_logger::test" />
       </list>
     </recent_temporary>
   </component>
@@ -342,7 +339,9 @@
       <workItem from="1732878870374" duration="27000" />
       <workItem from="1736735886988" duration="843000" />
       <workItem from="1736756439398" duration="5205000" />
-      <workItem from="1736818912132" duration="76000" />
+      <workItem from="1736818912132" duration="2412000" />
+      <workItem from="1736821633913" duration="31000" />
+      <workItem from="1736821672376" duration="263000" />
     </task>
     <task id="LOCAL-00037" summary=":green_heart: fix CI">
       <created>1692790427725</created>
@@ -687,7 +686,7 @@
       <option name="project" value="LOCAL" />
       <updated>1693315500256</updated>
     </task>
-    <option name="localTasksCounter" value="171" />
+    <option name="localTasksCounter" value="172" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -728,7 +727,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value=":sparkles: 免打扰模式添加" />
     <MESSAGE value=":wrench: 修改项目配置，配置IDE 不报错" />
     <MESSAGE value=":sparkles: 加载工具列表改用动态加载模式" />
     <MESSAGE value=":sparkles: 添加命令行参数识别" />
@@ -753,7 +751,8 @@
     <MESSAGE value=":tada: 初始化未来可能能用的plugin模块" />
     <MESSAGE value=":sparkles: 添加version manger" />
     <MESSAGE value=":recycle: 调整为使用CDN信息" />
-    <option name="LAST_COMMIT_MESSAGE" value=":recycle: 调整为使用CDN信息" />
+    <MESSAGE value=":fire: 清理嵌套plugin 当前实现" />
+    <option name="LAST_COMMIT_MESSAGE" value=":fire: 清理嵌套plugin 当前实现" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
