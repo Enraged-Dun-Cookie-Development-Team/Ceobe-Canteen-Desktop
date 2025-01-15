@@ -23,6 +23,7 @@ import updater, { VersionStateType } from "../api/operations/updater";
 import DonatePage from "./DonatePage.vue";
 import SettingPage from "./SettingPage.vue";
 import VersionPage from "./VersionPage.vue";
+import { ReleasePlatform, ReleaseVersion } from "@/api/resourceFetcher/version";
 
 const winMax = ref(false);
 
@@ -158,17 +159,12 @@ const setting = reactive({
   },
 });
 
-const ErrVersionInfo = {
-  baidu: "<Missing>",
-  baidu_text: "<Missing>",
-  description: "<Missing>",
-  dmg: "<Missing>",
-  exe: "<Missing>",
-  force: false,
-  last_force_version: "<Missing>",
-  spare_dmg: "<Missing>",
-  spare_exe: "<Missing>",
-  version: "<Missing>",
+const ErrVersionInfo: ReleaseVersion = {
+  deleted: false,
+  download_source: [],
+  platform: ReleasePlatform.Desktop,
+  previous_mandatory_version: "",
+  version: "0.0.0",
 };
 
 const version = reactive<{
@@ -186,7 +182,6 @@ const version = reactive<{
         setting.versionState = VersionStateType.Newest;
       }
       const currentVersion = await updateManager.latestVersion();
-      console.log(currentVersion);
       if (currentVersion) version.version_info = currentVersion;
       // version.force = await updater.judgmentVersion(version.version_info.last_force_version)
       version.show = await updater.judgmentVersion(

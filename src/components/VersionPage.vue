@@ -10,6 +10,7 @@ import {
   ReleaseVersion,
   SpareUrl,
 } from "@/api/resourceFetcher/version";
+import DownloadSource from "./DownloadSource.vue";
 
 const props = defineProps<{
   versionInfo: ReleaseVersion;
@@ -91,8 +92,10 @@ onMounted(() => {
           <br />
           {{ versionInfo.description }}
         </div>
-
-        <v-btn
+        <div v-for="source in versionInfo.download_source" :key="source.name">
+          <download-source :source="source"> </download-source>
+        </div>
+        <!-- <v-btn
           v-for="source in versionInfo.download_source"
           :key="source.name"
           density="de"
@@ -111,7 +114,7 @@ onMounted(() => {
             />
           </template>
           <template #append> 下载 </template>
-        </v-btn>
+        </v-btn> -->
 
         <!-- <v-btn
             color="#e6a23c"
