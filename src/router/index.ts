@@ -6,6 +6,7 @@ import Background from "@/view/Background.vue";
 import Notification from "@/view/Notification.vue";
 import Home from "@/view/home/Home.vue";
 import InfoAndTool from "@/view/home/InfoAndTool.vue";
+import Updater from "@/view/Updater.vue";
 
 const routes = [
   {
@@ -40,6 +41,10 @@ const routes = [
     path: "/background",
     component: Background,
   },
+  {
+    path: "/updater",
+    component: Updater,
+  }
 ];
 
 const router = createRouter({

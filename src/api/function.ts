@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { writeText } from "@tauri-apps/api/clipboard";
 import { readTextFile } from "@tauri-apps/api/fs";
 import { open } from "@tauri-apps/api/shell";
+import { isPermissionGranted, requestPermission, sendNotification } from "@tauri-apps/api/notification";
 
 // 获取文件
 export async function getLocalFileText(path: string): Promise<string> {
@@ -40,4 +41,16 @@ export async function bootStartSetting(isBoot: boolean): Promise<boolean> {
 
 export async function getBootStartSetting(): Promise<boolean> {
   return await invoke<boolean>("auto_launch_setting");
+}
+
+
+export async function handleAsyncException(exception: Error) {
+  if (!(await isPermissionGranted())) {
+    await requestPermission();
+  }
+  sendNotification({
+    title: "小刻出错了！",
+    icon: "/asserts/icon.png",
+    body: exception.toString(),
+  });
 }

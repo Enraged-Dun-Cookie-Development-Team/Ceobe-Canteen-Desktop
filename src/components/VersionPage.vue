@@ -10,14 +10,15 @@ import {
   ReleaseVersion,
   SpareUrl,
 } from "@/api/resourceFetcher/version";
+
 import DownloadSource from "./DownloadSource.vue";
 
 const props = defineProps<{
   versionInfo: ReleaseVersion;
 }>();
-const emits = defineEmits({
-  close: null,
-});
+const emits = defineEmits<{
+  (e: "close"): void;
+}>();
 
 // 如果更新版本即为前一强制更新版本，需要强制更新
 const mandatory = computed(
@@ -75,16 +76,6 @@ onMounted(() => {
 <template>
   <div class="donate">
     <v-card>
-      <v-toolbar color="#e6a23c">
-        <v-toolbar-title>版本更新</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn
-          v-if="!mandatory"
-          variant="text"
-          icon="fa-solid fa-xmark"
-          @click="version.close"
-        ></v-btn>
-      </v-toolbar>
       <v-card-text>
         <div v-if="mandatory" class="text-subtitle-1 pl-6">更新方式：强制</div>
         <div class="text-subtitle-1 pl-6">
