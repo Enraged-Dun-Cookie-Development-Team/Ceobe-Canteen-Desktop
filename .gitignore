@@ -44,6 +44,8 @@
 # *.iml
 # *.ipr
 
+.idea/codeStyles
+
 # CMake
 cmake-build-*/
 
@@ -281,3 +283,5 @@ docs/_book
 test/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,rust,rust-analyzer,node,vue,jetbrains+all
+
+src-tauri/gen
