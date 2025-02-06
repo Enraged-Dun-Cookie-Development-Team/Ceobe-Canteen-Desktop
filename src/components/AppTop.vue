@@ -1,13 +1,7 @@
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
-import {
-  isPermissionGranted,
-  requestPermission,
-  sendNotification,
-} from "@tauri-apps/api/notification";
-
-import updateManager from "@/api/managers/UpdateManager";
+import { VersionStateType } from "@/api/operations/updater";
 import { getDatasourceComb } from "@/api/resourceFetcher/datasourceCombine";
 import {
   DatasourceItem,
@@ -18,12 +12,10 @@ import datasourceConfigOperate from "../api/operations/datasourceConfig";
 import storage from "../api/operations/localStorage";
 import operate from "../api/operations/operate";
 import searchWordEvent from "../api/operations/searchWordEvent";
-import updater, { VersionStateType } from "../api/operations/updater";
 
 import DonatePage from "./DonatePage.vue";
 import SettingPage from "./SettingPage.vue";
-import VersionPage from "./VersionPage.vue";
-import { ReleasePlatform, ReleaseVersion } from "@/api/resourceFetcher/version";
+import { emit } from "@tauri-apps/api/event";
 
 const winMax = ref(false);
 
@@ -158,55 +150,6 @@ const setting = reactive({
     setting.versionState = VersionStateType.Unknown;
   },
 });
-
-const ErrVersionInfo: ReleaseVersion = {
-  deleted: false,
-  download_source: [],
-  platform: ReleasePlatform.Desktop,
-  previous_mandatory_version: "",
-  version: "0.0.0",
-};
-
-const version = reactive<{
-  show: boolean;
-  version_info: ReleaseVersion;
-  force: boolean;
-  getNewestVersion(): void;
-}>({
-  show: true,
-  force: false,
-  version_info: ErrVersionInfo,
-  async getNewestVersion() {
-    try {
-      if (setting.show) {
-        setting.versionState = VersionStateType.Newest;
-      }
-      const currentVersion = await updateManager.latestVersion();
-      if (currentVersion) version.version_info = currentVersion;
-      // version.force = await updater.judgmentVersion(version.version_info.last_force_version)
-      version.show = await updater.judgmentVersion(
-        version.version_info.version,
-      );
-      if (version.show) {
-        setting.versionState = VersionStateType.UpdateAvailable;
-      }
-    } catch (error: any) {
-      console.log("Failure loading New Version");
-      if (!(await isPermissionGranted())) {
-        await requestPermission();
-      }
-      sendNotification({
-        title: "小刻出错了！",
-        icon: "/asserts/icon.png",
-        body: error.toString(),
-      });
-    }
-  },
-});
-
-onMounted(() => {
-  version.getNewestVersion();
-});
 </script>
 
 <template>
@@ -329,21 +272,9 @@ onMounted(() => {
   >
     <setting-page
       :version-state="setting.versionState"
-      @check-update="version.getNewestVersion"
+      @check-update="emit('check-update')"
       @close="setting.close"
     ></setting-page>
-  </v-dialog>
-  <v-dialog
-    v-model="version.show"
-    persistent
-    transition="dialog-top-transition"
-    width="600"
-  >
-    <version-page
-      :force="version.force"
-      :version-info="version.version_info"
-      @close="version.show = false"
-    ></version-page>
   </v-dialog>
 </template>
 

@@ -1,7 +1,7 @@
 <script lang="ts" name="setting" setup>
 import { computed, onMounted, reactive } from "vue";
 
-import { app, invoke } from "@tauri-apps/api";
+import { app, invoke, window } from "@tauri-apps/api";
 
 import notification, {
   allNotifyMode,
