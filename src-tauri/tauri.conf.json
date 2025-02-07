@@ -41,9 +41,13 @@
         "assetScope": []
       },
       "dialog": {
-        "message": true
+        "message": true,
+        "confirm": true
       },
       "os":{
+        "all": true
+      },
+      "process": {
         "all": true
       }
     },
@@ -120,6 +124,16 @@
         "visible": false,
         "title": "background",
         "url": "/#/background"
+      },
+      {
+        "label": "updater",
+        "visible": false,
+        "title": "小刻食堂更新",
+        "url": "/#/updater",
+        "resizable": false,
+        "minimizable": false,
+        "width": 400,
+        "height": 500
       },
       {
         "label": "notification",
