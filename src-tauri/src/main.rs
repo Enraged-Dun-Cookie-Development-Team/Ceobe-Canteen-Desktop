@@ -14,7 +14,6 @@ use std::sync::atomic::Ordering::Relaxed;
 use std::thread::spawn;
 use tauri::api::path::app_log_dir;
 use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
-use log::log;
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
     get_app_config_path, get_item, get_monitor_info, hide_notification, is_debug, message_beep,
