@@ -1,12 +1,12 @@
 use crate::state::get_cache_dir;
 use once_cell::sync::Lazy;
-use std::sync::Mutex;
 use std::time::{Duration, SystemTime};
 use std::{fmt, fs, io};
 use tauri::{command, AppHandle};
-use tracing::{debug, trace, info};
+use tokio;
+use tracing::{debug, info, trace};
 
-static CACHE_CLEAR_MUTEX: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+static CACHE_CLEAR_MUTEX: Lazy<tokio::sync::Mutex<()>> = Lazy::new(|| tokio::sync::Mutex::new(()));
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
 #[serde(tag = "status", content = "data")]
@@ -104,19 +104,19 @@ pub async fn clear_cache_dir(app: AppHandle) -> Result<ClearStatus, Error> {
         return Ok(ClearStatus::Clearing);
     }
 
-    let cache_dir = get_cache_dir(app);
+    let cache_dir = get_cache_dir(app).clone();
     // 删除3天前的缓存
     let now = SystemTime::now();
     let mut count = 0;
 
-    for entry in fs::read_dir(cache_dir)? {
-        let entry = entry?;
-        let metadata = entry.metadata()?;
+    let mut dir = tokio::fs::read_dir(cache_dir).await?;
+    while let Some(entry) = dir.next_entry().await? {
+        let metadata = entry.metadata().await?;
         let modified = metadata.modified().unwrap();
 
         if now.duration_since(modified).unwrap() > Duration::from_secs(60 * 60 * 24 * 3) {
             debug!("remove dir: {:?}", entry.path());
-            fs::remove_dir_all(entry.path())?;
+            tokio::fs::remove_dir_all(entry.path()).await?;
             count += 1;
         }
     }
