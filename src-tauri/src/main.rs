@@ -10,7 +10,6 @@ mod state;
 mod storage;
 
 use std::sync::atomic::Ordering;
-use std::sync::atomic::Ordering::Relaxed;
 use std::thread::spawn;
 use tauri::api::path::app_log_dir;
 use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
