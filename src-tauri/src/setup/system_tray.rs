@@ -1,9 +1,11 @@
+use std::sync::atomic::{AtomicBool, Ordering};
+use log::info;
 use tauri::{
     App, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayHandle, SystemTrayMenu,
 };
 
 const CEOBE_SYSTEM_TRAY: &str = "CEOBE_SYSTEM_TRAY";
-
+pub const CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
 pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
     let handle = app.handle();
     SystemTray::new()
@@ -11,9 +13,13 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
         .with_tooltip("小刻食堂持续蹲饼中")
         .on_event(move |event| match event {
             SystemTrayEvent::DoubleClick { .. } | SystemTrayEvent::LeftClick { .. } => {
-                let window = handle.get_window("main").unwrap();
-                window.show().unwrap();
-                window.set_focus().unwrap();
+                let can_open = CAN_OPEN_MAIN.load(Ordering::Acquire);
+                info!("Current [{}] open the Main", if can_open{"can"}else{"can't"});
+                if  can_open{
+                    let window = handle.get_window("main").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
             }
             SystemTrayEvent::MenuItemClick { tray_id, id, .. } => {
                 println!("{tray_id}:{id}");

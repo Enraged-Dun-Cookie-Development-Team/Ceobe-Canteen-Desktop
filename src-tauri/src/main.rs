@@ -8,10 +8,13 @@ mod setup;
 mod single_instance;
 mod state;
 mod storage;
+
+use std::sync::atomic::Ordering;
+use std::sync::atomic::Ordering::Relaxed;
 use std::thread::spawn;
 use tauri::api::path::app_log_dir;
 use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
-
+use log::log;
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
     get_app_config_path, get_item, get_monitor_info, hide_notification, is_debug, message_beep,
@@ -19,7 +22,7 @@ use crate::commands::{
     set_auto_launch, set_item, should_silence,
 };
 use crate::setup::logger::init_logger;
-use crate::setup::system_tray::new_system_tray;
+use crate::setup::system_tray::{new_system_tray, CAN_OPEN_MAIN};
 use crate::single_instance::{run_sev, try_start};
 
 fn main() {
@@ -29,13 +32,26 @@ fn main() {
     if let Ok(true) | Err(_) = try_start() {
         let builder = Builder::default()
             .setup(|app| {
+                // silence startup
+                let mut need_show = false;
                 let window = app.get_window("main").expect("cannot found main window");
                 let args = app.get_cli_matches()?.args;
                 if let Some(arg) = args.get("hidden") {
                     if arg.occurrences == 0 {
-                        window.show()?;
+                        need_show = true;
                     }
                 }
+                // updater
+                app.listen_global("updater-exit",{
+                    let local_main = window.clone();
+                    move |_|{
+                        CAN_OPEN_MAIN.store(true, Ordering::Release);
+                        if need_show && !local_main.is_visible().unwrap_or_default() {
+                            local_main.show().ok();
+                        }
+                    }
+                });
+
                 // single instance
                 spawn({
                     let main_window = window.clone();
