@@ -131,7 +131,9 @@
         "title": "小刻食堂更新",
         "url": "/#/updater",
         "resizable": false,
-        "minimizable": false
+        "minimizable": false,
+        "width": 400,
+        "height": 500
       },
       {
         "label": "notification",
