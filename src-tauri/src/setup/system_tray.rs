@@ -5,7 +5,7 @@ use tauri::{
 use tracing::info;
 
 const CEOBE_SYSTEM_TRAY: &str = "CEOBE_SYSTEM_TRAY";
-pub const CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
+pub static  CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
 pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
     let handle = app.handle();
     SystemTray::new()
