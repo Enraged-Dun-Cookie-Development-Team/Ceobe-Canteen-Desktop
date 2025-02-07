@@ -1,8 +1,8 @@
 use std::sync::atomic::{AtomicBool, Ordering};
-use log::info;
 use tauri::{
     App, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayHandle, SystemTrayMenu,
 };
+use tracing::info;
 
 const CEOBE_SYSTEM_TRAY: &str = "CEOBE_SYSTEM_TRAY";
 pub const CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
