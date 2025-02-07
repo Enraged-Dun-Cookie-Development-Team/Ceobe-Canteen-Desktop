@@ -61,6 +61,8 @@ onUnmounted(() => {
 watch(needDisplay, (value) => {
   if (value) {
     getCurrent().show();
+  } else {
+    emit("updater-exit");
   }
 });
 </script>
