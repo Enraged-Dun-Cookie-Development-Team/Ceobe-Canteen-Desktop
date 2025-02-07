@@ -5,7 +5,7 @@ use tauri::{
 use tracing::info;
 
 const CEOBE_SYSTEM_TRAY: &str = "CEOBE_SYSTEM_TRAY";
-pub static  CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
+pub static CAN_OPEN_MAIN: AtomicBool = AtomicBool::new(false);
 pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
     let handle = app.handle();
     SystemTray::new()
@@ -14,8 +14,11 @@ pub fn new_system_tray(app: &mut App) -> tauri::Result<SystemTrayHandle> {
         .on_event(move |event| match event {
             SystemTrayEvent::DoubleClick { .. } | SystemTrayEvent::LeftClick { .. } => {
                 let can_open = CAN_OPEN_MAIN.load(Ordering::Acquire);
-                info!("Current [{}] open the Main", if can_open{"can"}else{"can't"});
-                if  can_open{
+                info!(
+                    "Current [{}] open the Main",
+                    if can_open { "can" } else { "can't" }
+                );
+                if can_open {
                     let window = handle.get_window("main").unwrap();
                     window.show().unwrap();
                     window.set_focus().unwrap();

@@ -9,10 +9,6 @@ mod single_instance;
 mod state;
 mod storage;
 
-use std::sync::atomic::Ordering;
-use std::thread::spawn;
-use tauri::api::path::app_log_dir;
-use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 use crate::commands::{
     auto_launch_setting, back_preview, copy_image, front_logger, get_app_cache_path,
     get_app_config_path, get_item, get_monitor_info, hide_notification, is_debug, message_beep,
@@ -22,6 +18,10 @@ use crate::commands::{
 use crate::setup::logger::init_logger;
 use crate::setup::system_tray::{new_system_tray, CAN_OPEN_MAIN};
 use crate::single_instance::{run_sev, try_start};
+use std::sync::atomic::Ordering;
+use std::thread::spawn;
+use tauri::api::path::app_log_dir;
+use tauri::{generate_context, Builder, Context, Manager, WindowEvent};
 
 fn main() {
     let context: Context<_> = generate_context!();
@@ -40,9 +40,9 @@ fn main() {
                     }
                 }
                 // updater
-                app.listen_global("updater-exit",{
+                app.listen_global("updater-exit", {
                     let local_main = window.clone();
-                    move |_|{
+                    move |_| {
                         CAN_OPEN_MAIN.store(true, Ordering::Release);
                         if need_show && !local_main.is_visible().unwrap_or_default() {
                             local_main.show().ok();
