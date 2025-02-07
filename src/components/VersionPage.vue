@@ -4,12 +4,7 @@ import { computed, defineEmits, defineProps, onMounted, reactive } from "vue";
 import { app } from "@tauri-apps/api";
 
 import operate from "@/api/operations/operate";
-import {
-  primaryToSpare,
-  PrimaryUrl,
-  ReleaseVersion,
-  SpareUrl,
-} from "@/api/resourceFetcher/version";
+import { ReleaseVersion } from "@/api/resourceFetcher/version";
 
 import DownloadSource from "./DownloadSource.vue";
 
@@ -25,22 +20,6 @@ const mandatory = computed(
   () =>
     props.versionInfo.previous_mandatory_version === props.versionInfo.version,
 );
-
-// const Selects = ref(props.versionInfo.download_source.map(()=>1))
-
-const downloadSourceCombine = (primary: PrimaryUrl, spares?: SpareUrl[]) => {
-  const urls: SpareUrl[] = [];
-  urls.push(primaryToSpare(primary));
-  if (spares) urls.push(...spares);
-  return urls;
-};
-
-const itemProp = (item: SpareUrl) => {
-  return {
-    title: item.name === "Primary" ? "主链接" : item.name,
-    subtitle: `手动下载：${item.manual} | 支持平台：${item.support_platforms ?? [].join(", ")}`,
-  };
-};
 
 const version = reactive<{
   currentVersion: string;
@@ -86,62 +65,6 @@ onMounted(() => {
         <div v-for="source in versionInfo.download_source" :key="source.name">
           <download-source :source="source"> </download-source>
         </div>
-        <!-- <v-btn
-          v-for="source in versionInfo.download_source"
-          :key="source.name"
-          density="de"
-          color="#e6a23c"
-          class="w-25"
-        >
-          <template #default>
-            <v-select
-              density="compact"
-              class="w-100 h-100"
-              label="下载源"
-              :items="
-                downloadSourceCombine(source.primary_url, source.spare_urls)
-              "
-              :item-props="itemProp"
-            />
-          </template>
-          <template #append> 下载 </template>
-        </v-btn> -->
-
-        <!-- <v-btn
-            color="#e6a23c"
-            @click="version.openUrl(versionInfo.exe)"
-        >Windows安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl(versionInfo.spare_exe)"
-        >Windows备用安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl(versionInfo.dmg)"
-        >Mac安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl(versionInfo.spare_dmg)"
-        >Mac备用安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl('')"
-        >Ubuntu安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl('')"
-        >Ubuntu备用安装包
-        </v-btn>
-        <v-btn
-            color="#e6a23c"
-            @click="version.openUrl(versionInfo.baidu)"
-        >百度云链接{{ versionInfo.baidu_text }}
-        </v-btn> -->
       </v-card-text>
       <v-card-actions class="justify-space-around flex-wrap">
         <v-btn v-if="mandatory" color="red" @click="version.exist"

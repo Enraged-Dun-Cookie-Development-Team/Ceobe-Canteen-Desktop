@@ -232,23 +232,23 @@ const setting = reactive({
         @click="donate.show = true"
       ></v-btn>
       <v-btn
-        icon="fas fa-gear"
+        icon="mdi mdi-cog"
         variant="text"
         @click="setting.show = true"
       ></v-btn>
       <v-btn
-        icon="fas fa-minus"
+        icon="mdi mdi-window-minimize"
         variant="text"
         @click="handleWindow.minus"
       ></v-btn>
       <v-btn
-        :icon="winMax ? 'fas fa-minimize' : 'fas fa-maximize'"
+        :icon="winMax ? 'mdi mdi-arrow-collapse-all' : 'mdi mdi-arrow-expand-all'"
         variant="text"
         @click="handleWindow.maximize"
       ></v-btn>
       <v-btn
         color="error"
-        icon="fas fa-circle-xmark "
+        icon="mdi mdi-close-thick"
         variant="text"
         @click="handleWindow.close"
       ></v-btn>
