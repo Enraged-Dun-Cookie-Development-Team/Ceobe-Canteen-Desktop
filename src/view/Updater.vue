@@ -26,6 +26,9 @@ const getLatestVersion = async () => {
     latestVersion.previous_mandatory_version,
   );
   needDisplay.value = await updater.judgmentVersion(latestVersion.version);
+  if (!needDisplay.value) {
+    await emit("updater-exit");
+  }
 };
 
 const onClose = async (event: CloseRequestedEvent) => {
