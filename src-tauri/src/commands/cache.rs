@@ -112,12 +112,29 @@ pub async fn clear_cache_dir(app: AppHandle) -> Result<ClearStatus, Error> {
     let mut dir = tokio::fs::read_dir(cache_dir).await?;
     while let Some(entry) = dir.next_entry().await? {
         let metadata = entry.metadata().await?;
-        let modified = metadata.modified().unwrap();
+        let modified = metadata.modified().map_err(|err| {
+            io::Error::new(
+                io::ErrorKind::Other,
+                format!("get modified time failed: {}", err),
+            )
+        })?;
 
-        if now.duration_since(modified).unwrap() > Duration::from_secs(60 * 60 * 24 * 3) {
-            debug!("remove dir: {:?}", entry.path());
-            tokio::fs::remove_dir_all(entry.path()).await?;
-            count += 1;
+        match now.duration_since(modified) {
+            Ok(duration) if duration > Duration::from_secs(60 * 60 * 24 * 3) => {
+                debug!("remove dir: {:?}", entry.path());
+                tokio::fs::remove_dir_all(entry.path()).await?;
+                count += 1;
+            }
+            Ok(duration) => {
+                debug!("nothing to do for {:?}", duration);
+            }
+            Err(err) => {
+                return Err(io::Error::new(
+                    io::ErrorKind::Other,
+                    format!("get duration failed: {}", err),
+                )
+                .into());
+            }
         }
     }
 
