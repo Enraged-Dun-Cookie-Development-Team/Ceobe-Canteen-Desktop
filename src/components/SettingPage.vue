@@ -1,7 +1,8 @@
 <script lang="ts" name="setting" setup>
 import { computed, onMounted, reactive } from "vue";
 
-import { app, invoke, window } from "@tauri-apps/api";
+import { app, invoke } from "@tauri-apps/api";
+import { emit } from "@tauri-apps/api/event";
 
 import notification, {
   allNotifyMode,
@@ -112,7 +113,7 @@ const setting = reactive<{
   },
 
   checkUpdate(): void {
-    emits("checkUpdate");
+    emit("check-update");
   },
 
   cacheSize: "Unknown",

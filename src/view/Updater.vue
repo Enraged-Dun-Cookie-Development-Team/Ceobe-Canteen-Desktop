@@ -28,6 +28,8 @@ const getLatestVersion = async () => {
   needDisplay.value = await updater.judgmentVersion(latestVersion.version);
   if (!needDisplay.value) {
     await emit("updater-exit");
+  } else if (needDisplay.value && !(await getCurrent().isVisible())) {
+    await getCurrent().show();
   }
 };
 
