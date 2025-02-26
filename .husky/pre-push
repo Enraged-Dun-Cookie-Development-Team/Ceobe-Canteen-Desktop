@@ -1,0 +1,4 @@
+npx lint-staged
+cd src-tauri
+cargo clippy
+cargo fmt
