@@ -68,7 +68,7 @@
 </template>
 
 <script setup name="version" lang="ts">
-import { defineEmits, defineProps, onMounted, reactive, ref } from "vue";
+import { onMounted, reactive } from "vue";
 import operate from "@/api/operations/operate";
 import { DesktopVersion } from "@/api/resourceFetcher/version";
 import { app } from "@tauri-apps/api";

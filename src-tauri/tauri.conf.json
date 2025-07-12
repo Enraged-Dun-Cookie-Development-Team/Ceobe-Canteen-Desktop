@@ -108,12 +108,27 @@
         "fullscreen": false,
         "visible": false,
         "label": "main",
-        "height": 640,
+        "height": 720,
         "resizable": true,
         "title": "小刻食堂",
         "width": 1280,
         "minWidth": 1280,
         "minHeight": 640
+      },
+      {
+        "decorations": false,
+        "fullscreen": false,
+        "visible": false,
+        "url": "/#/settings",
+        "label": "settings",
+        "height": 640,
+        "resizable": true,
+        "title": "设置",
+        "width": 720,
+        "minWidth": 720,
+        "minHeight": 640,
+        "fileDropEnabled": false,
+        "maximizable": false
       },
       {
         "label": "background",

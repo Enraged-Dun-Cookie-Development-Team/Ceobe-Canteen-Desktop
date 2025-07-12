@@ -5,6 +5,7 @@ import Background from "@/view/Background.vue";
 import Notification from "@/view/Notification.vue";
 import InfoAndTool from "@/view/home/InfoAndTool.vue";
 import Browser from "@/components/Browser.vue";
+import SettingPage from "@/components/SettingPage.vue";
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
     path: "/background",
     component: Background,
   },
+  {
+    path: "/settings",
+    component: SettingPage,
+  }
 ];
 
 const router = createRouter({
