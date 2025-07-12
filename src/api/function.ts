@@ -49,7 +49,3 @@ export async function getBootStartSetting(): Promise<boolean> {
 export async function openSettingPage() {
   return await invoke<void>("open_setting_page");
 }
-
-export async function closeSettingPage() {
-  return await invoke<void>("close_setting_page");
-}

@@ -1,101 +1,78 @@
 <template>
   <v-app class="setting">
 
-    <div >
+    <div>
       <v-app-bar title="设置" id="drag" color="#e6a23c" density="compact" data-tauri-drag-region>
 
         <template #prepend>
-          <v-icon icon="fa fa-cog"/>
+          <v-icon icon="fa fa-cog" />
         </template>
         <template #append>
-          <v-btn data-tauri-drag-region
-            icon="fa-solid fa-xmark"
-            variant="text"
-            @click="setting.close"
-          ></v-btn>
+          <v-btn data-tauri-drag-region icon="fa-solid fa-xmark" variant="text" @click="setting.close"></v-btn>
         </template>
         <template #default>
 
-        <div data-tauri-drag-region style="width: 100%;height: 100%"></div>
+          <div data-tauri-drag-region style="width: 100%;height: 100%"></div>
         </template>
       </v-app-bar>
     </div>
     <v-main>
 
-    <v-card>
+      <v-card>
 
-      <SettingItem sub-title="每次开机就能自动蹲饼呢~" title="开机自启">
-        <template v-slot:action="{ color }">
-          <v-switch
-            v-model="setting.autoBoot"
-            :color="color"
-            @change="setting.setAutoBoot"
-          >
-          </v-switch>
-        </template>
-      </SettingItem>
-      <SettingItem title="版本">
-        <template v-slot:sub-title>
-          当前版本 {{ setting.currentVersion }}
-        </template>
-        <template v-slot:action="{ color }">
-          <v-btn :color="color" @click="setting.checkUpdate">检查更新</v-btn>
-        </template>
-      </SettingItem>
-      <SettingItem v-if="isDebug" title="测试弹窗">
-        <template v-slot:action>
-          <v-btn @click="sen_d"> 弹窗</v-btn>
-        </template>
-      </SettingItem>
-      <SettingItem>
-        <template v-slot:fill-action>
-          <v-select
-            v-model="setting.notify_mode"
-            :hint="setting.notify_mode.tip"
-            :items="allNotifyMode"
-            item-title="value"
-            label="通知设置"
-            persistent-hint
-            return-object
-            @update:model-value="setting.setNotifyMode()"
-          >
-          </v-select>
-        </template>
-      </SettingItem>
-    </v-card>
-    <v-snackbar v-model="showDownload">
-      检测到了新版本，即将跳转到下载页面
-    </v-snackbar>
-    <v-snackbar v-model="showAlreadyNewest">
-      已经是最新版本，无需下载
-    </v-snackbar>
+        <SettingItem sub-title="每次开机就能自动蹲饼呢~" title="开机自启">
+          <template v-slot:action="{ color }">
+            <v-switch v-model="setting.autoBoot" :color="color" @change="setting.setAutoBoot">
+            </v-switch>
+          </template>
+        </SettingItem>
+        <SettingItem title="版本">
+          <template v-slot:sub-title>
+            当前版本 {{ setting.currentVersion }}
+          </template>
+          <template v-slot:action="{ color }">
+            <v-btn :color="color" @click="setting.checkUpdate">检查更新</v-btn>
+          </template>
+        </SettingItem>
+        <SettingItem v-if="isDebug" title="测试弹窗">
+          <template v-slot:action>
+            <v-btn @click="sen_d"> 弹窗</v-btn>
+          </template>
+        </SettingItem>
+        <SettingItem>
+          <template v-slot:fill-action>
+            <v-select v-model="setting.notify_mode" :hint="setting.notify_mode.tip" :items="allNotifyMode"
+              item-title="value" label="通知设置" persistent-hint return-object
+              @update:model-value="setting.setNotifyMode()">
+            </v-select>
+          </template>
+        </SettingItem>
+      </v-card>
+      <v-snackbar v-model="showDownload">
+        检测到了新版本，即将跳转到下载页面
+      </v-snackbar>
+      <v-snackbar v-model="showAlreadyNewest">
+        已经是最新版本，无需下载
+      </v-snackbar>
     </v-main>
   </v-app>
-  <v-dialog
-    v-model="version.show"
-    persistent
-    transition="dialog-top-transition"
-    width="600"
-  >
-    <version-page
-      :force="version.force"
-      :versionInfo="version.version_info"
-      @close="version.show = false"
-    ></version-page>
+  <v-dialog v-model="version.show" persistent transition="dialog-top-transition" width="600">
+    <version-page :force="version.force" :versionInfo="version.version_info"
+      @close="version.show = false"></version-page>
   </v-dialog>
 </template>
 
 <script lang="ts" name="setting" setup>
-import {computed, onMounted, reactive, ref} from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import VersionPage from "./VersionPage.vue";
 import operate from "@/api/operations/operate";
 import SettingItem from "@/components/SettingItem/SettingItem.vue";
-import notification, {allNotifyMode, NotifyMode,} from "@/api/operations/notification";
-import {app, invoke} from "@tauri-apps/api";
-import updater, {VersionStateType} from "@/api/operations/updater";
-import {closeSettingPage} from "@/api/function";
-import {isPermissionGranted, requestPermission, sendNotification,} from "@tauri-apps/api/notification";
-import {DesktopVersion, getVersion} from "@/api/resourceFetcher/version";
+import notification, { allNotifyMode, NotifyMode, } from "@/api/operations/notification";
+import { app, invoke } from "@tauri-apps/api";
+import updater, { VersionStateType } from "@/api/operations/updater";
+import { isPermissionGranted, requestPermission, sendNotification, } from "@tauri-apps/api/notification";
+import { DesktopVersion, getVersion } from "@/api/resourceFetcher/version";
+import { WebviewWindow } from "@tauri-apps/api/window";
 
 const versionState = ref<VersionStateType>(VersionStateType.Unknown);
 
@@ -119,7 +96,7 @@ const sen_d = () => {
         text: "欸嘿嘿，桃金娘的脚小小的~香香的~.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       },
       icon: "/assets/icon/anime.png",
-      source: {data: "123", type: "nn"},
+      source: { data: "123", type: "nn" },
       timestamp: {
         fetcher: 114514,
         platform: 114514,
@@ -183,8 +160,12 @@ const setting = reactive<{
       setting.autoBoot = res;
     });
   },
-  close() {
-    closeSettingPage();
+  async close() {
+    const settingWindows = WebviewWindow.getByLabel("settings");
+    if (!settingWindows) {
+      return;
+    }
+    await settingWindows.hide();
   },
 
   checkUpdate(): void {
